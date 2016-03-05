@@ -15,7 +15,7 @@ public class Netrogue extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		assets = new Assets();
+		Assets.load();
 		batch = new SpriteBatch();
 		startTime = TimeUtils.millis();
 	}
@@ -27,7 +27,7 @@ public class Netrogue extends ApplicationAdapter {
 		long currTime = TimeUtils.millis();
 		batch.begin();
 		float animationTime = (currTime - startTime) / 1000f;
-		batch.draw(assets.animations.get(0).getKeyFrame(animationTime), 0, 0);
+		batch.draw(Assets.animations.get(0).getKeyFrame(animationTime), 0, 0);
 		batch.end();
 	}
 }
