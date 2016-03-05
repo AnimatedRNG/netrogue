@@ -10,6 +10,10 @@ package animated.spferical.netrogue.networking;
  * @author srinivas
  */
 public class ModifyChildDiff extends Diff {
+	
+	public ModifyChildDiff() {
+		super(0);
+	}
 
 	public ModifyChildDiff(int newUpdate, Long ID, NetworkObject child) {
 		super(newUpdate);

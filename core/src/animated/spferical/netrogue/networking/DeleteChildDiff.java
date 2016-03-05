@@ -8,6 +8,10 @@ package animated.spferical.netrogue.networking;
  * @author srinivas
  */
 public class DeleteChildDiff extends Diff {
+	
+	public DeleteChildDiff() {
+		super(0);
+	}
 
 	public DeleteChildDiff(int newUpdate, Long ID) {
 		super(newUpdate);
