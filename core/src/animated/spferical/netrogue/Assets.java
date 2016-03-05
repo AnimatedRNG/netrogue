@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public class Assets {
@@ -19,12 +20,14 @@ public class Assets {
 	static List<Animation> animations = new ArrayList<>();
 	static FreeTypeFontGenerator fontGenerator;
 	static HashMap<Integer, BitmapFont> fonts = new HashMap<>();
+	static Skin skin;
 
 	public static void load() {
 		animations.add(
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 	}
 
 	public static Animation loadAnimationFromBasePath(String basePath,
