@@ -59,7 +59,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        compile files('./libs/kryonet-2.21-all.jar')
+        compile files("$rootProject.projectDir/libs/kryonet-2.21-all.jar")
     }
 }
 
