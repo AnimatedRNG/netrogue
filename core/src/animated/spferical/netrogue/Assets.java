@@ -7,17 +7,24 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Array;
 
 public class Assets {
 	HashMap<String, Texture> spriteMaps = new HashMap<>();
 	float animationTime = 0.5f;
 	List<Animation> animations = new ArrayList<>();
+	FreeTypeFontGenerator fontGenerator;
+	HashMap<Integer, BitmapFont> fonts = new HashMap<>();
 
 	public Assets() {
 		animations.add(
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
+		fontGenerator = new FreeTypeFontGenerator(
+			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));
 	}
 
 	public Animation loadAnimationFromBasePath(String basePath,
@@ -41,5 +48,14 @@ public class Assets {
 		}
 		return new TextureRegion(spriteMaps.get(file),
 				col * 64, row * 64, 64, 64);
+	}
+
+	public BitmapFont getFont(int size) {
+		if (!fonts.containsKey(size)) {
+			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+			parameter.size = 12;
+			fonts.put(size, fontGenerator.generateFont(parameter));
+		}
+		return fonts.get(size);
 	}
 }
