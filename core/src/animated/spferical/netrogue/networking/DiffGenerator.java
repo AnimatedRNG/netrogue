@@ -81,6 +81,20 @@ public abstract class DiffGenerator {
 			}
 		}
 		
+		// Recursively gets diffs of all children
+		for (Map.Entry<Long, NetworkObject> childEntry : newObject.getAllChildren().entrySet())
+		{
+			Long key = childEntry.getKey();
+			NetworkObject value = childEntry.getValue();
+			
+			if (!oldObject.hasChild(key))
+				continue;
+			
+			List<Diff> childDiffs = DiffGenerator.generateDiffs(oldObject.getChild(key), value);
+			for (Diff diff : childDiffs)
+				diffs.add(diff);
+		}
+		
 		return diffs;
 	}
 }

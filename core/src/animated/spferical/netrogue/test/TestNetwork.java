@@ -14,11 +14,9 @@ public class TestNetwork {
 
 	@Before
 	public void setUp() throws Exception {
-		this.obj = new ExampleNetworkObject(null);
-		ExampleNetworkObject child = new ExampleNetworkObject(this.obj);
+		this.obj = new ExampleNetworkObject(null, false);
 		this.obj.lastUpdate++;
-		this.obj1 = new ExampleNetworkObject(null);
-		this.obj1.putChild(child.ID, child);
+		this.obj1 = new ExampleNetworkObject(null, false);
 	}
 
 	@After
@@ -42,11 +40,21 @@ public class TestNetwork {
 		
 		private static final long serialVersionUID = -269444597085367965L;
 
-		public ExampleNetworkObject(NetworkObject parent) {
+		public ExampleNetworkObject(NetworkObject parent, boolean leaf) {
 			super(parent);
-			for (int i = 0; i < Math.random() * 10; i++)
-				this.put(new String("" + Math.random()), Math.random());
-			
+			if (!leaf) {
+				for (int i = 0; i < Math.random() * 100; i++)
+					this.put(new String("" + Math.random()), Math.random());
+				for (int i = 0; i < 6; i++)
+				{
+					ExampleNetworkObject child;
+					if (Math.random() < 0.2)
+						child = new ExampleNetworkObject(this, false);
+					else
+						child = new ExampleNetworkObject(this, true);
+					this.putChild(child.ID, child);
+				}
+			}
 		}
 	}
 	
