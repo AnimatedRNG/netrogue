@@ -1,5 +1,10 @@
 package animated.spferical.netrogue.networking;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -8,7 +13,7 @@ import java.util.TreeMap;
  * 
  * @author srinivas
  */
-public abstract class NetworkObject {
+public abstract class NetworkObject implements Serializable, Cloneable {
 
 	public int lastUpdate;
 	public long ID;
@@ -20,6 +25,19 @@ public abstract class NetworkObject {
 		this.parent = parent;
 		this.children = new TreeMap<>();
 		this.attributes= new TreeMap<>();
+	}
+	
+	public NetworkObject(NetworkObject copy, boolean mustCopy) {
+		if (!mustCopy)
+			throw new RuntimeException("INVALID COPY");
+		else
+		{
+			this.ID = copy.ID;
+			this.parent = copy.parent;
+			this.lastUpdate = copy.lastUpdate;
+			this.children = copy.getAllChildren();
+			this.attributes = copy.getAllAttributes();
+		}
 	}
 	
 	public NetworkObject(NetworkObject parent, long ID) {
@@ -51,6 +69,11 @@ public abstract class NetworkObject {
 			return false;
 	}
 	
+	// Please don't abuse.
+	public TreeMap<String, Object> getAllAttributes() {
+		return new TreeMap<String, Object>(this.attributes);
+	}
+	
 	public void putChild(Long ID, NetworkObject child) {
 		this.children.put(ID, child);
 	}
@@ -65,6 +88,37 @@ public abstract class NetworkObject {
 	
 	public boolean hasChild(Long ID) {
 		return this.children.containsKey(ID);
+	}
+	
+	// Please don't abuse
+	public TreeMap<Long, NetworkObject> getAllChildren() {
+		return new TreeMap<Long, NetworkObject>(this.children);
+	}
+	
+	/* Warning this is evil.
+	 * 
+	 * (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public NetworkObject clone() {
+		try {
+			ByteArrayOutputStream outByte = new ByteArrayOutputStream();
+			ObjectOutputStream outObj = new ObjectOutputStream(outByte);
+			ByteArrayInputStream inByte;
+			ObjectInputStream inObject;
+			outObj.writeObject(this);
+			outObj.close();
+			byte[] buffer = outByte.toByteArray();
+			inByte = new ByteArrayInputStream(buffer);
+			inObject = new ObjectInputStream(inByte);
+			Object deepcopy =  inObject.readObject();
+			inObject.close();
+			return (NetworkObject) deepcopy;
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+	    return null;
 	}
 	
 	// ID -> Child
