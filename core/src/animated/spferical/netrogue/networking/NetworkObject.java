@@ -15,9 +15,17 @@ import java.util.TreeMap;
  */
 public abstract class NetworkObject implements Serializable, Cloneable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4277851132396689715L;
 	public int lastUpdate;
 	public long ID;
 	public NetworkObject parent;
+	
+	public NetworkObject() {
+		
+	}
 	
 	public NetworkObject(NetworkObject parent) {
 		this.lastUpdate = 0;

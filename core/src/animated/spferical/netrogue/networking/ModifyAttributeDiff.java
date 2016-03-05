@@ -9,6 +9,10 @@ package animated.spferical.netrogue.networking;
  * @author srinivas
  */
 public class ModifyAttributeDiff extends Diff {
+	
+	public ModifyAttributeDiff() {
+		super(0);
+	}
 
 	public ModifyAttributeDiff(int newUpdate, String name, Object value) {
 		super(newUpdate);

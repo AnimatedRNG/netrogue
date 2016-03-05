@@ -8,6 +8,10 @@ package animated.spferical.netrogue.networking;
  * @author srinivas
  */
 public class AddChildDiff extends Diff {
+	
+	public AddChildDiff() {
+		super(0);
+	}
 
 	public AddChildDiff(int newUpdate, Long ID, NetworkObject child) {
 		super(newUpdate);

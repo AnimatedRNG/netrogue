@@ -9,6 +9,10 @@ package animated.spferical.netrogue.networking;
  * @author srinivas
  */
 public class DeleteAttributeDiff extends Diff {
+	
+	public DeleteAttributeDiff() {
+		super(0);
+	}
 
 	public DeleteAttributeDiff(int newUpdate, String name) {
 		super(newUpdate);
