@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -101,6 +102,17 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	// Please don't abuse
 	public TreeMap<Long, NetworkObject> getAllChildren() {
 		return new TreeMap<Long, NetworkObject>(this.children);
+	}
+	
+	public NetworkObject searchChildren(Long ID) {
+		for (Entry<Long, NetworkObject> child : this.getAllChildren().entrySet())
+		{
+			if (child.getKey().equals(ID))
+				return child.getValue();
+			else
+				return searchChildren(ID);
+		}
+		return null;
 	}
 	
 	/* Warning this is evil.
