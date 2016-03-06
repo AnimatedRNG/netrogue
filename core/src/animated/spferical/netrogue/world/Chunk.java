@@ -1,10 +1,10 @@
-package animated.spferical.netrogue;
+package animated.spferical.netrogue.world;
 
 import animated.spferical.netrogue.networking.NetworkObject;
 
-public class MapChunk extends NetworkObject {
+public class Chunk extends NetworkObject {
 
 	private static final long serialVersionUID = -7476640053641021374L;
 
-	MapTile.Type[][] tiles = new MapTile.Type[16][16];
+	Tile.Type[][] tiles = new Tile.Type[16][16];
 }
