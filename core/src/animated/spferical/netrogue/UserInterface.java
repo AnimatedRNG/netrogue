@@ -1,5 +1,6 @@
 package animated.spferical.netrogue;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -28,7 +29,7 @@ public class UserInterface {
 		batch = new SpriteBatch();
 	}
 
-	public void draw() {
+	public void draw(Camera camera) {
 		//TODO: have player's health + ap passed in
 		int hp = 7;
 		int maxHP = 10;
@@ -36,6 +37,7 @@ public class UserInterface {
 		float apFraction = 0.1f;
 		long currTime = TimeUtils.millis();
 		float animationTime = (currTime - startTime) / 1000f;
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		// draw the fractions of hp
 		for (int i = 0; i < hpFraction * 4; i++) {
