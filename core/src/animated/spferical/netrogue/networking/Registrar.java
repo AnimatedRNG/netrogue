@@ -5,6 +5,10 @@ import java.util.TreeMap;
 
 import com.esotericsoftware.kryo.Kryo;
 
+import animated.spferical.netrogue.world.Chunk;
+import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Tile;
+
 public abstract class Registrar {
 
 	public static void register(Kryo kryo) {
@@ -18,5 +22,8 @@ public abstract class Registrar {
 		kryo.register(ModifyAttributeDiff.class);
 		kryo.register(ModifyChildDiff.class);
 		kryo.register(NetworkObject.class);
+		kryo.register(GameState.class);
+		kryo.register(Tile.class);
+		kryo.register(Chunk.class);
 	}
 }
