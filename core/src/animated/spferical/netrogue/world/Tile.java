@@ -8,5 +8,7 @@ public class Tile extends NetworkObject {
 
 	enum Type {FLOOR, WALL};
 
-	Type type;
+	public Tile() {
+		put("type", Type.WALL);
+	}
 }

@@ -6,5 +6,7 @@ public class Chunk extends NetworkObject {
 
 	private static final long serialVersionUID = -7476640053641021374L;
 
-	Tile.Type[][] tiles = new Tile.Type[16][16];
+	public Chunk() {
+		put("tiles", new Tile.Type[16][16]);
+	}
 }
