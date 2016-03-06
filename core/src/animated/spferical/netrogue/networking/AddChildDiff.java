@@ -10,11 +10,11 @@ package animated.spferical.netrogue.networking;
 public class AddChildDiff extends Diff {
 	
 	public AddChildDiff() {
-		super(0);
+		super(0, 0);
 	}
 
-	public AddChildDiff(int newUpdate, Long ID, NetworkObject child) {
-		super(newUpdate);
+	public AddChildDiff(long parentID, long newUpdate, Long ID, NetworkObject child) {
+		super(newUpdate, parentID);
 		this.ID = ID;
 		this.child = child;
 	}

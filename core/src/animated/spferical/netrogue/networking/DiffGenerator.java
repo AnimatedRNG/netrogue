@@ -7,6 +7,10 @@ import java.util.Map;
 public abstract class DiffGenerator {
 
 	public static List<Diff> generateDiffs(NetworkObject oldObject, NetworkObject newObject) {
+		
+		if (oldObject == newObject)
+			return new ArrayList<>();
+		
 		List<Diff> diffs = new ArrayList<Diff>();
 		for(Map.Entry<String, Object> attributeEntry : oldObject.getAllAttributes().entrySet()) {
 			String key = attributeEntry.getKey();
@@ -23,13 +27,13 @@ public abstract class DiffGenerator {
 				{
 					// Make a ModfiyAttributeDiff
 					// OldObject[key] != NewObject[key]
-					diffs.add(new ModifyAttributeDiff(newObject.lastUpdate, key, newObject.get(key)));
+					diffs.add(new ModifyAttributeDiff(oldObject.ID, ++newObject.lastUpdate, key, newObject.get(key)));
 				}
 			}
 			else
 			{
 				// Generate a DeleteAttributeDiff
-				diffs.add(new DeleteAttributeDiff(newObject.lastUpdate, key));
+				diffs.add(new DeleteAttributeDiff(oldObject.ID, ++newObject.lastUpdate, key));
 			}
 		}
 		
@@ -45,7 +49,7 @@ public abstract class DiffGenerator {
 			{
 				// Make a AddAttributeDiff
 				// OldObject[key] == null
-				diffs.add(new AddAttributeDiff(newObject.lastUpdate, key, value));
+				diffs.add(new AddAttributeDiff(oldObject.ID, ++newObject.lastUpdate, key, value));
 			}
 		}
 		
@@ -62,7 +66,7 @@ public abstract class DiffGenerator {
 			else
 			{
 				// Generate a DeleteChildDiff
-				diffs.add(new DeleteChildDiff(newObject.lastUpdate, key));
+				diffs.add(new DeleteChildDiff(oldObject.ID, ++newObject.lastUpdate, key));
 			}
 		}
 		
@@ -77,7 +81,7 @@ public abstract class DiffGenerator {
 			else
 			{
 				// Generate an AddChildDiff
-				diffs.add(new AddChildDiff(newObject.lastUpdate, key, value));
+				diffs.add(new AddChildDiff(oldObject.ID, ++newObject.lastUpdate, key, value));
 			}
 		}
 		

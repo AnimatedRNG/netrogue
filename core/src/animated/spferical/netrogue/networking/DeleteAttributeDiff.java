@@ -11,11 +11,11 @@ package animated.spferical.netrogue.networking;
 public class DeleteAttributeDiff extends Diff {
 	
 	public DeleteAttributeDiff() {
-		super(0);
+		super(0, 0);
 	}
 
-	public DeleteAttributeDiff(int newUpdate, String name) {
-		super(newUpdate);
+	public DeleteAttributeDiff(long ID, long newUpdate, String name) {
+		super(newUpdate, ID);
 		this.name = name;
 	}
 	

@@ -12,11 +12,11 @@ package animated.spferical.netrogue.networking;
 public class ModifyChildDiff extends Diff {
 	
 	public ModifyChildDiff() {
-		super(0);
+		super(0, 0);
 	}
 
-	public ModifyChildDiff(int newUpdate, Long ID, NetworkObject child) {
-		super(newUpdate);
+	public ModifyChildDiff(long parentID, long newUpdate, Long ID, NetworkObject child) {
+		super(newUpdate, parentID);
 		this.ID = ID;
 		this.child = child;
 	}

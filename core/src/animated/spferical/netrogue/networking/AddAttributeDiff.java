@@ -10,11 +10,11 @@ package animated.spferical.netrogue.networking;
 public class AddAttributeDiff extends Diff {
 	
 	public AddAttributeDiff() {
-		super(0);
+		super(0, 0);
 	}
 
-	public AddAttributeDiff(int newUpdate, String name, Object value) {
-		super(newUpdate);
+	public AddAttributeDiff(long ID, long newUpdate, String name, Object value) {
+		super(newUpdate, ID);
 		this.name = name;
 		this.value = value;
 	}
