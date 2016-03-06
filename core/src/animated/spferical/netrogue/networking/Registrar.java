@@ -11,6 +11,10 @@ import com.esotericsoftware.kryonet.Server;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
+import animated.spferical.netrogue.world.Chunk;
+import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Tile;
+
 public abstract class Registrar {
 
 	public static void register(Kryo kryo) {
@@ -32,5 +36,8 @@ public abstract class Registrar {
 		kryo.register(Player.class);
 		kryo.register(InfoQuery.class);
 		kryo.register(InfoResponse.class);
+		kryo.register(GameState.class);
+		kryo.register(Tile.class);
+		kryo.register(Chunk.class);
 	}
 }
