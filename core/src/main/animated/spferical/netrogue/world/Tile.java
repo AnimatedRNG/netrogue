@@ -6,7 +6,7 @@ public class Tile extends NetworkObject {
 
 	private static final long serialVersionUID = 8152109643124254457L;
 
-	enum Type {FLOOR, WALL};
+	public enum Type {FLOOR, WALL};
 
 	public Tile() {
 		put("type", Type.WALL);
