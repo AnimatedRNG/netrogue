@@ -29,6 +29,10 @@ public class Level extends NetworkObject {
 	}
 
 	public Chunk getChunk(int row, int col) {
+		if (row < 0 || col < 0 ||
+				row >= chunkIDs.length || col >= chunkIDs[0].length)
+			// out of the map
+			return null;
 		if (chunkIDs[row][col] == 0) {
 			for (NetworkObject child : getAllChildren().values()) {
 				if (!(child instanceof Chunk)) continue;
