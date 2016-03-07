@@ -26,7 +26,7 @@ public class ModifyChildDiff extends Diff {
 		NetworkObject newObject = old;
 		if (!newObject.hasChild(this.ID))
 			return false;
-		newObject.putChild(this.ID, this.child);
+		newObject.putChild(this.child);
 		return true;
 	}
 	

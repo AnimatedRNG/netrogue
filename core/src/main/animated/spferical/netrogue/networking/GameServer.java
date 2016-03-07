@@ -68,7 +68,7 @@ public class GameServer extends Listener implements Runnable {
 		Player player = new Player(this.gameState);
 		player.put("connection", connection);
 		this.playerIDs.put(connection, player.ID);
-		this.gameState.putChild(player.ID, player);
+		this.gameState.putChild(player);
 		
 		this.server.sendToTCP(connection.getID(),
 			new InfoResponse(this.gameState));

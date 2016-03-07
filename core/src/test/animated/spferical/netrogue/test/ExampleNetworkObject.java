@@ -20,7 +20,7 @@ class ExampleNetworkObject extends NetworkObject implements Serializable {
 					child = new ExampleNetworkObject(this, false);
 				else
 					child = new ExampleNetworkObject(this, true);
-				this.putChild(child.ID, child);
+				this.putChild(child);
 			}
 		}
 	}

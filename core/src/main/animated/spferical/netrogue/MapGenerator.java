@@ -34,7 +34,7 @@ public class MapGenerator {
 		for (int row = 0; row < chunks.length; row++) {
 			for (int col = 0; col < chunks[0].length; col++) {
 				chunks[row][col] = new Chunk(level, row, col);
-				level.putChild(chunks[row][col].ID, chunks[row][col]);
+				level.putChild(chunks[row][col]);
 			}
 		}
 

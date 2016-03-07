@@ -83,8 +83,8 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 		return new TreeMap<String, Object>(this.attributes);
 	}
 	
-	public void putChild(Long ID, NetworkObject child) {
-		this.children.put(ID, child);
+	public void putChild(NetworkObject child) {
+		this.children.put(child.ID, child);
 	}
 	
 	public NetworkObject removeChild(Long ID) {

@@ -16,10 +16,10 @@ public class TestNetwork {
 		this.obj = new ExampleNetworkObject(null, false);
 		this.obj2 = new ExampleNetworkObject(null, false);
 		this.obj3 = (ExampleNetworkObject) this.obj2.clone();
-		this.obj.putChild(this.obj3.ID, this.obj3);
+		this.obj.putChild(this.obj3);
 		this.obj1 = new ExampleNetworkObject(null, false);
-		this.obj1.putChild(this.obj3.ID, this.obj3);
-		this.obj.putChild(this.obj2.ID, this.obj2);
+		this.obj1.putChild(this.obj3);
+		this.obj.putChild(this.obj2);
 		this.obj1.update();
 	}
 
