@@ -1,15 +1,20 @@
 package animated.spferical.netrogue;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class UserInterface {
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
 	Animation barLeft, barMiddle, barRight;
 	long startTime;
 	SpriteBatch batch;
+	Camera camera;
+	Viewport viewport;
 
 	public UserInterface() {
 		hp1 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9);
@@ -27,9 +32,11 @@ public class UserInterface {
 		barRight = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 8);
 		startTime = TimeUtils.millis();
 		batch = new SpriteBatch();
+		camera = new OrthographicCamera();
+		viewport = new ExtendViewport(1024, 768, camera);
 	}
 
-	public void draw(Camera camera) {
+	public void draw() {
 		//TODO: have player's health + ap passed in
 		int hp = 7;
 		int maxHP = 10;
@@ -75,5 +82,9 @@ public class UserInterface {
 		batch.draw(barMiddle.getKeyFrame(animationTime), 2 * 64, 64);
 		batch.draw(barRight.getKeyFrame(animationTime), 3 * 64, 64);
 		batch.end();
+	}
+
+	public void handleResize(int width, int height) {
+		viewport.update(width, height, true);
 	}
 }
