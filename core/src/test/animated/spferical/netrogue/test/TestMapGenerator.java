@@ -12,7 +12,6 @@ import animated.spferical.netrogue.world.Level;
 public class TestMapGenerator {
 	@Before
 	public void setUp() throws Exception {
-		mapgen = new MapGenerator();
 	}
 
 	@After
@@ -21,10 +20,8 @@ public class TestMapGenerator {
 
 	@Test
 	public void test() {
-		NetworkObject level = new Level(null, 1);
-		mapgen.generateMap(level);
+		NetworkObject level = new Level(null, 1, MapGenerator.mapWidth, MapGenerator.mapHeight);
+		MapGenerator.generateMap(level);
 		assertFalse(level.getAllChildren().isEmpty());
 	}
-
-	private MapGenerator mapgen;
 }
