@@ -28,4 +28,8 @@ public class Chunk extends NetworkObject {
 	public int getCol() {
 		return (int) get("col");
 	}
+
+	public Tile.Type[][] getTiles() {
+		return (Tile.Type[][]) get("tiles");
+	}
 }

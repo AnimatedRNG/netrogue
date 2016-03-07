@@ -39,7 +39,7 @@ public class WorldRenderer {
 		tileTextureRegions.put(Tile.Type.WALL,
 				Assets.loadTextureRegion("DawnLike/Objects/Wall.png", 3, 3));
 		tileTextureRegions.put(Tile.Type.FLOOR,
-				Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 1, 1));
+				Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 13, 1));
 	}
 
 	public void render(float delta) {
