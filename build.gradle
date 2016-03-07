@@ -64,6 +64,10 @@ project(":core") {
         testCompile "junit:junit:4.12"
         compile "com.esotericsoftware:kryonet:$kryonetVersion"
     }
+
+    test {
+        testLogging.showStandardStreams = true
+    }
 }
 
 tasks.eclipse.doLast {
