@@ -7,6 +7,7 @@ import com.esotericsoftware.kryo.Kryo;
 
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Tile;
 
 public abstract class Registrar {
@@ -25,5 +26,6 @@ public abstract class Registrar {
 		kryo.register(GameState.class);
 		kryo.register(Tile.class);
 		kryo.register(Chunk.class);
+		kryo.register(Level.class);
 	}
 }
