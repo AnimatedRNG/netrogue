@@ -11,4 +11,8 @@ public class Tile extends NetworkObject {
 	public Tile() {
 		put("type", Type.WALL);
 	}
+
+	public Type getType() {
+		return (Type) get("type");
+	}
 }

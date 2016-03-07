@@ -7,7 +7,10 @@ import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.Tile;
 
 public class MapGenerator {
-	public void digRect(Tile.Type[][] tiles, int row1, int col1, int row2, int col2) {
+
+	public static final int mapHeight = 62;
+	public static final int mapWidth = 62;
+	public static void digRect(Tile.Type[][] tiles, int row1, int col1, int row2, int col2) {
 		for (int row = row1; row <= row2; row++) {
 			for (int col = col1; col < col2; col++) {
 				tiles[row][col] = Tile.Type.FLOOR;
@@ -15,10 +18,8 @@ public class MapGenerator {
 		}
 	}
 
-	public void generateMap(NetworkObject level) {
+	public static void generateMap(NetworkObject level) {
 		// map dimensions, in chunks
-		int mapHeight = 62;
-		int mapWidth = 62;
 		Random random = new Random();
 
 		Tile.Type[][] tiles = new Tile.Type[mapWidth * 16][mapHeight * 16];

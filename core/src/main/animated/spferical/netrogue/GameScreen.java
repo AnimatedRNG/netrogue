@@ -5,19 +5,45 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import animated.spferical.netrogue.networking.NetworkObject;
+import animated.spferical.netrogue.world.Chunk;
+import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Level;
+import animated.spferical.netrogue.world.Player;
+import animated.spferical.netrogue.world.Tile;
 
 public class GameScreen implements Screen {
 	float timeElapsed;
 	UserInterface ui;
 	Viewport viewport;
 	Camera camera;
+	GameState gameState;
+	Player player;
+	Level level;
+	SpriteBatch batch;
 
 	public GameScreen() {
 		ui = new UserInterface();
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(1024, 768, camera);
+		batch = new SpriteBatch();
+
+		// TODO: get stuff from server instead
+		gameState = new GameState();
+		level = new Level(gameState, 1,
+				MapGenerator.mapHeight, MapGenerator.mapWidth);
+		gameState.putChild(level);
+		MapGenerator.generateMap(level);
+		int mapCenterX = MapGenerator.mapWidth * 16 / 2;
+		int mapCenterY = MapGenerator.mapHeight * 16 / 2;
+		player = new Player(level, mapCenterX, mapCenterY);
+		level.putChild(player);
+		
 	}
 
 	@Override
@@ -26,8 +52,41 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		// move camera to player
+		camera.position.x = player.getX() * 16 + 8;
+		camera.position.y = player.getY() * 16 + 8;
+		camera.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		// draw tiles
+		for (NetworkObject child : level.getAllChildren().values()) {
+			if (!(child instanceof Chunk)) continue;
+			Chunk chunk = (Chunk) child;
+			Tile.Type[][] tiles = (Tile.Type[][]) chunk.get("tiles");
+			for (int row = 0; row < tiles.length; row++) {
+				for (int col = 0; col < tiles[0].length; col++) {
+					int x = chunk.getCol() * 64 * 16 + col * 64;
+					int y = chunk.getRow() * 64 * 16 + row * 64;
+					TextureRegion tileTexture;
+					switch (tiles[row][col]) {
+					case FLOOR:
+						tileTexture = Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 1, 1);
+						break;
+					default:
+					case WALL:
+						tileTexture = Assets.loadTextureRegion("DawnLike/Objects/Wall.png", 3, 3);
+						break;
+					}
+					batch.draw(tileTexture, x, y);
+				}
+			}
+		}
+		batch.end();
+		// draw player
+		
+
 		ui.draw(camera);
 	}
 
