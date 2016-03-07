@@ -1,5 +1,7 @@
 package animated.spferical.netrogue;
 
+import java.util.EnumMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +23,7 @@ public class WorldRenderer {
 	SpriteBatch batch;
 	Viewport viewport;
 	Player player;
+	EnumMap<Tile.Type, TextureRegion> tileTextureRegions;
 
 	public WorldRenderer(Level level, Player player) {
 		this.level = level;
@@ -28,6 +31,15 @@ public class WorldRenderer {
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(1024, 768, camera);
 		batch = new SpriteBatch();
+		loadTileTextureRegions();
+	}
+
+	public void loadTileTextureRegions() {
+		tileTextureRegions = new EnumMap<>(Tile.Type.class);
+		tileTextureRegions.put(Tile.Type.WALL,
+				Assets.loadTextureRegion("DawnLike/Objects/Wall.png", 3, 3));
+		tileTextureRegions.put(Tile.Type.FLOOR,
+				Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 1, 1));
 	}
 
 	public void render(float delta) {
@@ -54,16 +66,8 @@ public class WorldRenderer {
 					for (int tileCol = 0; tileCol < tiles[0].length; tileCol++) {
 						int x = chunk.getCol() * 64 * 16 + tileCol * 64;
 						int y = chunk.getRow() * 64 * 16 + tileRow * 64;
-						TextureRegion tileTexture;
-						switch (tiles[tileRow][tileCol]) {
-						case FLOOR:
-							tileTexture = Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 1, 1);
-							break;
-						default:
-						case WALL:
-							tileTexture = Assets.loadTextureRegion("DawnLike/Objects/Wall.png", 3, 3);
-							break;
-						}
+						TextureRegion tileTexture = tileTextureRegions.get(
+								tiles[tileRow][tileCol]);
 						batch.draw(tileTexture, x, y);
 					}
 				}
