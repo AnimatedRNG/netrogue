@@ -51,6 +51,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		timeElapsed += delta;
 		// move camera to player
 		camera.position.x = player.getX() * 64 + 32;
 		camera.position.y = player.getY() * 64 + 32;
@@ -91,6 +92,10 @@ public class GameScreen implements Screen {
 		batch.end();
 
 		// TODO: draw player
+		batch.begin();
+		batch.draw(Assets.loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0).getKeyFrame(timeElapsed, true),
+				player.getX() * 64, player.getY() * 64);
+		batch.end();
 
 		ui.draw(camera);
 	}
