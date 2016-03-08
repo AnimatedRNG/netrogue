@@ -24,10 +24,18 @@ public class ClientInputState implements Serializable {
 					this.moveRight == otherInputState.moveRight &&
 					this.mouseXOffset == otherInputState.mouseXOffset &&
 					this.mouseYOffset == otherInputState.mouseYOffset &&
-					this.mouseClicked == otherInputState.mouseClicked &&
-					((this.stringInput == null && otherInputState.stringInput == null)
-							|| this.stringInput.equals(otherInputState.stringInput)))
-				return true;
+					this.mouseClicked == otherInputState.mouseClicked)
+			{
+					if (this.stringInput == null ^ otherInputState.stringInput == null)
+						return false;
+					else
+					{
+						if (this.stringInput == null && otherInputState.stringInput == null)
+							return true;
+						else
+							return this.stringInput.equals(otherInputState.stringInput);
+					}
+			}
 			else
 				return false;
 		}
