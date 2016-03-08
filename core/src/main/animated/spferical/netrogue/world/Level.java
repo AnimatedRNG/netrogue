@@ -22,8 +22,8 @@ public class Level extends NetworkObject {
 	 * @param width width of the level, in chunks
 	 * @param height height of the level, in chunks
 	 */
-	public Level(NetworkObject parent, int number, int width, int height) {
-		super(parent);
+	public Level(int number, int width, int height) {
+		super();
 		put("number", number);
 		chunkIDs = new long[width][height];
 	}

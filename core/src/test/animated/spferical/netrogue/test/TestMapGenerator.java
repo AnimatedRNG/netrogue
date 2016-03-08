@@ -20,7 +20,7 @@ public class TestMapGenerator {
 
 	@Test
 	public void test() {
-		NetworkObject level = new Level(null, 1, MapGenerator.mapWidth, MapGenerator.mapHeight);
+		NetworkObject level = new Level(1, MapGenerator.mapWidth, MapGenerator.mapHeight);
 		MapGenerator.generateMap(level);
 		assertFalse(level.getAllChildren().isEmpty());
 	}

@@ -27,9 +27,6 @@ public class TestClientServer {
 		this.server.start();
 		this.client.connect();
 		while (true) {
-			
-			System.out.println(this.client.gameState);
-			
 			try {
 				Thread.sleep((long) ((1f / GameServer.NETWORK_UPDATE_RATE) * 1000));
 			} catch (Exception e) {

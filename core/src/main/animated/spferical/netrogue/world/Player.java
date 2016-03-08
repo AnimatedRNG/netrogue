@@ -7,14 +7,11 @@ public class Player extends NetworkObject {
 	private static final long serialVersionUID = 818494368830828933L;
 
 	public Player() {
+		this(0, 0);
 	}
 
-	public Player(NetworkObject parent) {
-		this(parent, 0, 0);
-	}
-
-	public Player(NetworkObject parent, int x, int y) {
-		super(parent);
+	public Player(int x, int y) {
+		super();
 		setX(x);
 		setY(y);
 	}

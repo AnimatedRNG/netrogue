@@ -4,6 +4,10 @@ public class InfoResponse {
 
 	public NetworkObject response;
 	
+	public InfoResponse() {
+		
+	}
+	
 	public InfoResponse(NetworkObject response) {
 		this.response = response;
 	}

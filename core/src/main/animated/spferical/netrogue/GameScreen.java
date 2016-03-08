@@ -21,13 +21,13 @@ public class GameScreen implements Screen {
 
 		// TODO: get stuff from server instead
 		gameState = new GameState();
-		level = new Level(gameState, 1,
-				MapGenerator.mapHeight, MapGenerator.mapWidth);
+		level = new Level(1, MapGenerator.mapHeight,
+				MapGenerator.mapWidth);
 		gameState.putChild(level);
 		MapGenerator.generateMap(level);
 		int mapCenterX = MapGenerator.mapWidth * 16 / 2;
 		int mapCenterY = MapGenerator.mapHeight * 16 / 2;
-		player = new Player(level, mapCenterX, mapCenterY);
+		player = new Player(mapCenterX, mapCenterY);
 		level.putChild(player);
 
 		worldRenderer = new WorldRenderer(level, player);

@@ -41,8 +41,7 @@ public class MapGenerator {
 		for (int chunkRow = 0; chunkRow < chunks.length; chunkRow++) {
 			for (int chunkCol = 0; chunkCol < chunks[0].length; chunkCol++) {
 				// create the chunk
-				chunks[chunkRow][chunkCol] = new Chunk(
-						level, chunkRow, chunkCol);
+				chunks[chunkRow][chunkCol] = new Chunk(chunkRow, chunkCol);
 				// get the tiles it starts with
 				Tile.Type[][] chunkTiles = chunks[chunkRow][chunkCol].getTiles();
 

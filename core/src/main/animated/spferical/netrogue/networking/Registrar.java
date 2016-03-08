@@ -8,12 +8,10 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
-import animated.spferical.netrogue.world.GameState;
-import animated.spferical.netrogue.world.Player;
-
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
+import animated.spferical.netrogue.world.Player;
 import animated.spferical.netrogue.world.Tile;
 
 public abstract class Registrar {

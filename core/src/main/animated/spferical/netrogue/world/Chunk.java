@@ -9,8 +9,8 @@ public class Chunk extends NetworkObject {
 	public Chunk() {
 	}
 
-	public Chunk(NetworkObject parent, int chunkRow, int chunkCol) {
-		super(parent);
+	public Chunk(int chunkRow, int chunkCol) {
+		super();
 		Tile.Type[][] tiles = new Tile.Type[16][16];
 		for (int row = 0; row < tiles.length; row++) {
 			for (int col = 0; col < tiles[0].length; col++) {

@@ -67,7 +67,7 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void connected(Connection connection) {
 		// Player connected, create new Player object
-		Player player = new Player(this.gameState);
+		Player player = new Player();
 		player.put("connection", connection);
 		this.playerIDs.put(connection, player.ID);
 		this.gameState.putChild(player);
@@ -103,6 +103,8 @@ public class GameServer extends Listener implements Runnable {
 	
 	private void sendUpdateToPlayer(List<Diff> diffs, Connection player) {
 		Player p = (Player) this.gameState.getChild(this.playerIDs.get(player));
+		
+		// Filter function here
 		
 		for (Diff diff : diffs)
 			this.server.sendToTCP(player.getID(), diff);

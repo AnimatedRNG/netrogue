@@ -9,6 +9,10 @@ public class InfoQuery {
 
 	public Long queryID;
 	
+	public InfoQuery() {
+		
+	}
+	
 	public InfoQuery(Long queryID) {
 		this.queryID = queryID;
 	}
