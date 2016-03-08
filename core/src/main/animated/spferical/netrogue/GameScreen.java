@@ -1,5 +1,7 @@
 package animated.spferical.netrogue;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -34,6 +36,18 @@ public class GameScreen implements Screen {
 
 	}
 
+	public void handleKeys() {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+			player.setY(player.getY() + 1);
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+			player.setX(player.getX() - 1);
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+			player.setY(player.getY() - 1);
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+			player.setX(player.getX() + 1);
+		}
+	}
+
 	@Override
 	public void show() {
 	}
@@ -42,6 +56,7 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		worldRenderer.render(delta);
 		ui.draw();
+		handleKeys();
 	}
 
 	@Override
