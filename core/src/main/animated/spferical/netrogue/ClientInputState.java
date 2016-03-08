@@ -5,6 +5,10 @@ import java.io.Serializable;
 public class ClientInputState implements Serializable {
 
 	private static final long serialVersionUID = -8444092253112268601L;
+	
+	public ClientInputState() {
+		
+	}
 
 	boolean moveLeft = false;
 	boolean moveRight = false;
