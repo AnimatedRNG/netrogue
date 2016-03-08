@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
+import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
@@ -41,5 +42,6 @@ public abstract class Registrar {
 		kryo.register(Tile.class);
 		kryo.register(Chunk.class);
 		kryo.register(Level.class);
+		kryo.register(ClientInputState.class);
 	}
 }

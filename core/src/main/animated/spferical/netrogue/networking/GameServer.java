@@ -72,6 +72,10 @@ public class GameServer extends Listener implements Runnable {
 		
 		Player player = new Player();
 		player.put("connection", connection.getID());
+		
+		// Temporary name until player identifies themselves
+		player.put("name", connection.getID());
+		
 		this.playerIDs.put(connection, player.ID);
 		this.gameState.putChild(player);
 		

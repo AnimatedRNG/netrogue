@@ -16,4 +16,8 @@ public class ClientInputState implements Serializable {
 	int mouseYOffset = 0;
 
 	boolean mouseClicked = false;
+	
+	// Use this for login, chat, and other player
+	// commands
+	String stringInput = null;
 }
