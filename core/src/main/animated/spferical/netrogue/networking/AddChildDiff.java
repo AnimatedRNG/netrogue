@@ -1,4 +1,7 @@
 package animated.spferical.netrogue.networking;
+
+import com.badlogic.gdx.Gdx;
+
 /**
  * Diff to add a single child
  * 
@@ -23,7 +26,10 @@ public class AddChildDiff extends Diff {
 	public boolean onApply(NetworkObject old) {
 		NetworkObject newObject = old;
 		if (newObject.hasChild(this.ID))
+		{
+			Gdx.app.error("Invalid Diff", "AddChildDiff reports that child already exists!");
 			return false;
+		}
 		newObject.putChild(this.child);
 		return true;
 	}

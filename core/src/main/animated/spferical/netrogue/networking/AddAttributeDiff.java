@@ -1,5 +1,7 @@
 package animated.spferical.netrogue.networking;
 
+import com.badlogic.gdx.Gdx;
+
 /**
  * Diff to add a single attribute field.
  * 
@@ -23,7 +25,10 @@ public class AddAttributeDiff extends Diff {
 	public boolean onApply(NetworkObject old) {
 		NetworkObject newObject = old;
 		if (newObject.has(this.name))
+		{
+			Gdx.app.error("Invalid Diff", "AddAttributeDiff reports that attribute already exists!");
 			return false;
+		}
 		newObject.put(this.name, this.value);
 		return true;
 	}

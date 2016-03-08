@@ -1,4 +1,7 @@
 package animated.spferical.netrogue.networking;
+
+import com.badlogic.gdx.Gdx;
+
 /**
  * Diff to delete a single child
  * 
@@ -22,7 +25,10 @@ public class DeleteChildDiff extends Diff {
 	public boolean onApply(NetworkObject old) {
 		NetworkObject newObject = old;
 		if (!newObject.hasChild(this.ID))
+		{
+			Gdx.app.error("Invalid Diff", "DeleteChildDiff reports that child does not exist!");
 			return false;
+		}
 		newObject.removeChild(this.ID);
 		return true;
 	}
