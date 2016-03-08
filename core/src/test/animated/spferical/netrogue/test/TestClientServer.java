@@ -14,7 +14,7 @@ import animated.spferical.netrogue.networking.GameServer;
 
 public class TestClientServer {
 
-	public static final int DURATION = 80;
+	public static final int DURATION = 50;
 	public static final int NUMBER_CLIENTS = 10;
 	
 	@Before
@@ -34,7 +34,10 @@ public class TestClientServer {
 	public void test() {
 		this.server.start();
 		for (GameClient client : this.clients)
+		{
+			briefLag(500);
 			client.connect();
+		}
 		
 		for (int i = 0; i < DURATION; i++) {
 			try {
@@ -45,7 +48,18 @@ public class TestClientServer {
 		}
 		
 		for (GameClient client : this.clients)
+		{
+			briefLag(500);
 			client.disconnect();
+		}
+	}
+	
+	private void briefLag(long delay) {
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			Log.error("Interrupted", e.getMessage());
+		}
 	}
 
 	private GameServer server;
