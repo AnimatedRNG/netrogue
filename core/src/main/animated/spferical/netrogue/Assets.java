@@ -56,7 +56,7 @@ public class Assets {
 	public static BitmapFont getFont(int size) {
 		if (!fonts.containsKey(size)) {
 			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-			parameter.size = 12;
+			parameter.size = size;
 			fonts.put(size, fontGenerator.generateFont(parameter));
 		}
 		return fonts.get(size);
