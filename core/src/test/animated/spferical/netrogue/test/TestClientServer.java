@@ -24,6 +24,7 @@ public class TestClientServer {
 
 	@Test
 	public void test() {
+		this.server.start();
 		this.client.connect();
 		while (true) {
 			
