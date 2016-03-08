@@ -1,6 +1,6 @@
 package animated.spferical.netrogue.networking;
 
-import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.minlog.Log;
 
 /**
  * Diff to delete a single attribute field.
@@ -26,7 +26,7 @@ public class DeleteAttributeDiff extends Diff {
 		NetworkObject newObject = old;
 		if (!newObject.has(this.name))
 		{
-			Gdx.app.error("Invalid Diff", "DeleteAttributeDiff reports that attribute does not exist!");
+			Log.error("Invalid Diff", "DeleteAttributeDiff reports that attribute does not exist!");
 			return false;
 		}
 		newObject.remove(this.name);

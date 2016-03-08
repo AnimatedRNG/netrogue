@@ -1,6 +1,6 @@
 package animated.spferical.netrogue.networking;
 
-import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.minlog.Log;
 
 /**
  * Diff to modify a single attribute field.
@@ -27,7 +27,7 @@ public class ModifyAttributeDiff extends Diff {
 		NetworkObject newObject = old;
 		if (!newObject.has(this.name))
 		{
-			Gdx.app.error("Invalid Diff", "ModifyAttributeDiff reports that attribute does not exist!");
+			Log.error("Invalid Diff", "ModifyAttributeDiff reports that attribute does not exist!");
 			return false;
 		}
 		newObject.put(this.name, this.value);

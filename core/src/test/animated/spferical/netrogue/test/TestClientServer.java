@@ -1,5 +1,8 @@
 package animated.spferical.netrogue.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +14,15 @@ import animated.spferical.netrogue.networking.GameServer;
 
 public class TestClientServer {
 
+	public static final int DURATION = 80;
+	public static final int NUMBER_CLIENTS = 10;
+	
 	@Before
 	public void setUp() throws Exception {
 		this.server = new GameServer();
-		this.client = new GameClient();
+		this.clients = new ArrayList<GameClient>();
+		for (int i = 0; i < NUMBER_CLIENTS; i++)
+			this.clients.add(new GameClient());
 	}
 
 	@After
@@ -25,8 +33,10 @@ public class TestClientServer {
 	@Test
 	public void test() {
 		this.server.start();
-		this.client.connect();
-		while (true) {
+		for (GameClient client : this.clients)
+			client.connect();
+		
+		for (int i = 0; i < DURATION; i++) {
 			try {
 				Thread.sleep((long) ((1f / GameServer.NETWORK_UPDATE_RATE) * 1000));
 			} catch (Exception e) {
@@ -36,5 +46,5 @@ public class TestClientServer {
 	}
 
 	private GameServer server;
-	private GameClient client;
+	private List<GameClient> clients;
 }

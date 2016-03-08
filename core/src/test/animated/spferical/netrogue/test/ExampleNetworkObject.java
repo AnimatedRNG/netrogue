@@ -8,8 +8,7 @@ class ExampleNetworkObject extends NetworkObject implements Serializable {
 		
 	private static final long serialVersionUID = -269444597085367965L;
 
-	public ExampleNetworkObject(NetworkObject parent, boolean leaf) {
-		super(parent);
+	public ExampleNetworkObject(boolean leaf) {
 		if (!leaf) {
 			for (int i = 0; i < Math.random() * 2; i++)
 				this.put(new String("" + Math.random()), Math.random());
@@ -17,9 +16,9 @@ class ExampleNetworkObject extends NetworkObject implements Serializable {
 			{
 				ExampleNetworkObject child;
 				if (Math.random() < 0.1)
-					child = new ExampleNetworkObject(this, false);
+					child = new ExampleNetworkObject(false);
 				else
-					child = new ExampleNetworkObject(this, true);
+					child = new ExampleNetworkObject(true);
 				this.putChild(child);
 			}
 		}

@@ -8,11 +8,13 @@ package animated.spferical.netrogue.networking;
  */
 public abstract class Diff {
 	
+	public int connectionID;
+	
 	public Diff(long newUpdate, long ID) {
 		this.newUpdate = newUpdate;
-		this.ID = ID;
+		this.targetID = ID;
 	}
-
+	
 	/*
 	 * Updates the object if it is able to update the
 	 * object
@@ -20,18 +22,19 @@ public abstract class Diff {
 	public boolean apply(NetworkObject old) {
 		if (old.lastUpdate + 1 == newUpdate)
 		{
-			if (ID == old.ID)
-				this.onApply(old);
+			boolean result = true;
+			if (targetID == old.ID)
+				result = this.onApply(old);
 			else
 			{
 				for (NetworkObject child : old.getAllChildren().values())
 				{
-					if (child.ID == ID)
-						this.onApply(child);
+					if (child.ID == targetID)
+						result = this.onApply(child);
 				}
 			}
 			old.lastUpdate++;
-			return true;
+			return result;
 		}
 		else
 			return false;
@@ -40,5 +43,5 @@ public abstract class Diff {
 	public abstract boolean onApply(NetworkObject old);
 	
 	protected long newUpdate;
-	protected long ID;
+	protected long targetID;
 }

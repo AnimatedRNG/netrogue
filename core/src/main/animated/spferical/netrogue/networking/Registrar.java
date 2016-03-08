@@ -7,6 +7,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
@@ -20,6 +21,7 @@ public abstract class Registrar {
 		kryo.register(TreeMap.class);
 		kryo.register(ArrayList.class);
 		kryo.register(Diff.class);
+		kryo.register(List.class);
 		kryo.register(AddAttributeDiff.class);
 		kryo.register(AddChildDiff.class);
 		kryo.register(DeleteAttributeDiff.class);

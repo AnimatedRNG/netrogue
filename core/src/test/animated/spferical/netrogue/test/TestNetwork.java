@@ -13,11 +13,11 @@ public class TestNetwork {
 
 	@Before
 	public void setUp() throws Exception {
-		this.obj = new ExampleNetworkObject(null, false);
-		this.obj2 = new ExampleNetworkObject(null, false);
+		this.obj = new ExampleNetworkObject( false);
+		this.obj2 = new ExampleNetworkObject(false);
 		this.obj3 = (ExampleNetworkObject) this.obj2.clone();
 		this.obj.putChild(this.obj3);
-		this.obj1 = new ExampleNetworkObject(null, false);
+		this.obj1 = new ExampleNetworkObject(false);
 		this.obj1.putChild(this.obj3);
 		this.obj.putChild(this.obj2);
 		this.obj1.update();

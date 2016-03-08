@@ -1,6 +1,6 @@
 package animated.spferical.netrogue.networking;
 
-import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.minlog.Log;
 
 /**
  * Diff to modify a single child
@@ -29,7 +29,7 @@ public class ModifyChildDiff extends Diff {
 		NetworkObject newObject = old;
 		if (!newObject.hasChild(this.ID))
 		{
-			Gdx.app.error("Invalid Diff", "ModifyChildDiff reports that child does not exist!");
+			Log.error("Invalid Diff", "ModifyChildDiff reports that child does not exist!");
 			return false;
 		}
 		newObject.putChild(this.child);

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
@@ -33,11 +33,13 @@ public class GameServer extends Listener implements Runnable {
 	public void start() {
 		this.networkingThead.start();
 		
+		Log.info("Server Networking", "Server started. GameState ID: " + this.gameState.ID);
+		
 		try {
 			server.start();
 			server.bind(PORT_NUMBER);
 		} catch (IOException e) {
-			Gdx.app.error("Networking", "Error binding to port", e);
+			Log.error("Server Networking", "Error binding to port", e);
 		}
 	}
 	
@@ -48,8 +50,6 @@ public class GameServer extends Listener implements Runnable {
 			// and send them to everybody
 			List<Diff> diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
 			
-			// Actually implement a filter function
-			
 			// Send everyone diffs
 			for (Connection connection : this.playerIDs.keySet())
 				this.sendUpdateToPlayer(diffs, connection);
@@ -59,7 +59,7 @@ public class GameServer extends Listener implements Runnable {
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
 			} catch (Exception e) {
-				Gdx.app.log("Interrupted", e.getMessage());
+				Log.error("Server Networking", "Interrupted", e);
 			}
 		}
 	}
@@ -67,13 +67,15 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void connected(Connection connection) {
 		// Player connected, create new Player object
+		this.server.sendToTCP(connection.getID(),
+			new InfoResponse(this.oldGameState));
+		
 		Player player = new Player();
-		player.put("connection", connection);
+		player.put("connection", connection.getID());
 		this.playerIDs.put(connection, player.ID);
 		this.gameState.putChild(player);
 		
-		this.server.sendToTCP(connection.getID(),
-			new InfoResponse(this.gameState));
+		Log.info("Server Networking", "Player " + connection.getID() + " connected with ID: " + player.ID);
 	}
 	
 	@Override
@@ -105,9 +107,11 @@ public class GameServer extends Listener implements Runnable {
 		Player p = (Player) this.gameState.getChild(this.playerIDs.get(player));
 		
 		// Filter function here
-		
 		for (Diff diff : diffs)
-			this.server.sendToTCP(player.getID(), diff);
+			diff.connectionID = player.getID();
+		
+		if (!diffs.isEmpty())
+			this.server.sendToTCP(player.getID(), diffs);
 	}
 
 	private Server server;

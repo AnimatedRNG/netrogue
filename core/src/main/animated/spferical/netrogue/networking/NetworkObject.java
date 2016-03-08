@@ -22,7 +22,7 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	private static final long serialVersionUID = -4277851132396689715L;
 	public long lastUpdate;
 	public long ID;
-	public NetworkObject parent;
+	public long parent;
 	
 	public NetworkObject() {
 		this.lastUpdate = 0;
@@ -52,7 +52,7 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	@Deprecated
 	public NetworkObject(NetworkObject parent) {
 		this();
-		this.parent = parent;
+		this.parent = parent.ID;
 	}
 	
 	@Deprecated
@@ -91,12 +91,12 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	}
 	
 	public void putChild(NetworkObject child) {
-		child.parent = this;
+		child.parent = this.ID;
 		this.children.put(child.ID, child);
 	}
 	
 	public NetworkObject removeChild(Long ID) {
-		this.parent = null;
+		this.parent = 0;
 		return this.children.remove(ID);
 	}
 	

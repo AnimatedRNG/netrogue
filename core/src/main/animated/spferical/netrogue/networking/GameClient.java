@@ -1,11 +1,13 @@
 package animated.spferical.netrogue.networking;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.world.GameState;
 
@@ -43,12 +45,43 @@ public class GameClient extends Listener {
 	
 	@Override
 	public void received(Connection connection, Object object) {
-		System.out.println("SOMETHING WAS RECEIVED!");
 		if (object instanceof InfoResponse)
 		{
 			NetworkObject networkObject = ((InfoResponse) object).response;
 			if (networkObject instanceof GameState)
+			{
 				this.gameState = (GameState) networkObject;
+				Log.info("Directly updated gamestate: " + this.gameState);
+			}
+		}
+		else if (object instanceof List)
+		{
+			@SuppressWarnings("unchecked")
+			List<Object> objectList = ((List<Object>) object);
+			
+			for (Object obj : objectList)
+			{
+				if (obj instanceof Diff)
+				{
+					Diff diff = ((Diff) obj);
+					
+					if (diff.connectionID != connection.getID())
+					{
+						Log.warn("Client Networking", "Diff reports invalid connection. Ignoring.");
+						return;
+					}
+					
+					boolean result = diff.apply(this.gameState);
+					if (!result)
+					{
+						Log.error("Client Networking", "Failed to apply diff " + obj);
+					}
+					else
+					{
+						Log.info("Client Networking", "Applied Diff " + diff.newUpdate);
+					}
+				}
+			}
 		}
 	}
 	
