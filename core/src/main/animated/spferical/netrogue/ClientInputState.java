@@ -9,6 +9,29 @@ public class ClientInputState implements Serializable {
 	public ClientInputState() {
 		
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof ClientInputState))
+			return false;
+		else
+		{
+			ClientInputState otherInputState = 
+					((ClientInputState) other);
+			if (this.moveUp == otherInputState.moveUp &&
+					this.moveDown == otherInputState.moveDown &&
+					this.moveLeft == otherInputState.moveLeft &&
+					this.moveRight == otherInputState.moveRight &&
+					this.mouseXOffset == otherInputState.mouseXOffset &&
+					this.mouseYOffset == otherInputState.mouseYOffset &&
+					this.mouseClicked == otherInputState.mouseClicked &&
+					((this.stringInput == null && otherInputState.stringInput == null)
+							|| this.stringInput.equals(otherInputState.stringInput)))
+				return true;
+			else
+				return false;
+		}
+	}
 
 	boolean moveLeft = false;
 	boolean moveRight = false;
