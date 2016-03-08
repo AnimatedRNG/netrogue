@@ -1,13 +1,13 @@
 package animated.spferical.netrogue.networking;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
