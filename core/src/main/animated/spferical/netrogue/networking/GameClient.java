@@ -15,7 +15,8 @@ public class GameClient extends Listener {
 	
 	public static final int TIMEOUT = 1000; 
 
-	public GameState gameState;
+	public GameState currentGameState;
+	public GameState oldGameState;
 	
 	public GameClient() {
 		this.client = new Client();
@@ -31,6 +32,10 @@ public class GameClient extends Listener {
 		} catch (IOException e) {
 			Gdx.app.error("Networking", "Failed to connect to server", e);
 		}
+	}
+	
+	public void disconnect() {
+		client.close();
 	}
 	
 	@Override
@@ -50,8 +55,9 @@ public class GameClient extends Listener {
 			NetworkObject networkObject = ((InfoResponse) object).response;
 			if (networkObject instanceof GameState)
 			{
-				this.gameState = (GameState) networkObject;
-				Log.info("Directly updated gamestate: " + this.gameState);
+				this.currentGameState = (GameState) networkObject;
+				this.oldGameState = (GameState) this.currentGameState.clone();
+				Log.info("Directly updated gamestate: " + this.currentGameState);
 			}
 		}
 		else if (object instanceof List)
@@ -71,7 +77,7 @@ public class GameClient extends Listener {
 						return;
 					}
 					
-					boolean result = diff.apply(this.gameState);
+					boolean result = diff.apply(this.oldGameState);
 					if (!result)
 					{
 						Log.error("Client Networking", "Failed to apply diff " + obj);
@@ -82,6 +88,7 @@ public class GameClient extends Listener {
 					}
 				}
 			}
+			this.currentGameState = (GameState) this.oldGameState.clone();
 		}
 	}
 	

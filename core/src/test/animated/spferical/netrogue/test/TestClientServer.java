@@ -7,14 +7,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.GameClient;
 import animated.spferical.netrogue.networking.GameServer;
 
 public class TestClientServer {
 
-	public static final int DURATION = 80;
+	public static final int DURATION = 50;
 	public static final int NUMBER_CLIENTS = 10;
 	
 	@Before
@@ -34,14 +34,31 @@ public class TestClientServer {
 	public void test() {
 		this.server.start();
 		for (GameClient client : this.clients)
+		{
+			briefLag(500);
 			client.connect();
+		}
 		
 		for (int i = 0; i < DURATION; i++) {
 			try {
 				Thread.sleep((long) ((1f / GameServer.NETWORK_UPDATE_RATE) * 1000));
 			} catch (Exception e) {
-				Gdx.app.log("Interrupted", e.getMessage());
+				Log.error("Interrupted", e.getMessage());
 			}
+		}
+		
+		for (GameClient client : this.clients)
+		{
+			briefLag(500);
+			client.disconnect();
+		}
+	}
+	
+	private void briefLag(long delay) {
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			Log.error("Interrupted", e.getMessage());
 		}
 	}
 
