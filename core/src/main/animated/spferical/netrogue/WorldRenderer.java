@@ -43,14 +43,17 @@ public class WorldRenderer {
 	}
 
 	public void updateCamera(float delta) {
-		float dx = player.getX() * 64 + 32 - camera.position.x;
-		float dy = player.getY() * 64 + 32 - camera.position.y;
+		int tileSize = Constants.tileSize;
+		float dx = tileSize * (player.getX() + .5f) - camera.position.x;
+		float dy = tileSize * (player.getY() + .5f) - camera.position.y;
 		camera.position.x += dx * delta * 10;
 		camera.position.y += dy * delta * 10;
 		camera.update();
 	}
 
 	public void render(float delta) {
+		int tileSize = Constants.tileSize;
+		int chunkSize = Constants.chunkSize;
 		timeElapsed += delta;
 		updateCamera(delta);
 		// move camera to player
@@ -58,8 +61,8 @@ public class WorldRenderer {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		int playerChunkRow = player.getY() / 16;
-		int playerChunkCol = player.getX() / 16;
+		int playerChunkRow = player.getY() / Constants.chunkSize;
+		int playerChunkCol = player.getX() / Constants.chunkSize;
 		// draw tiles
 		for (int row = playerChunkRow - 1; row <= playerChunkRow + 1; row++) {
 			for (int col = playerChunkCol - 1; col <= playerChunkCol + 1; col++) {
@@ -70,8 +73,10 @@ public class WorldRenderer {
 				Tile.Type[][] tiles = (Tile.Type[][]) chunk.get("tiles");
 				for (int tileRow = 0; tileRow < tiles.length; tileRow++) {
 					for (int tileCol = 0; tileCol < tiles[0].length; tileCol++) {
-						int x = chunk.getCol() * 64 * 16 + tileCol * 64;
-						int y = chunk.getRow() * 64 * 16 + tileRow * 64;
+						int tileX = chunk.getCol() * chunkSize + tileCol;
+						int tileY = chunk.getRow() * chunkSize + tileRow;
+						int x = tileSize * tileX;
+						int y = tileSize * tileY;
 						TextureRegion tileTexture = tileTextureRegions.get(
 								tiles[tileRow][tileCol]);
 						batch.draw(tileTexture, x, y);
@@ -83,7 +88,7 @@ public class WorldRenderer {
 
 		batch.begin();
 		batch.draw(Assets.animations.get(0).getKeyFrame(timeElapsed, true),
-				player.getX() * 64, player.getY() * 64);
+				player.getX() * tileSize, player.getY() * tileSize);
 		batch.end();
 	}
 

@@ -38,6 +38,7 @@ public class UserInterface {
 
 	public void draw() {
 		//TODO: have player's health + ap passed in
+		int tileSize = Constants.tileSize;
 		int hp = 7;
 		int maxHP = 10;
 		float hpFraction = (float) hp / maxHP;
@@ -50,22 +51,26 @@ public class UserInterface {
 		for (int i = 0; i < hpFraction * 4; i++) {
 			float baseFraction = i/4f;
 			if (hpFraction >= baseFraction + .25) {
-				batch.draw(hpfull.getKeyFrame(animationTime), i * 64, 64);
+				batch.draw(hpfull.getKeyFrame(animationTime),
+						i * tileSize, tileSize);
 			} else if (hpFraction >= baseFraction + 3f/16) {
-				batch.draw(hp3.getKeyFrame(animationTime), i * 64, 64);
+				batch.draw(hp3.getKeyFrame(animationTime),
+						i * tileSize, tileSize);
 			} else if (hpFraction >= baseFraction + 1f/8) {
-				batch.draw(hp2.getKeyFrame(animationTime), i * 64, 64);
+				batch.draw(hp2.getKeyFrame(animationTime),
+						i * tileSize, tileSize);
 			} else if (hpFraction >= baseFraction + 1f/16) {
-				batch.draw(hp1.getKeyFrame(animationTime), i * 64, 64);
+				batch.draw(hp1.getKeyFrame(animationTime),
+						i * tileSize, tileSize);
 			}
 			if (apFraction >= baseFraction + .25) {
-				batch.draw(apfull.getKeyFrame(animationTime), i * 64, 0);
+				batch.draw(apfull.getKeyFrame(animationTime), i * tileSize, 0);
 			} else if (apFraction >= baseFraction + 3f/16) {
-				batch.draw(ap3.getKeyFrame(animationTime), i * 64, 0);
+				batch.draw(ap3.getKeyFrame(animationTime), i * tileSize, 0);
 			} else if (apFraction >= baseFraction + 1f/8) {
-				batch.draw(ap2.getKeyFrame(animationTime), i * 64, 0);
+				batch.draw(ap2.getKeyFrame(animationTime), i * tileSize, 0);
 			} else if (apFraction >= baseFraction + 1f/16) {
-				batch.draw(ap1.getKeyFrame(animationTime), i * 64, 0);
+				batch.draw(ap1.getKeyFrame(animationTime), i * tileSize, 0);
 			}
 		}
 		batch.end();
@@ -73,14 +78,17 @@ public class UserInterface {
 		// draw the bar containers
 		batch.begin();
 		batch.draw(barLeft.getKeyFrame(animationTime), 0, 0);
-		batch.draw(barMiddle.getKeyFrame(animationTime), 1 * 64, 0);
-		batch.draw(barMiddle.getKeyFrame(animationTime), 2 * 64, 0);
-		batch.draw(barRight.getKeyFrame(animationTime), 3 * 64, 0);
+		batch.draw(barMiddle.getKeyFrame(animationTime), 1 * tileSize, 0);
+		batch.draw(barMiddle.getKeyFrame(animationTime), 2 * tileSize, 0);
+		batch.draw(barRight.getKeyFrame(animationTime), 3 * tileSize, 0);
 
-		batch.draw(barLeft.getKeyFrame(animationTime), 0, 64);
-		batch.draw(barMiddle.getKeyFrame(animationTime), 1 * 64, 64);
-		batch.draw(barMiddle.getKeyFrame(animationTime), 2 * 64, 64);
-		batch.draw(barRight.getKeyFrame(animationTime), 3 * 64, 64);
+		batch.draw(barLeft.getKeyFrame(animationTime), 0, tileSize);
+		batch.draw(barMiddle.getKeyFrame(animationTime),
+				1 * tileSize, tileSize);
+		batch.draw(barMiddle.getKeyFrame(animationTime),
+				2 * tileSize, tileSize);
+		batch.draw(barRight.getKeyFrame(animationTime),
+				3 * tileSize, tileSize);
 		batch.end();
 	}
 
