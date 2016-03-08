@@ -18,6 +18,8 @@ public class GameScreen implements Screen {
 	Level level;
 	SpriteBatch batch;
 	WorldRenderer worldRenderer;
+	float timeSinceLastAction = 0;
+	final float actionDelay = 0.1f; // in seconds
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -39,15 +41,22 @@ public class GameScreen implements Screen {
 
 	}
 
-	public void handleKeys() {
-		if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-			player.setY(player.getY() + 1);
-		} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-			player.setX(player.getX() - 1);
-		} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-			player.setY(player.getY() - 1);
-		} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-			player.setX(player.getX() + 1);
+	public void handleKeys(float delta) {
+		timeSinceLastAction += delta;
+		if (timeSinceLastAction > actionDelay) {
+			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+				player.setY(player.getY() + 1);
+				timeSinceLastAction = 0;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+				player.setX(player.getX() - 1);
+				timeSinceLastAction = 0;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+				player.setY(player.getY() - 1);
+				timeSinceLastAction = 0;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+				player.setX(player.getX() + 1);
+				timeSinceLastAction = 0;
+			}
 		}
 	}
 
@@ -60,7 +69,7 @@ public class GameScreen implements Screen {
 		gameState = gameClient.currentGameState;
 		worldRenderer.render(delta);
 		ui.draw();
-		handleKeys();
+		handleKeys(delta);
 	}
 
 	@Override

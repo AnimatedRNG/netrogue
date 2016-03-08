@@ -42,12 +42,18 @@ public class WorldRenderer {
 				Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 13, 1));
 	}
 
+	public void updateCamera(float delta) {
+		float dx = player.getX() * 64 + 32 - camera.position.x;
+		float dy = player.getY() * 64 + 32 - camera.position.y;
+		camera.position.x += dx * delta * 10;
+		camera.position.y += dy * delta * 10;
+		camera.update();
+	}
+
 	public void render(float delta) {
 		timeElapsed += delta;
+		updateCamera(delta);
 		// move camera to player
-		camera.position.x = player.getX() * 64 + 32;
-		camera.position.y = player.getY() * 64 + 32;
-		camera.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
