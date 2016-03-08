@@ -19,7 +19,6 @@ public class GameScreen implements Screen {
 	SpriteBatch batch;
 	WorldRenderer worldRenderer;
 	float timeSinceLastAction = 0;
-	final float actionDelay = 0.1f; // in seconds
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -32,8 +31,8 @@ public class GameScreen implements Screen {
 				MapGenerator.mapWidth);
 		gameState.putChild(level);
 		MapGenerator.generateMap(level);
-		int mapCenterX = MapGenerator.mapWidth * 16 / 2;
-		int mapCenterY = MapGenerator.mapHeight * 16 / 2;
+		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
+		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
 		player = new Player(mapCenterX, mapCenterY);
 		level.putChild(player);
 
@@ -43,7 +42,7 @@ public class GameScreen implements Screen {
 
 	public void handleKeys(float delta) {
 		timeSinceLastAction += delta;
-		if (timeSinceLastAction > actionDelay) {
+		if (timeSinceLastAction > Constants.actionDelay) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
 				player.setY(player.getY() + 1);
 				timeSinceLastAction = 0;

@@ -49,14 +49,15 @@ public class Assets {
 		if (!spriteMaps.containsKey(file)) {
 			spriteMaps.put(file, new Texture(Gdx.files.internal(file)));
 		}
+		int tileSize = Constants.tileSize;
 		return new TextureRegion(spriteMaps.get(file),
-				col * 64, row * 64, 64, 64);
+				col * tileSize, row * tileSize, tileSize, tileSize);
 	}
 
 	public static BitmapFont getFont(int size) {
 		if (!fonts.containsKey(size)) {
 			FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-			parameter.size = 12;
+			parameter.size = size;
 			fonts.put(size, fontGenerator.generateFont(parameter));
 		}
 		return fonts.get(size);

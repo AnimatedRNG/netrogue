@@ -22,8 +22,11 @@ public class MapGenerator {
 	public static void generateMap(NetworkObject level) {
 		// map dimensions, in chunks
 		Random random = new Random();
+		int chunkSize = Constants.chunkSize;
 
-		Tile.Type[][] tiles = new Tile.Type[mapWidth * 16][mapHeight * 16];
+		Tile.Type[][] tiles = new Tile.Type
+			[mapWidth * chunkSize][mapHeight * chunkSize];
+
 		// initialize with walls
 		for (int row = 0; row < tiles.length; row++) {
 			Arrays.fill(tiles[row], Tile.Type.WALL);
@@ -46,10 +49,10 @@ public class MapGenerator {
 				Tile.Type[][] chunkTiles = chunks[chunkRow][chunkCol].getTiles();
 
 				// fill in each tile with what was generated above
-				for (int tileRow = 0; tileRow < 16; tileRow++) {
-					for (int tileCol = 0; tileCol < 16; tileCol++) {
-						int row = chunkRow * 16 + tileRow;
-						int col = chunkCol * 16 + tileCol;
+				for (int tileRow = 0; tileRow < chunkSize; tileRow++) {
+					for (int tileCol = 0; tileCol < chunkSize; tileCol++) {
+						int row = chunkRow * chunkSize + tileRow;
+						int col = chunkCol * chunkSize + tileCol;
 						chunkTiles[tileRow][tileCol] = tiles[row][col];
 					}
 				}
