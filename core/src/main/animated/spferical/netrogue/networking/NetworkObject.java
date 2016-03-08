@@ -25,15 +25,15 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	public NetworkObject parent;
 	
 	public NetworkObject() {
-		
-	}
-	
-	public NetworkObject(NetworkObject parent) {
 		this.lastUpdate = 0;
 		this.ID = new Random().nextLong();
-		this.parent = parent;
 		this.children = new TreeMap<>();
 		this.attributes= new TreeMap<>();
+	}
+	
+	public NetworkObject(int ID) {
+		this();
+		this.ID = ID;
 	}
 	
 	public NetworkObject(NetworkObject copy, boolean mustCopy) {
@@ -49,6 +49,13 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 		}
 	}
 	
+	@Deprecated
+	public NetworkObject(NetworkObject parent) {
+		this();
+		this.parent = parent;
+	}
+	
+	@Deprecated
 	public NetworkObject(NetworkObject parent, long ID) {
 		this(parent);
 		this.ID = ID;
@@ -84,10 +91,12 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	}
 	
 	public void putChild(NetworkObject child) {
+		child.parent = this;
 		this.children.put(child.ID, child);
 	}
 	
 	public NetworkObject removeChild(Long ID) {
+		this.parent = null;
 		return this.children.remove(ID);
 	}
 	
