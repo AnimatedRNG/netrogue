@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 /**
  * Handles the main menu.
@@ -32,7 +32,7 @@ public class MenuScreen implements Screen {
      */
     public void create() {
 
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ExtendViewport(640, 480));
         Gdx.input.setInputProcessor(stage);
 
         TextButton playButton = new TextButton("Play", Assets.skin);
