@@ -13,7 +13,8 @@ import animated.spferical.netrogue.world.GameState;
 
 public class GameClient extends Listener {
 	
-	public static final int TIMEOUT = 1000; 
+	public static final int TIMEOUT = 1000;
+	public static final int BLOCKING_PERIOD = 10;
 
 	public GameState currentGameState;
 	public GameState oldGameState;
@@ -32,6 +33,21 @@ public class GameClient extends Listener {
 		} catch (IOException e) {
 			Gdx.app.error("Networking", "Failed to connect to server", e);
 		}
+	}
+	
+	public GameState blockUntilConnected() {
+		this.connect();
+		int accumulator = 0;
+		while (this.currentGameState == null && accumulator < TIMEOUT)
+		{
+			try {
+				Thread.sleep(BLOCKING_PERIOD);
+			} catch (InterruptedException e) {
+				Log.error("Interrupted", e);
+			}
+			accumulator += BLOCKING_PERIOD;
+		}
+		return this.currentGameState;
 	}
 	
 	public void disconnect() {

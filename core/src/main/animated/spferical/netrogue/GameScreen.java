@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import animated.spferical.netrogue.networking.GameClient;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
@@ -12,6 +13,7 @@ import animated.spferical.netrogue.world.Player;
 public class GameScreen implements Screen {
 	UserInterface ui;
 	GameState gameState;
+	GameClient gameClient;
 	Player player;
 	Level level;
 	SpriteBatch batch;
@@ -20,9 +22,10 @@ public class GameScreen implements Screen {
 	public GameScreen() {
 		ui = new UserInterface();
 		batch = new SpriteBatch();
+		gameClient = new GameClient(); 
 
 		// TODO: get stuff from server instead
-		gameState = new GameState();
+		gameState = gameClient.blockUntilConnected();
 		level = new Level(1, MapGenerator.mapHeight,
 				MapGenerator.mapWidth);
 		gameState.putChild(level);
@@ -54,6 +57,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		gameState = gameClient.currentGameState;
 		worldRenderer.render(delta);
 		ui.draw();
 		handleKeys();
