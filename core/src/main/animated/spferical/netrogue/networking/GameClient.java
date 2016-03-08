@@ -33,6 +33,10 @@ public class GameClient extends Listener {
 		}
 	}
 	
+	public void disconnect() {
+		client.close();
+	}
+	
 	@Override
 	public void connected(Connection connection) {
 		

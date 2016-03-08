@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.GameClient;
 import animated.spferical.netrogue.networking.GameServer;
@@ -40,9 +40,12 @@ public class TestClientServer {
 			try {
 				Thread.sleep((long) ((1f / GameServer.NETWORK_UPDATE_RATE) * 1000));
 			} catch (Exception e) {
-				Gdx.app.log("Interrupted", e.getMessage());
+				Log.error("Interrupted", e.getMessage());
 			}
 		}
+		
+		for (GameClient client : this.clients)
+			client.disconnect();
 	}
 
 	private GameServer server;
