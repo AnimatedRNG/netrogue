@@ -25,18 +25,20 @@ public class GameServer extends Listener implements Runnable {
 		this.gameState = (GameState) this.oldGameState.clone();
 		this.isRunning = true;
 		this.networkingThead = new Thread(this);
+		Registrar.register(server.getKryo());
+		
+		this.playerIDs = new HashMap<>();
+	}
+	
+	public void start() {
+		this.networkingThead.start();
 		
 		try {
-			Registrar.register(server.getKryo());
 			server.start();
 			server.bind(PORT_NUMBER);
 		} catch (IOException e) {
 			Gdx.app.error("Networking", "Error binding to port", e);
 		}
-		
-		this.playerIDs = new HashMap<>();
-		
-		this.networkingThead.start();
 	}
 	
 	@Override
