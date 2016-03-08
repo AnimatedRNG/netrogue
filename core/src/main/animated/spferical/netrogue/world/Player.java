@@ -1,5 +1,8 @@
 package animated.spferical.netrogue.world;
 
+import com.esotericsoftware.kryonet.Connection;
+
+import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.networking.NetworkObject;
 
 public class Player extends NetworkObject {
@@ -8,6 +11,14 @@ public class Player extends NetworkObject {
 
 	public Player() {
 		this(0, 0);
+	}
+	
+	public Player(Connection connection, int x, int y) {
+		this(x, y);
+		this.put("connection", connection.getID());
+		// Temporary name until player identifies themselves
+		this.put("name", connection.getID());
+		this.put("input", new ClientInputState());
 	}
 
 	public Player(int x, int y) {
