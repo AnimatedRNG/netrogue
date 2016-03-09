@@ -61,23 +61,23 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 		this.ID = ID;
 	}
 	
-	public void put(String name, Object obj) {
+	public synchronized void put(String name, Object obj) {
 		this.attributes.put(name, obj);
 	}
 	
-	public Object remove(String name) {
+	public synchronized Object remove(String name) {
 		return this.attributes.remove(name);
 	}
 	
-	public Object get(String name) {
+	public synchronized Object get(String name) {
 		return this.attributes.get(name);
 	}
 	
-	public boolean has(String name) {
+	public synchronized boolean has(String name) {
 		return this.attributes.containsKey(name);
 	}
 	
-	public boolean check(String name) {
+	public synchronized boolean check(String name) {
 		Object val = this.attributes.get(name);
 		if (val instanceof Boolean)
 			return (Boolean) val;
@@ -86,34 +86,34 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	}
 	
 	// Please don't abuse.
-	public TreeMap<String, Object> getAllAttributes() {
+	public synchronized TreeMap<String, Object> getAllAttributes() {
 		return new TreeMap<String, Object>(this.attributes);
 	}
 	
-	public void putChild(NetworkObject child) {
+	public synchronized void putChild(NetworkObject child) {
 		child.parent = this.ID;
 		this.children.put(child.ID, child);
 	}
 	
-	public NetworkObject removeChild(Long ID) {
+	public synchronized NetworkObject removeChild(Long ID) {
 		this.parent = 0;
 		return this.children.remove(ID);
 	}
 	
-	public NetworkObject getChild(Long ID) {
+	public synchronized NetworkObject getChild(Long ID) {
 		return this.children.get(ID);
 	}
 	
-	public boolean hasChild(Long ID) {
+	public synchronized boolean hasChild(Long ID) {
 		return this.children.containsKey(ID);
 	}
 	
 	// Please don't abuse
-	public TreeMap<Long, NetworkObject> getAllChildren() {
+	public synchronized TreeMap<Long, NetworkObject> getAllChildren() {
 		return new TreeMap<Long, NetworkObject>(this.children);
 	}
 	
-	public NetworkObject searchChildren(Long ID) {
+	public synchronized NetworkObject searchChildren(Long ID) {
 		for (Entry<Long, NetworkObject> child : this.getAllChildren().entrySet())
 		{
 			if (child.getKey().equals(ID))
@@ -130,7 +130,7 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
-	public NetworkObject clone() {
+	public synchronized NetworkObject clone() {
 		try {
 			ByteArrayOutputStream outByte = new ByteArrayOutputStream();
 			ObjectOutputStream outObj = new ObjectOutputStream(outByte);
