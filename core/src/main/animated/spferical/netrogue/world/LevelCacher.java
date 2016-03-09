@@ -34,7 +34,8 @@ public class LevelCacher {
 			}
 			return chunk;
 		} else {
-			return (Chunk) level.searchChildren(chunkIDs[row][col]);
+			Chunk chunk = (Chunk) level.searchChildren(chunkIDs[row][col]);
+			return chunk;
 		}
 	}
 }

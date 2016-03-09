@@ -37,16 +37,7 @@ public class GameServer extends Listener implements Runnable {
 		this.playerIDs = new HashMap<>();
 	}
 
-	public void setupGame() {
-		Level level = new Level(1, MapGenerator.mapHeight,
-				MapGenerator.mapWidth);
-		MapGenerator.generateMap(level);
-		gameState.putChild(level);
-	}
-	
 	public void start() {
-		setupGame();
-
 		this.networkingThead.start();
 		
 		Log.info("Server Networking", "Server started. GameState ID: " + this.gameState.ID);

@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
 
 public class GameClient extends Listener {

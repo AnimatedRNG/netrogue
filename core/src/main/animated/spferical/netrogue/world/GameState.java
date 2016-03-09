@@ -3,6 +3,7 @@ package animated.spferical.netrogue.world;
 import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.ClientInputState;
+import animated.spferical.netrogue.MapGenerator;
 import animated.spferical.netrogue.networking.NetworkObject;
 
 public class GameState extends NetworkObject {
@@ -11,6 +12,13 @@ public class GameState extends NetworkObject {
 
 	public GameState() {
 		super();
+	}
+
+	public void setupGame() {
+		Level level = new Level(1, MapGenerator.mapHeight,
+				MapGenerator.mapWidth);
+		MapGenerator.generateMap(level);
+		putChild(level);
 	}
 	
 	// Handle player input
@@ -24,5 +32,17 @@ public class GameState extends NetworkObject {
 		ClientInputState input = (ClientInputState) player.get("input");
 		
 		// All your GameState input code here
+	}
+
+	public Level findLevel(int levelNum) {
+		for (NetworkObject obj : getAllChildren().values()) {
+			if (obj instanceof Level) {
+				Level level = (Level) obj;
+				if (levelNum == level.getNumber()) {
+					return level;
+				}
+			}
+		}
+		return null;
 	}
 }

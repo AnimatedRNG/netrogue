@@ -15,7 +15,6 @@ public class GameScreen implements Screen {
 	GameState gameState;
 	GameClient gameClient;
 	Player player;
-	Level level;
 	SpriteBatch batch;
 	WorldRenderer worldRenderer;
 	float timeSinceLastAction = 0;
@@ -25,11 +24,23 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		gameClient = new GameClient(); 
 
-		gameState = gameClient.blockUntilLoaded();
-		player = gameClient.findPlayer();
-		level.putChild(player);
+		//gameState = gameClient.blockUntilLoaded();
+		gameState = new GameState();
+		gameState.setupGame();
+
+		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
+		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
+
+		player = new Player(mapCenterX, mapCenterY);
+		gameState.putChild(new Player(mapCenterX, mapCenterY));
+		//player = gameClient.findPlayer();
+		Level level = getCurrentLevel();
 
 		worldRenderer = new WorldRenderer(level, player);
+	}
+
+	public Level getCurrentLevel() {
+		return gameState.findLevel(player.getDungeonLevel());
 	}
 
 	public void handleKeys(float delta) {
@@ -57,7 +68,11 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		gameState = gameClient.currentGameState;
+		//gameState = gameClient.currentGameState;
+
+		// re-find player in case object changed
+		//player = gameClient.findPlayer();
+
 		worldRenderer.render(gameState, delta);
 		ui.draw();
 		handleKeys(delta);

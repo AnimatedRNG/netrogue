@@ -32,6 +32,10 @@ public class Level extends NetworkObject {
 		return (int) get("height");
 	}
 
+	public int getNumber() {
+		return (int) get("number");
+	}
+
 	public Chunk getChunk(int row, int col) {
 		for (NetworkObject child : getAllChildren().values()) {
 			if (!(child instanceof Chunk)) continue;
