@@ -26,6 +26,10 @@ public class GameClient extends Listener {
 		this.client.addListener(this.threaded);
 		Registrar.register(this.client.getKryo());
 	}
+
+	public int getConnectionID() {
+		return this.client.getID();
+	}
 	
 	public void connect() {
 		try {

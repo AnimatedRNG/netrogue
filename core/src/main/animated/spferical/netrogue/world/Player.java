@@ -42,4 +42,8 @@ public class Player extends NetworkObject {
 	public void setY(int y) {
 		put("y", y);
 	}
+
+	public int getConnectionID() {
+		return (int) get("connection");
+	}
 }

@@ -43,5 +43,8 @@ public abstract class Registrar {
 		kryo.register(Chunk.class);
 		kryo.register(Level.class);
 		kryo.register(ClientInputState.class);
+		kryo.register(Tile.Type.class);
+		kryo.register(Tile.Type[].class);
+		kryo.register(Tile.Type[][].class);
 	}
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import animated.spferical.netrogue.networking.GameClient;
+import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
@@ -25,19 +26,25 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		gameClient = new GameClient(); 
 
-		// TODO: get stuff from server instead
 		gameState = gameClient.blockUntilConnected();
-		level = new Level(1, MapGenerator.mapHeight,
-				MapGenerator.mapWidth);
-		gameState.putChild(level);
-		MapGenerator.generateMap(level);
-		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
-		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
-		player = new Player(mapCenterX, mapCenterY);
+		player = findPlayer();
 		level.putChild(player);
 
 		worldRenderer = new WorldRenderer(level, player);
 
+	}
+
+	public Player findPlayer() {
+		for (NetworkObject obj : gameState.getAllChildren().values()) {
+			if (obj instanceof Player) {
+				Player player = (Player) obj;
+				int connectionID = player.getConnectionID();
+				if (connectionID == gameClient.getConnectionID()) {
+					return player;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void handleKeys(float delta) {

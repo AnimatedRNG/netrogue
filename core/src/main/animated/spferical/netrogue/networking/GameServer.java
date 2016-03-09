@@ -9,7 +9,10 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.Constants;
+import animated.spferical.netrogue.MapGenerator;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
 
 public class GameServer extends Listener implements Runnable {
@@ -29,8 +32,17 @@ public class GameServer extends Listener implements Runnable {
 		
 		this.playerIDs = new HashMap<>();
 	}
+
+	public void setupGame() {
+		Level level = new Level(1, MapGenerator.mapHeight,
+				MapGenerator.mapWidth);
+		MapGenerator.generateMap(level);
+		gameState.putChild(level);
+	}
 	
 	public void start() {
+		setupGame();
+
 		this.networkingThead.start();
 		
 		Log.info("Server Networking", "Server started. GameState ID: " + this.gameState.ID);
@@ -70,7 +82,9 @@ public class GameServer extends Listener implements Runnable {
 		this.server.sendToTCP(connection.getID(),
 			new InfoResponse(this.oldGameState));
 		
-		Player player = new Player(connection, 0, 0);
+		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
+		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
+		Player player = new Player(connection, mapCenterX, mapCenterY);
 		
 		this.playerIDs.put(connection, player.ID);
 		this.gameState.putChild(player);
@@ -105,6 +119,7 @@ public class GameServer extends Listener implements Runnable {
 	
 	private void sendUpdateToPlayer(List<Diff> diffs, Connection player) {
 		Player p = (Player) this.gameState.getChild(this.playerIDs.get(player));
+		gameState.putChild(p);
 		
 		// Filter function here
 		for (Diff diff : diffs)
