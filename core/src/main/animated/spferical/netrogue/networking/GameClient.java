@@ -36,7 +36,8 @@ public class GameClient extends Listener {
 	
 	public void connect() {
 		try {
-			this.client.connect(TIMEOUT, "18.189.109.162", GameServer.PORT_NUMBER);
+			// 18.189.109.162
+			this.client.connect(TIMEOUT, "localhost", GameServer.PORT_NUMBER);
 		} catch (IOException e) {
 			Gdx.app.error("Networking", "Failed to connect to server", e);
 		}
@@ -64,7 +65,7 @@ public class GameClient extends Listener {
 		this.blockUntilConnected();
 		Log.info("Client Networking", "Connected");
 		int accumulator = 0;
-		while (this.findPlayer() == null || accumulator < LOAD_TIMEOUT)
+		while (this.findPlayer() == null && accumulator < LOAD_TIMEOUT)
 		{
 			try {
 				Thread.sleep(BLOCKING_PERIOD);
