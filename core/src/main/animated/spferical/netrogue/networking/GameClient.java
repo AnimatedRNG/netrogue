@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Player;
 
 public class GameClient extends Listener {
 	
@@ -52,6 +53,29 @@ public class GameClient extends Listener {
 			}
 			accumulator += BLOCKING_PERIOD;
 		}
+		return this.currentGameState;
+	}
+	
+	/**
+	 * Blocks until client is ready to join the game world
+	 */
+	public GameState blockUntilLoaded() {
+		this.blockUntilConnected();
+		Log.info("Client Networking", "Connected");
+		int accumulator = 0;
+		while (this.findPlayer() == null && accumulator < TIMEOUT)
+		{
+			try {
+				Thread.sleep(BLOCKING_PERIOD);
+			} catch (InterruptedException e) {
+				Log.error("Interrupted", e);
+			}
+			accumulator += BLOCKING_PERIOD;
+		}
+		if (accumulator > TIMEOUT)
+			Log.error("Client Networking", "Unable to load world from server!");
+		else
+			Log.info("Client Networking", "Loaded world from server");
 		return this.currentGameState;
 	}
 	
@@ -122,6 +146,19 @@ public class GameClient extends Listener {
 			}
 			this.currentGameState = (GameState) this.oldGameState.clone();
 		}
+	}
+	
+	public Player findPlayer() {
+		for (NetworkObject obj : this.currentGameState.getAllChildren().values()) {
+			if (obj instanceof Player) {
+				Player player = (Player) obj;
+				int connectionID = player.getConnectionID();
+				if (connectionID == this.getConnectionID()) {
+					return player;
+				}
+			}
+		}
+		return null;
 	}
 	
 	@Override
