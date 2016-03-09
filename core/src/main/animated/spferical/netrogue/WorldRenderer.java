@@ -26,12 +26,12 @@ public class WorldRenderer {
 	Camera camera;
 	SpriteBatch batch;
 	Viewport viewport;
-	Player player;
+	long playerID;
 	EnumMap<Tile.Type, TextureRegion> tileTextureRegions;
 
 	public WorldRenderer(Level level, Player player) {
 		this.levelCacher = new LevelCacher(level);
-		this.player = player;
+		this.playerID = player.ID;
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(1024, 768, camera);
 		batch = new SpriteBatch();
@@ -46,7 +46,7 @@ public class WorldRenderer {
 				Assets.loadTextureRegion("DawnLike/Objects/Floor.png", 13, 1));
 	}
 
-	public void updateCamera(float delta) {
+	public void updateCamera(Player player, float delta) {
 		int tileSize = Constants.tileSize;
 		float dx = tileSize * (player.getX() + .5f) - camera.position.x;
 		float dy = tileSize * (player.getY() + .5f) - camera.position.y;
@@ -56,10 +56,11 @@ public class WorldRenderer {
 	}
 
 	public void render(GameState gameState, float delta) {
+		Player player = (Player) gameState.searchChildren(playerID);
 		int tileSize = Constants.tileSize;
 		int chunkSize = Constants.chunkSize;
 		timeElapsed += delta;
-		updateCamera(delta);
+		updateCamera(player, delta);
 		// move camera to player
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
