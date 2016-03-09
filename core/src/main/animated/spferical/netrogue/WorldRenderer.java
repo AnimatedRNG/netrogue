@@ -103,6 +103,6 @@ public class WorldRenderer {
 	}
 
 	public void handleResize(int width, int height) {
-		viewport.update(width, height, true);
+		viewport.update(width, height);
 	}
 }
