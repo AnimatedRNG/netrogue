@@ -26,8 +26,6 @@ public class GameScreen implements Screen {
 		gameClient = new GameClient(); 
 
 		gameState = gameClient.blockUntilLoaded();
-		player = gameClient.findPlayer();
-		level.putChild(player);
 
 		worldRenderer = new WorldRenderer(level, player);
 	}
