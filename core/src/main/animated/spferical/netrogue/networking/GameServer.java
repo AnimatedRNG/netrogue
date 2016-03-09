@@ -11,6 +11,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.MapGenerator;
 import animated.spferical.netrogue.world.GameState;
@@ -35,6 +36,7 @@ public class GameServer extends Listener implements Runnable {
 		Registrar.register(server.getKryo());
 		
 		this.playerIDs = new HashMap<>();
+		this.timeSinceLastMove = new HashMap<>();
 	}
 
 	public void setupGame() {
@@ -90,6 +92,7 @@ public class GameServer extends Listener implements Runnable {
 		Player player = new Player(connection, mapCenterX, mapCenterY);
 		
 		this.playerIDs.put(connection, player.ID);
+		this.timeSinceLastMove.put(connection, System.currentTimeMillis());
 		this.gameState.putChild(player);
 		
 		Log.info("Server Networking", "Player " + connection.getID() + " connected with ID: " + player.ID);
@@ -99,6 +102,7 @@ public class GameServer extends Listener implements Runnable {
 	public void disconnected(Connection connection) {
 		// Player disconnected, destroy Player object
 		this.gameState.removeChild(this.playerIDs.remove(connection));
+		this.timeSinceLastMove.remove(connection);
 	}
 	
 	@Override
@@ -112,6 +116,15 @@ public class GameServer extends Listener implements Runnable {
 				if (target != null)
 					this.server.sendToTCP(connection.getID(), new InfoResponse(target));
 			}
+		}
+		else if (object instanceof ClientInputState)
+		{
+			Player player = (Player) this.gameState.getChild(this.playerIDs.get(connection));
+			player.put("input", object);
+			
+			long delta = System.currentTimeMillis() - timeSinceLastMove.get(connection);
+			this.gameState.handlePlayerInput(player, (float) delta / 1000f);
+			this.timeSinceLastMove.put(connection, System.currentTimeMillis());
 		}
 	}
 	
@@ -164,4 +177,7 @@ public class GameServer extends Listener implements Runnable {
 	private boolean isRunning;
 	
 	private HashMap<Connection, Long> playerIDs;
+	
+	// Connection -> Time since last move
+	private HashMap<Connection, Long> timeSinceLastMove;
 }

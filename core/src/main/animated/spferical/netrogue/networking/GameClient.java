@@ -17,6 +17,7 @@ public class GameClient extends Listener {
 	public static final int TIMEOUT = 1000;
 	public static final int LOAD_TIMEOUT = 10000;
 	public static final int BLOCKING_PERIOD = 10;
+	public static final int CLIENT_NETWORK_UPDATE_RATE = 10;
 	public static final int[] BUFFER_SIZES = {131072, 131072};
 
 	public GameState currentGameState;
@@ -166,6 +167,10 @@ public class GameClient extends Listener {
 			}
 		}
 		return null;
+	}
+	
+	public synchronized void sendObjectToServer(Object object) {
+		this.client.sendTCP(object);
 	}
 	
 	@Override
