@@ -11,10 +11,10 @@ public class Chunk extends NetworkObject {
 
 	public Chunk(int chunkRow, int chunkCol) {
 		super();
-		Tile.Type[][] tiles = new Tile.Type[16][16];
-		for (int row = 0; row < tiles.length; row++) {
-			for (int col = 0; col < tiles[0].length; col++) {
-				tiles[row][col] = Tile.Type.WALL;
+		TileTypeArray tiles = new TileTypeArray(16, 16);
+		for (int row = 0; row < tiles.tiles.length; row++) {
+			for (int col = 0; col < tiles.tiles[0].length; col++) {
+				tiles.tiles[row][col] = Tile.Type.WALL;
 			}
 		}
 		put("tiles", tiles);
@@ -29,7 +29,7 @@ public class Chunk extends NetworkObject {
 		return (int) get("col");
 	}
 
-	public Tile.Type[][] getTiles() {
-		return (Tile.Type[][]) get("tiles");
+	public TileTypeArray getTiles() {
+		return (TileTypeArray) get("tiles");
 	}
 }

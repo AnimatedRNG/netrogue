@@ -6,6 +6,7 @@ import java.util.Random;
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.Tile;
+import animated.spferical.netrogue.world.TileTypeArray;
 
 public class MapGenerator {
 
@@ -46,14 +47,14 @@ public class MapGenerator {
 				// create the chunk
 				chunks[chunkRow][chunkCol] = new Chunk(chunkRow, chunkCol);
 				// get the tiles it starts with
-				Tile.Type[][] chunkTiles = chunks[chunkRow][chunkCol].getTiles();
+				TileTypeArray chunkTiles = chunks[chunkRow][chunkCol].getTiles();
 
 				// fill in each tile with what was generated above
 				for (int tileRow = 0; tileRow < chunkSize; tileRow++) {
 					for (int tileCol = 0; tileCol < chunkSize; tileCol++) {
 						int row = chunkRow * chunkSize + tileRow;
 						int col = chunkCol * chunkSize + tileCol;
-						chunkTiles[tileRow][tileCol] = tiles[row][col];
+						chunkTiles.tiles[tileRow][tileCol] = tiles[row][col];
 					}
 				}
 

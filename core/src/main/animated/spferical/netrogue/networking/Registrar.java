@@ -15,6 +15,7 @@ import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
 import animated.spferical.netrogue.world.Tile;
+import animated.spferical.netrogue.world.TileTypeArray;
 
 public abstract class Registrar {
 
@@ -46,5 +47,6 @@ public abstract class Registrar {
 		kryo.register(Tile.Type.class);
 		kryo.register(Tile.Type[].class);
 		kryo.register(Tile.Type[][].class);
+		kryo.register(TileTypeArray.class);
 	}
 }

@@ -1,5 +1,7 @@
 package animated.spferical.netrogue.world;
 
+import java.util.Arrays;
+
 import animated.spferical.netrogue.networking.NetworkObject;
 
 public class Tile extends NetworkObject {
@@ -16,3 +18,5 @@ public class Tile extends NetworkObject {
 		return (Type) get("type");
 	}
 }
+
+
