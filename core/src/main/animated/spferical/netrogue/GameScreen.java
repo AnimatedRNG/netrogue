@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		gameState = gameClient.currentGameState;
-		worldRenderer.render(delta);
+		worldRenderer.render(gameState, delta);
 		ui.draw();
 		handleKeys(delta);
 	}
