@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
@@ -90,8 +91,13 @@ public class WorldRenderer {
 		batch.end();
 
 		batch.begin();
-		batch.draw(Assets.animations.get(0).getKeyFrame(timeElapsed, true),
-				player.getX() * tileSize, player.getY() * tileSize);
+		for (NetworkObject obj : gameState.getAllChildren().values()) {
+			if (obj instanceof Player) {
+				Player p = (Player) obj;
+				batch.draw(Assets.animations.get(0).getKeyFrame(timeElapsed, true),
+						p.getX() * tileSize, p.getY() * tileSize);
+			}
+		}
 		batch.end();
 	}
 
