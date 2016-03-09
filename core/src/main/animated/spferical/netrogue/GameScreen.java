@@ -14,11 +14,9 @@ public class GameScreen implements Screen {
 	UserInterface ui;
 	GameState gameState;
 	GameClient gameClient;
-	Player player;
-	Level level;
 	SpriteBatch batch;
 	WorldRenderer worldRenderer;
-	float timeSinceLastAction = 0;
+	//float timeSinceLastAction = 0;
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -26,27 +24,29 @@ public class GameScreen implements Screen {
 		gameClient = new GameClient(); 
 
 		gameState = gameClient.blockUntilLoaded();
+		Player player = gameClient.findPlayer();
+		Level level = gameState.getLevelByNumber(player.getDungeonLevel());
 
 		worldRenderer = new WorldRenderer(level, player);
 	}
 
 	public void handleKeys(float delta) {
-		timeSinceLastAction += delta;
-		if (timeSinceLastAction > Constants.actionDelay) {
-			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-				player.setY(player.getY() + 1);
-				timeSinceLastAction = 0;
-			} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-				player.setX(player.getX() - 1);
-				timeSinceLastAction = 0;
-			} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-				player.setY(player.getY() - 1);
-				timeSinceLastAction = 0;
-			} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-				player.setX(player.getX() + 1);
-				timeSinceLastAction = 0;
-			}
+		Player player = gameClient.findPlayer();
+		ClientInputState inputState = (ClientInputState) player.get("input");
+		inputState.resetAll();
+		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+			inputState.moveUp = true;
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+			inputState.moveRight = true;
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+			inputState.moveDown = true;
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+			inputState.moveRight = true;
 		}
+		
+		player.put("input", inputState);
+		this.gameState.handlePlayerInput(player, delta);
 	}
 
 	@Override

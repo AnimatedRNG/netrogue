@@ -40,19 +40,33 @@ public class ClientInputState implements Serializable {
 				return false;
 		}
 	}
+	
+	public void resetAll() {
+		this.moveLeft = false;
+		this.moveRight = false;
+		this.moveUp = false;
+		this.moveDown = false;
+		
+		this.mouseXOffset = 0;
+		this.mouseYOffset = 0;
+		
+		this.mouseClicked = false;
+		
+		this.stringInput = null;
+	}
 
-	boolean moveLeft = false;
-	boolean moveRight = false;
-	boolean moveUp = false;
-	boolean moveDown = false;
+	public boolean moveLeft = false;
+	public boolean moveRight = false;
+	public boolean moveUp = false;
+	public boolean moveDown = false;
 
 	// offsets from the player, in tiles
-	int mouseXOffset = 0;
-	int mouseYOffset = 0;
+	public int mouseXOffset = 0;
+	public int mouseYOffset = 0;
 
-	boolean mouseClicked = false;
+	public boolean mouseClicked = false;
 	
 	// Use this for login, chat, and other player
 	// commands
-	String stringInput = null;
+	public String stringInput = null;
 }

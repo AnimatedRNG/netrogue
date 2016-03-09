@@ -25,6 +25,12 @@ public class Player extends NetworkObject {
 		super();
 		setX(x);
 		setY(y);
+		this.put("level", 1);
+		this.put("timeSinceLastAction", 0.0f);
+	}
+
+	public int getDungeonLevel() {
+		return (int) get("level");
 	}
 
 	public int getX() {
