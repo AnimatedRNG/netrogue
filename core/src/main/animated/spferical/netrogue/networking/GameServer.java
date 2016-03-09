@@ -2,7 +2,9 @@ package animated.spferical.netrogue.networking;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -80,10 +82,9 @@ public class GameServer extends Listener implements Runnable {
 	
 	@Override
 	public void connected(Connection connection) {
-		// Player connected, create new Player object
-		this.server.sendToTCP(connection.getID(),
-			new InfoResponse(this.oldGameState));
+		this.sendRecursiveInfoToPlayer(connection, this.gameState);
 		
+		// Player connected, create new Player object
 		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
 		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
 		Player player = new Player(connection, mapCenterX, mapCenterY);
@@ -117,6 +118,31 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void idle(Connection connection) {
 		// Not much is happening
+	}
+	
+	private void sendRecursiveInfoToPlayer(Connection connection, NetworkObject object) {
+		//this.server.sendToTCP(connection.getID(),
+		//		new InfoResponse(object));
+		
+		NetworkObject tempObject = object.clone();
+		tempObject.killChildren();
+		this.server.sendToTCP(connection.getID(), 
+				new InfoResponse(tempObject));
+		
+		// Recursive child genocide and cloning
+		Iterator<Entry<Long, NetworkObject>> children = 
+				object.getAllChildren().entrySet().iterator();
+		while (children.hasNext())
+		{
+			NetworkObject child = children.next().getValue().clone();
+			child.killChildren();
+			this.server.sendToTCP(connection.getID(), 
+				new InfoResponse(child));
+		}
+		
+		children = object.getAllChildren().entrySet().iterator();
+		while (children.hasNext())
+			sendRecursiveInfoToPlayer(connection, children.next().getValue());
 	}
 	
 	private void sendUpdateToPlayer(List<Diff> diffs, Connection player) {

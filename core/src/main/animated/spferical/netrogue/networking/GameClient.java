@@ -80,6 +80,17 @@ public class GameClient extends Listener {
 				this.oldGameState = (GameState) this.currentGameState.clone();
 				Log.info("Directly updated gamestate: " + this.currentGameState);
 			}
+			else
+			{
+				long parent = networkObject.parent;
+				if (this.oldGameState == null)
+				{
+					Log.error("Client Networking", 
+							"Received InfoResponse but haven't yet received GameState!");
+					return;
+				}
+				this.oldGameState.searchChildren(parent).putChild(networkObject);
+			}
 		}
 		else if (object instanceof List)
 		{

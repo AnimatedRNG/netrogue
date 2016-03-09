@@ -126,6 +126,15 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 		return null;
 	}
 	
+	/**
+	 * Murders all the children.
+	 * 
+	 * I hope you feel good about yourself.
+	 */
+	public void killChildren() {
+		this.children.clear();
+	}
+	
 	/* Warning this is evil.
 	 * 
 	 * (non-Javadoc)
