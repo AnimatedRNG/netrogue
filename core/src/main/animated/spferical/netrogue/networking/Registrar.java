@@ -48,5 +48,6 @@ public abstract class Registrar {
 		kryo.register(Tile.Type[].class);
 		kryo.register(Tile.Type[][].class);
 		kryo.register(TileTypeArray.class);
+		kryo.register(Float.class);
 	}
 }

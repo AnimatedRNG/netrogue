@@ -29,16 +29,16 @@ public class GameState extends NetworkObject {
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
 			if (input.moveUp) {
 				player.setY(player.getY() + 1);
-				player.put("timeSinceLastAction", 0);
+				player.put("timeSinceLastAction", 0.0f);
 			} else if (input.moveLeft) {
 				player.setX(player.getX() - 1);
-				player.put("timeSinceLastAction", 0);
+				player.put("timeSinceLastAction", 0.0f);
 			} else if (input.moveDown) {
 				player.setY(player.getY() - 1);
-				player.put("timeSinceLastAction", 0);
+				player.put("timeSinceLastAction", 0.0f);
 			} else if (input.moveRight) {
 				player.setX(player.getX() + 1);
-				player.put("timeSinceLastAction", 0);
+				player.put("timeSinceLastAction", 0.0f);
 			}
 		}
 	}
