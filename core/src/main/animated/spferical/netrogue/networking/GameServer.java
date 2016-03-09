@@ -20,8 +20,10 @@ public class GameServer extends Listener implements Runnable {
 	public static final float NETWORK_UPDATE_RATE = 10f;
 	public static final int PORT_NUMBER = 37707;
 	
+	public static final int[] BUFFER_SIZES = {131072, 131072};
+	
 	public GameServer() {
-		this.server = new Server();
+		this.server = new Server(BUFFER_SIZES[0], BUFFER_SIZES[1]);
 		this.threaded = new ThreadedListener(this);
 		this.server.addListener(this.threaded);
 		this.oldGameState = new GameState();
