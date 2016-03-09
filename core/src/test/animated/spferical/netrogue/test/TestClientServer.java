@@ -14,7 +14,7 @@ import animated.spferical.netrogue.networking.GameServer;
 
 public class TestClientServer {
 
-	public static final int DURATION = 50;
+	public static final int DURATION = 10;
 	public static final int NUMBER_CLIENTS = 10;
 	
 	@Before
@@ -35,7 +35,7 @@ public class TestClientServer {
 		this.server.start();
 		for (GameClient client : this.clients)
 		{
-			briefLag(500);
+			briefLag(100);
 			client.connect();
 		}
 		
@@ -49,7 +49,7 @@ public class TestClientServer {
 		
 		for (GameClient client : this.clients)
 		{
-			briefLag(500);
+			briefLag(100);
 			client.disconnect();
 		}
 	}
