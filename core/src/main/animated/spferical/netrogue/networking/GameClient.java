@@ -15,7 +15,7 @@ import animated.spferical.netrogue.world.Player;
 public class GameClient extends Listener {
 	
 	public static final int TIMEOUT = 1000;
-	public static final int LOAD_TIMEOUT = 5000;
+	public static final int LOAD_TIMEOUT = 10000;
 	public static final int BLOCKING_PERIOD = 10;
 	public static final int[] BUFFER_SIZES = {131072, 131072};
 
@@ -73,10 +73,11 @@ public class GameClient extends Listener {
 			}
 			accumulator += BLOCKING_PERIOD;
 		}
-		if (accumulator > TIMEOUT)
+		if (accumulator > LOAD_TIMEOUT)
 			Log.error("Client Networking", "Unable to load world from server!");
 		else
-			Log.info("Client Networking", "Loaded world from server");
+			Log.info("Client Networking", "Loaded world from server in "
+					+ (float) accumulator / 1000f + " seconds");
 		return this.currentGameState;
 	}
 	
@@ -113,6 +114,10 @@ public class GameClient extends Listener {
 					Log.error("Client Networking", 
 							"Received InfoResponse but haven't yet received GameState!");
 					return;
+				}
+				else
+				{
+					Log.info("Received an InfoResponse of " + networkObject);
 				}
 				this.oldGameState.searchChildren(parent).putChild(networkObject);
 			}
