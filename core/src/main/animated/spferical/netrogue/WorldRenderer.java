@@ -12,13 +12,15 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import animated.spferical.netrogue.world.Chunk;
+import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
+import animated.spferical.netrogue.world.LevelCacher;
 import animated.spferical.netrogue.world.Player;
 import animated.spferical.netrogue.world.Tile;
 
 public class WorldRenderer {
 	float timeElapsed;
-	Level level;
+	LevelCacher levelCacher;
 	Camera camera;
 	SpriteBatch batch;
 	Viewport viewport;
@@ -26,7 +28,7 @@ public class WorldRenderer {
 	EnumMap<Tile.Type, TextureRegion> tileTextureRegions;
 
 	public WorldRenderer(Level level, Player player) {
-		this.level = level;
+		this.levelCacher = new LevelCacher(level);
 		this.player = player;
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(1024, 768, camera);
@@ -51,7 +53,7 @@ public class WorldRenderer {
 		camera.update();
 	}
 
-	public void render(float delta) {
+	public void render(GameState gameState, float delta) {
 		int tileSize = Constants.tileSize;
 		int chunkSize = Constants.chunkSize;
 		timeElapsed += delta;
@@ -66,7 +68,7 @@ public class WorldRenderer {
 		// draw tiles
 		for (int row = playerChunkRow - 1; row <= playerChunkRow + 1; row++) {
 			for (int col = playerChunkCol - 1; col <= playerChunkCol + 1; col++) {
-				Chunk chunk = level.getChunk(row, col);
+				Chunk chunk = levelCacher.getChunk(gameState, row, col);
 				if (chunk == null) {
 					continue;
 				}
