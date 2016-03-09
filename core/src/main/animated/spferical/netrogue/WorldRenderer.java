@@ -17,6 +17,7 @@ import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.LevelCacher;
 import animated.spferical.netrogue.world.Player;
 import animated.spferical.netrogue.world.Tile;
+import animated.spferical.netrogue.world.TileTypeArray;
 
 public class WorldRenderer {
 	float timeElapsed;
@@ -72,15 +73,15 @@ public class WorldRenderer {
 				if (chunk == null) {
 					continue;
 				}
-				Tile.Type[][] tiles = (Tile.Type[][]) chunk.get("tiles");
-				for (int tileRow = 0; tileRow < tiles.length; tileRow++) {
-					for (int tileCol = 0; tileCol < tiles[0].length; tileCol++) {
+				TileTypeArray tiles = (TileTypeArray) chunk.get("tiles");
+				for (int tileRow = 0; tileRow < tiles.tiles.length; tileRow++) {
+					for (int tileCol = 0; tileCol < tiles.tiles[0].length; tileCol++) {
 						int tileX = chunk.getCol() * chunkSize + tileCol;
 						int tileY = chunk.getRow() * chunkSize + tileRow;
 						int x = tileSize * tileX;
 						int y = tileSize * tileY;
 						TextureRegion tileTexture = tileTextureRegions.get(
-								tiles[tileRow][tileCol]);
+								tiles.tiles[tileRow][tileCol]);
 						batch.draw(tileTexture, x, y);
 					}
 				}
