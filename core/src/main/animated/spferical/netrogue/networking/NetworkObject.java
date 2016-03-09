@@ -114,6 +114,8 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	}
 	
 	public synchronized NetworkObject searchChildren(Long ID) {
+		if (ID == this.ID)
+			return this;
 		for (Entry<Long, NetworkObject> child : this.getAllChildren().entrySet())
 		{
 			if (child.getKey().equals(ID))
