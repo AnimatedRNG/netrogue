@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -116,12 +117,21 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	public synchronized NetworkObject searchChildren(Long ID) {
 		if (ID == this.ID)
 			return this;
-		for (Entry<Long, NetworkObject> child : this.getAllChildren().entrySet())
+
+		Set<Entry<Long, NetworkObject>> children = getAllChildren().entrySet();
+		for (Entry<Long, NetworkObject> child : children)
 		{
 			if (child.getKey().equals(ID))
 				return child.getValue();
-			else
-				return searchChildren(ID);
+		}
+
+		// search children recursively
+		for (Entry<Long, NetworkObject> child : children)
+		{
+			NetworkObject obj = child.getValue().searchChildren(ID);
+			if (obj != null) {
+				return obj;
+			}
 		}
 		return null;
 	}
