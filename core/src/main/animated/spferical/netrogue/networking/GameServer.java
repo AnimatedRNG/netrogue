@@ -82,7 +82,7 @@ public class GameServer extends Listener implements Runnable {
 	
 	@Override
 	public void connected(Connection connection) {
-		this.sendRecursiveInfoToPlayer(connection, this.gameState);
+		this.sendRecursiveInfoToPlayer(connection, this.oldGameState);
 		
 		// Player connected, create new Player object
 		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
@@ -147,7 +147,6 @@ public class GameServer extends Listener implements Runnable {
 	
 	private void sendUpdateToPlayer(List<Diff> diffs, Connection player) {
 		Player p = (Player) this.gameState.getChild(this.playerIDs.get(player));
-		gameState.putChild(p);
 		
 		// Filter function here
 		for (Diff diff : diffs)

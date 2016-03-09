@@ -15,6 +15,7 @@ import animated.spferical.netrogue.world.Player;
 public class GameClient extends Listener {
 	
 	public static final int TIMEOUT = 1000;
+	public static final int LOAD_TIMEOUT = 5000;
 	public static final int BLOCKING_PERIOD = 10;
 	public static final int[] BUFFER_SIZES = {131072, 131072};
 
@@ -63,7 +64,7 @@ public class GameClient extends Listener {
 		this.blockUntilConnected();
 		Log.info("Client Networking", "Connected");
 		int accumulator = 0;
-		while (this.findPlayer() == null && accumulator < TIMEOUT)
+		while (this.findPlayer() == null && accumulator < LOAD_TIMEOUT)
 		{
 			try {
 				Thread.sleep(BLOCKING_PERIOD);
