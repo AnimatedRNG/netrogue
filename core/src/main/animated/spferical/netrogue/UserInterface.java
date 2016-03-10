@@ -148,7 +148,7 @@ public class UserInterface {
 	}
 
 	public String getChatMessage() {
-		return chatField.getMessageText();
+		return chatField.getText();
 	}
 
 	public void clearChatField() {
