@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
@@ -22,6 +24,7 @@ public class UserInterface {
 	Viewport viewport;
 	Stage stage;
 	TextField chatField;
+	Label chatLabel;
 
 	public UserInterface() {
 		hp1 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9);
@@ -50,12 +53,17 @@ public class UserInterface {
 		table.setDebug(true);
 		table.layout();
 
+		chatLabel = new Label("Loading chat...\n\n\n\n...", Assets.skin);
+
+		ScrollPane chatScrollPane = new ScrollPane(chatLabel);
+		chatScrollPane.setSize(500, 500);
+
 		chatField = new TextField("", Assets.skin);
 		chatField.setMessageText("Enter to chat");
-		chatField.setAlignment(Align.bottomRight);
 
+		table.add(chatScrollPane).left();
 		table.row();
-		table.add(chatField).bottom().right();
+		table.add(chatField).left();
 		table.bottom().right().layout();
 		table.pack();
 		stage.addActor(table);
