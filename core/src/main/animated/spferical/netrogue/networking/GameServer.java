@@ -14,6 +14,8 @@ import com.esotericsoftware.minlog.Log;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.MapGenerator;
+import animated.spferical.netrogue.world.Actor;
+import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
@@ -56,6 +58,10 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning) {
+			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
+			this.gameState.updateAllChildren(this.gameState, 
+					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
+			
 			// Get all diffs in the GameState object
 			// and send them to everybody
 			synchronized (this.gameState) 
@@ -68,6 +74,8 @@ public class GameServer extends Listener implements Runnable {
 				
 				this.oldGameState = (GameState) this.gameState.clone();
 			}
+			
+			Log.info("Server GameState", this.gameState.toString());
 			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
@@ -85,6 +93,7 @@ public class GameServer extends Listener implements Runnable {
 		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
 		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
 		Player player = new Player(connection, mapCenterX, mapCenterY);
+		player.randomlyAssignName();
 		
 		this.playerIDs.put(connection, player.ID);
 		this.timeSinceLastMove.put(connection, System.currentTimeMillis());

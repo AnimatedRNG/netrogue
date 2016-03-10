@@ -35,6 +35,11 @@ public abstract class Diff {
 			{
 				Log.error("Update numbers do not add up. Old update is "
 					+ old.lastUpdate + " and new update is " + newUpdate);
+				
+				Log.warn("Applying update regardless. May cause unintended consequences.");
+				old.lastUpdate = newUpdate;
+				this.onApply(old);
+				
 				return false;
 			}
 		}

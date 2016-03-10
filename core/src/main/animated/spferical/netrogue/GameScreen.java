@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
 	private GameClient gameClient;
 	private SpriteBatch batch;
 	private WorldRenderer worldRenderer;
-	private Thread networkThread;
+	private Thread logicThread;
 	
 	private long lastUpdate;
 
@@ -34,8 +34,8 @@ public class GameScreen implements Screen {
 		
 		this.lastUpdate = System.currentTimeMillis();
 		
-		this.networkThread = new Thread(new ClientNetworkHandler());
-		this.networkThread.start();
+		this.logicThread = new Thread(new ClientNetworkHandler());
+		this.logicThread.start();
 	}
 
 	public void handleKeys(float delta) {
@@ -56,7 +56,8 @@ public class GameScreen implements Screen {
 				ui.toggleChatFocus();
 			}
 		} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-			inputState.stringInput = ui.getChatMessage();
+			inputState.stringInput = player.get("name") + ": "
+					+ ui.getChatMessage();
 			ui.clearChatField();
 			ui.toggleChatFocus();
 		}
@@ -78,7 +79,7 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameState = gameClient.currentGameState;
 		worldRenderer.render(gameState, delta);
-		ui.draw(gameState);
+		ui.draw(gameState, gameClient.findPlayer().ID);
 		handleKeys(delta);
 	}
 
@@ -120,8 +121,11 @@ public class GameScreen implements Screen {
 		@Override
 		public void run() {
 			while (running) {
+				gameState.updateAllChildren(gameState, ((float) (System.currentTimeMillis() 
+						- (Long) gameState.get("lastTimeUpdate")) / 1000f));
+				
 				try {
-					Thread.sleep((long) (((float) GameClient.CLIENT_NETWORK_UPDATE_RATE / 60f) * 1000L));
+					Thread.sleep((long) (((float) GameClient.CLIENT_LOGIC_UPDATE_RATE / 60f) * 1000L));
 				} catch (InterruptedException e) {
 					Log.error("Client Networking", "Interrupted", e);
 				}

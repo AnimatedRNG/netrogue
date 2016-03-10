@@ -1,11 +1,14 @@
 package animated.spferical.netrogue.world;
 
-import com.esotericsoftware.kryonet.Connection;
+import java.util.Random;
 
-import animated.spferical.netrogue.ClientInputState;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.minlog.Log;
+
+import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.NetworkObject;
 
-public class Player extends NetworkObject {
+public class Player extends NetworkObject implements Actor {
 	
 	private static final long serialVersionUID = 818494368830828933L;
 
@@ -24,6 +27,10 @@ public class Player extends NetworkObject {
 		super();
 		setX(x);
 		setY(y);
+		
+		this.put("characterLevel", 1);
+		this.put("hp", calculateMaxHP((Integer) this.get("characterLevel")));
+		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
 	}
@@ -50,5 +57,20 @@ public class Player extends NetworkObject {
 
 	public int getConnectionID() {
 		return (int) get("connection");
+	}
+	
+	public void randomlyAssignName() {
+		this.put("name", Constants.names[new Random().nextInt(
+				Constants.names.length)]);
+	}
+	
+	public int calculateMaxHP(int characterLevelNumber) {
+		return Constants.BASE_HP + 
+				characterLevelNumber * Constants.EXTRA_HP_PER_LEVEL;
+	}
+
+	@Override
+	public void onUpdate(GameState gameState, float dt) {
+		
 	}
 }

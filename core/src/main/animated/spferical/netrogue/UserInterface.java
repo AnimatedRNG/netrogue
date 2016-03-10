@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Player;
 
 public class UserInterface {
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
@@ -88,11 +89,12 @@ public class UserInterface {
 		stage.addActor(table);
 	}
 
-	public void draw(GameState gameState) {
-		//TODO: have player's health + ap passed in
+	public void draw(GameState gameState, long playerID) {
+		Player player = (Player) gameState.searchChildren(playerID); 
+		
 		int tileSize = Constants.tileSize;
-		int hp = 7;
-		int maxHP = 10;
+		int hp = (int) player.get("hp");
+		int maxHP = player.calculateMaxHP((int) player.get("characterLevel"));
 		float hpFraction = (float) hp / maxHP;
 		float apFraction = 0.1f;
 		long currTime = TimeUtils.millis();

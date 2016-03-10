@@ -1,7 +1,5 @@
 package animated.spferical.netrogue.world;
 
-import com.esotericsoftware.minlog.Log;
-
 import animated.spferical.netrogue.ChatLine;
 import animated.spferical.netrogue.ChatNetworkObject;
 import animated.spferical.netrogue.ClientInputState;
@@ -15,6 +13,7 @@ public class GameState extends NetworkObject {
 
 	public GameState() {
 		super();
+		this.put("lastTimeUpdate", System.currentTimeMillis());
 		setupGame();
 	}
 
@@ -86,5 +85,21 @@ public class GameState extends NetworkObject {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Currently skips chunks for the sake of efficiency
+	 * 
+	 * @param object object whose children we need to update
+	 */
+	public void updateAllChildren(NetworkObject object, float dt) {
+		for (NetworkObject child : object.getAllChildren().values())
+			if (child instanceof Actor)
+				((Actor) child).onUpdate(this, dt);
+		for (NetworkObject child : object.getAllChildren().values())
+		{
+			if (!(child instanceof Chunk))
+				updateAllChildren(child, dt);
+		}
 	}
 }
