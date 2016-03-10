@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
@@ -17,7 +18,9 @@ public class GameClient extends Listener {
 	public static final int TIMEOUT = 10000;
 	public static final int LOAD_TIMEOUT = 10000;
 	public static final int BLOCKING_PERIOD = 10;
-	public static final int CLIENT_NETWORK_UPDATE_RATE = 10;
+	
+	// Try to keep this value close to the server update rate
+	public static final int CLIENT_LOGIC_UPDATE_RATE = 10;
 	public static final int[] BUFFER_SIZES = {8192, 2048};
 
 	public GameState currentGameState;
@@ -89,7 +92,7 @@ public class GameClient extends Listener {
 	
 	@Override
 	public void connected(Connection connection) {
-		
+		client.updateReturnTripTime();
 	}
 	
 	@Override
@@ -99,12 +102,21 @@ public class GameClient extends Listener {
 	
 	@Override
 	public void received(Connection connection, Object object) {
-		if (object instanceof InfoResponse)
+		if (object instanceof Ping)
+		{
+			Ping ping = (Ping) object;
+			//if (ping.isReply)
+			//	Log.info("One-way ping time of " + connection.getReturnTripTime() / 2);
+			client.updateReturnTripTime();
+		}
+		else if (object instanceof InfoResponse)
 		{
 			NetworkObject networkObject = ((InfoResponse) object).response;
 			if (networkObject instanceof GameState)
 			{
 				this.currentGameState = (GameState) networkObject;
+				this.currentGameState.put("lastTimeUpdate", 
+						System.currentTimeMillis() + connection.getReturnTripTime() / 2);
 				this.oldGameState = (GameState) this.currentGameState.clone();
 				Log.info("Directly updated gamestate: " + this.currentGameState);
 			}
@@ -129,6 +141,7 @@ public class GameClient extends Listener {
 			@SuppressWarnings("unchecked")
 			List<Object> objectList = ((List<Object>) object);
 			
+			
 			for (Object obj : objectList)
 			{
 				if (obj instanceof Diff)
@@ -138,7 +151,12 @@ public class GameClient extends Listener {
 					this.handleDiff(diff, connection);
 				}
 			}
-			this.currentGameState = (GameState) this.oldGameState.clone();
+			this.oldGameState.put("lastTimeUpdate", 
+					System.currentTimeMillis() + connection.getReturnTripTime() / 2);
+			
+			synchronized (this.currentGameState) {
+				this.currentGameState = (GameState) this.oldGameState.clone();
+			}
 		}
 	}
 	

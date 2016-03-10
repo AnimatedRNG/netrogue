@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -15,6 +14,8 @@ import com.esotericsoftware.minlog.Log;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.MapGenerator;
+import animated.spferical.netrogue.world.Actor;
+import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
@@ -57,6 +58,10 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning) {
+			Log.info("Server Networking", "Updating actors");
+			this.gameState.updateAllChildren(this.gameState, 
+					System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"));
+			
 			// Get all diffs in the GameState object
 			// and send them to everybody
 			synchronized (this.gameState) 

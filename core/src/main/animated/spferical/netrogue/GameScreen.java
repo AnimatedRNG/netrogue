@@ -17,7 +17,7 @@ public class GameScreen implements Screen {
 	private GameClient gameClient;
 	private SpriteBatch batch;
 	private WorldRenderer worldRenderer;
-	private Thread networkThread;
+	private Thread logicThread;
 	
 	private long lastUpdate;
 
@@ -34,8 +34,8 @@ public class GameScreen implements Screen {
 		
 		this.lastUpdate = System.currentTimeMillis();
 		
-		this.networkThread = new Thread(new ClientNetworkHandler());
-		this.networkThread.start();
+		this.logicThread = new Thread(new ClientNetworkHandler());
+		this.logicThread.start();
 	}
 
 	public void handleKeys(float delta) {
@@ -121,8 +121,12 @@ public class GameScreen implements Screen {
 		@Override
 		public void run() {
 			while (running) {
+				Log.info("Client Networking", "Updating actors");
+				gameState.updateAllChildren(gameState, ((float) (System.currentTimeMillis() 
+						- (Long) gameState.get("lastTimeUpdate")) / 1000f));
+				
 				try {
-					Thread.sleep((long) (((float) GameClient.CLIENT_NETWORK_UPDATE_RATE / 60f) * 1000L));
+					Thread.sleep((long) (((float) GameClient.CLIENT_LOGIC_UPDATE_RATE / 60f) * 1000L));
 				} catch (InterruptedException e) {
 					Log.error("Client Networking", "Interrupted", e);
 				}
