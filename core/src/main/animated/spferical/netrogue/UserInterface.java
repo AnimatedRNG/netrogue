@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -58,9 +57,15 @@ public class UserInterface {
 
 		chatLabel = new Label("Loading chat...\n\n\n\n...", Assets.skin);
 		chatLabel.setWrap(true);
+		
+		Table chatInnerTable = new Table();
+		chatInnerTable.row();
+		chatInnerTable.add(new Label("Welcome to Netrogue! Please be civil.", Assets.skin)).left();
+		chatInnerTable.row();
+		chatInnerTable.add(chatLabel).left();
+		chatInnerTable.pack();
 
-		ScrollPane chatScrollPane = new ScrollPane(chatLabel);
-		chatScrollPane.setSize(500, 500);
+		ScrollPane chatScrollPane = new ScrollPane(chatInnerTable, Assets.skin);
 
 		chatField = new TextField("", Assets.skin);
 		chatField.setMessageText("Enter to chat");
@@ -137,6 +142,7 @@ public class UserInterface {
 			}
 		}
 		chatLabel.setText(chat.getChatLines());
+		chatLabel.pack();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();

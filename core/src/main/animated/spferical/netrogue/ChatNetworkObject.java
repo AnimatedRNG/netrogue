@@ -24,10 +24,10 @@ public class ChatNetworkObject extends NetworkObject {
 
 		// sort them in chronological order
 		Collections.sort(lines,
-				(c1, c2) -> (int) (c2.getTimestamp() - c1.getTimestamp()));
+				(c1, c2) -> (int) (c1.getTimestamp() - c2.getTimestamp()));
 
 		for (ChatLine chatLine : lines) {
-			chatBuilder.append(chatLine.getLine());
+			chatBuilder.append(chatLine.getLine() + "\n");
 		}
 		return chatBuilder.toString();
 	}
