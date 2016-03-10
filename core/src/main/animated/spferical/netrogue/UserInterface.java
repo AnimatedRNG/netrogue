@@ -63,14 +63,8 @@ public class UserInterface {
 		table.setFillParent(true);
 		table.setDebug(true);
 
-		Label chatLabel = new Label("Loading chat...\n\n\n\n...", Assets.skin);
-		chatLabel.setWrap(true);
-		chatLabel.setDebug(true);
-		
 		chatInnerTable = new Table();
 		chatInnerTable.add(new Label("Welcome to Netrogue! Please be civil.", Assets.skin)).left();
-		chatInnerTable.row();
-		chatInnerTable.add(chatLabel).left();
 		chatInnerTable.setDebug(true);
 		chatInnerTable.padBottom(10);
 
@@ -160,8 +154,10 @@ public class UserInterface {
 		}
 		String[] chatLines = chat.getChatLines();
 		SnapshotArray<Actor> children = chatInnerTable.getChildren();
-		if (!((Label) children.first()).getText().toString().equals(chatLines[0])
-				|| chatInnerTable.getRows() != chatLines.length) {
+		boolean differentLineNumber = children.size != chatLines.length;
+		if (chatLines.length != 0 && (differentLineNumber
+				|| !((Label) children.first()).getText().toString().equals(chatLines[0]))){
+			System.out.println("Redrawing chat");
 			chatInnerTable.clearChildren();
 			for (String line : chat.getChatLines()) {
 				chatInnerTable.row();
