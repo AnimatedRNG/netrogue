@@ -57,4 +57,11 @@ public class Level extends NetworkObject {
 		return chunk.isOccupied(row % Constants.chunkSize, 
 				column % Constants.chunkSize); 
 	}
+
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(" "+this.getClass().getName() +" " + this.ID + "lastUpdate:" + this.lastUpdate);
+		builder.append("\n  ...and TONS of Chunks...");
+		return builder.toString();
+	}
 }

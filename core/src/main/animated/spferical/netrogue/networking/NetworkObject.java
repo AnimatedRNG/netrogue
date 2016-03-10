@@ -170,6 +170,16 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	    }
 	    return null;
 	}
+
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(" "+this.getClass().getName() +" " + this.ID + "lastUpdate:" + this.lastUpdate);
+		for (NetworkObject child : this.getAllChildren().values()) {
+			String childString = child.toString();
+			builder.append("\n" + childString.replaceAll(" ", "  "));
+		}
+		return builder.toString();
+	}
 	
 	// ID -> Child
 	private TreeMap<Long, NetworkObject> children;
