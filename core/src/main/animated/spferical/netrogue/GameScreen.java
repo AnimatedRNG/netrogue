@@ -12,12 +12,14 @@ import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
 
 public class GameScreen implements Screen {
-	UserInterface ui;
-	GameState gameState;
-	GameClient gameClient;
-	SpriteBatch batch;
-	WorldRenderer worldRenderer;
-	Thread networkThread;
+	private UserInterface ui;
+	private GameState gameState;
+	private GameClient gameClient;
+	private SpriteBatch batch;
+	private WorldRenderer worldRenderer;
+	private Thread networkThread;
+	
+	private long lastUpdate;
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -30,11 +32,14 @@ public class GameScreen implements Screen {
 
 		worldRenderer = new WorldRenderer(level, player);
 		
+		this.lastUpdate = System.currentTimeMillis();
+		
 		this.networkThread = new Thread(new ClientNetworkHandler());
 		this.networkThread.start();
 	}
 
 	public void handleKeys(float delta) {
+		long newUpdate = System.currentTimeMillis();
 		Player player = gameClient.findPlayer();
 		ClientInputState inputState = new ClientInputState();
 		
@@ -59,8 +64,9 @@ public class GameScreen implements Screen {
 		if (inputState.equals(new ClientInputState()))
 			return;
 		
-		this.gameState.handlePlayerInput(player, inputState, delta);
+		this.gameState.handlePlayerInput(player, inputState, ((float) newUpdate - lastUpdate) / 1000f);
 		this.sendInputToServer(inputState);
+		this.lastUpdate = newUpdate;
 	}
 
 	@Override
