@@ -202,10 +202,12 @@ public class GameClient extends Listener {
 		// If the server argues with the client about its position
 		// and the client isn't too wrong, we don't do anything on 
 		// the client
-		if (Math.abs((float) value - (int) diff.value) < 0)
+		Log.info("Client Networking", 
+				"Comparing client value " + value + " with server value " + diff.value);
+		if (Math.abs((float) value - (int) diff.value) < 1)
 		{
 			Log.info("Client Networking", "dx too small. Ignoring server.");
-			diff.value = value;
+			diff.actuallyDoSomething = false;
 		}
 		return diff;
 	}

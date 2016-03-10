@@ -11,8 +11,10 @@ import com.esotericsoftware.minlog.Log;
 public abstract class Diff {
 	
 	public int connectionID;
+	public boolean actuallyDoSomething;
 	
 	public Diff(long newUpdate, long ID) {
+		this.actuallyDoSomething = true;
 		this.newUpdate = newUpdate;
 		this.targetID = ID;
 	}
@@ -31,7 +33,7 @@ public abstract class Diff {
 			{
 				for (NetworkObject child : old.getAllChildren().values())
 				{
-					if (child.ID == targetID)
+					if (child.ID == targetID && actuallyDoSomething)
 						result = this.onApply(child);
 				}
 			}
