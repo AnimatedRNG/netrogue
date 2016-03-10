@@ -9,6 +9,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
+import animated.spferical.netrogue.ChatLine;
+import animated.spferical.netrogue.ChatNetworkObject;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
@@ -49,5 +51,7 @@ public abstract class Registrar {
 		kryo.register(Tile.Type[][].class);
 		kryo.register(TileTypeArray.class);
 		kryo.register(Float.class);
+		kryo.register(ChatNetworkObject.class);
+		kryo.register(ChatLine.class);
 	}
 }

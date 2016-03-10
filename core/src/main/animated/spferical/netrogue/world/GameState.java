@@ -2,8 +2,11 @@ package animated.spferical.netrogue.world;
 
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.ChatLine;
+import animated.spferical.netrogue.ChatNetworkObject;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
+import animated.spferical.netrogue.MapGenerator;
 import animated.spferical.netrogue.networking.NetworkObject;
 
 public class GameState extends NetworkObject {
@@ -12,6 +15,20 @@ public class GameState extends NetworkObject {
 
 	public GameState() {
 		super();
+		setupGame();
+	}
+
+	public void setupGame() {
+		// generate levels
+		Level level = new Level(1, MapGenerator.mapHeight,
+				MapGenerator.mapWidth);
+		MapGenerator.generateMap(level);
+		putChild(level);
+
+		// create chat directory
+		ChatNetworkObject chat = new ChatNetworkObject();
+		putChild(chat);
+
 	}
 	
 	// Handle player input
@@ -39,6 +56,19 @@ public class GameState extends NetworkObject {
 			} else if (input.moveRight) {
 				player.setX(player.getX() + 1);
 				player.put("timeSinceLastAction", 0.0f);
+			}
+
+			if (input.stringInput != null) {
+				// player sent message
+				ChatLine chatLine = new ChatLine(input.stringInput,
+						System.currentTimeMillis());
+
+				for (NetworkObject obj : getAllChildren().values()) {
+					if (obj instanceof ChatNetworkObject) {
+						obj.putChild(chatLine);
+						break;
+					}
+				}
 			}
 		}
 	}

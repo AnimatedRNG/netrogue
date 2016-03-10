@@ -15,6 +15,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import animated.spferical.netrogue.networking.NetworkObject;
+import animated.spferical.netrogue.world.GameState;
+
 public class UserInterface {
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
 	Animation barLeft, barMiddle, barRight;
@@ -54,6 +57,7 @@ public class UserInterface {
 		table.layout();
 
 		chatLabel = new Label("Loading chat...\n\n\n\n...", Assets.skin);
+		chatLabel.setWrap(true);
 
 		ScrollPane chatScrollPane = new ScrollPane(chatLabel);
 		chatScrollPane.setSize(500, 500);
@@ -69,7 +73,7 @@ public class UserInterface {
 		stage.addActor(table);
 	}
 
-	public void draw() {
+	public void draw(GameState gameState) {
 		//TODO: have player's health + ap passed in
 		int tileSize = Constants.tileSize;
 		int hp = 7;
@@ -123,6 +127,16 @@ public class UserInterface {
 		batch.draw(barRight.getKeyFrame(animationTime),
 				3 * tileSize, tileSize);
 		batch.end();
+
+		ChatNetworkObject chat = null;
+		// load chat lines and set them
+		for (NetworkObject obj : gameState.getAllChildren().values()) {
+			if (obj instanceof ChatNetworkObject) {
+				chat = (ChatNetworkObject) obj;
+				break;
+			}
+		}
+		chatLabel.setText(chat.getChatLines());
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();

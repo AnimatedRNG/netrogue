@@ -15,7 +15,6 @@ import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.MapGenerator;
 import animated.spferical.netrogue.world.GameState;
-import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
 
 public class GameServer extends Listener implements Runnable {
@@ -39,15 +38,8 @@ public class GameServer extends Listener implements Runnable {
 		this.timeSinceLastMove = new HashMap<>();
 	}
 
-	public void setupGame() {
-		Level level = new Level(1, MapGenerator.mapHeight,
-				MapGenerator.mapWidth);
-		MapGenerator.generateMap(level);
-		gameState.putChild(level);
-	}
 	
 	public void start() {
-		setupGame();
 
 		this.networkingThead.start();
 		
