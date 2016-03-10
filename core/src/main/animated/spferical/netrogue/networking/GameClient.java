@@ -17,7 +17,7 @@ public class GameClient extends Listener {
 	public static final int TIMEOUT = 10000;
 	public static final int LOAD_TIMEOUT = 10000;
 	public static final int BLOCKING_PERIOD = 10;
-	public static final int CLIENT_NETWORK_UPDATE_RATE = 10;
+	public static final int CLIENT_NETWORK_UPDATE_RATE = 60;
 	public static final int[] BUFFER_SIZES = {131072 * 8, 131072 * 8};
 
 	public GameState currentGameState;
@@ -204,7 +204,7 @@ public class GameClient extends Listener {
 		// the client
 		Log.info("Client Networking", 
 				"Comparing client value " + value + " with server value " + diff.value);
-		if (Math.abs((float) value - (int) diff.value) < 1)
+		if (Math.abs((float) value - (int) diff.value) < 0)
 		{
 			Log.info("Client Networking", "dx too small. Ignoring server.");
 			diff.actuallyDoSomething = false;

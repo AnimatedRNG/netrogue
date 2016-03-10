@@ -56,6 +56,9 @@ public class GameScreen implements Screen {
 			ui.toggleChatFocus();
 		}
 		
+		if (inputState.equals(new ClientInputState()))
+			return;
+		
 		this.gameState.handlePlayerInput(player, inputState, delta);
 		this.sendInputToServer(inputState);
 	}
