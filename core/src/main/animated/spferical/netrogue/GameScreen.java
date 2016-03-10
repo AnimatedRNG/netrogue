@@ -16,7 +16,6 @@ public class GameScreen implements Screen {
 	GameClient gameClient;
 	SpriteBatch batch;
 	WorldRenderer worldRenderer;
-	//float timeSinceLastAction = 0;
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -35,14 +34,22 @@ public class GameScreen implements Screen {
 		ClientInputState inputState = (ClientInputState) player.get("input");
 		inputState.resetAll();
 		
-		if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-			inputState.moveUp = true;
-		} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-			inputState.moveLeft = true;
-		} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-			inputState.moveDown = true;
-		} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-			inputState.moveRight = true;
+		if (!ui.isChatFocused()) {
+			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+				inputState.moveUp = true;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+				inputState.moveLeft = true;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+				inputState.moveDown = true;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+				inputState.moveRight = true;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+				ui.toggleChatFocus();
+			}
+		} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+			inputState.stringInput = ui.getChatMessage();
+			ui.clearChatField();
+			ui.toggleChatFocus();
 		}
 		
 		player.put("input", inputState);
@@ -51,6 +58,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
+        Gdx.input.setInputProcessor(ui.stage);
 	}
 
 	@Override

@@ -33,7 +33,6 @@ public class MenuScreen implements Screen {
     public void create() {
 
         stage = new Stage(new ExtendViewport(640, 480));
-        Gdx.input.setInputProcessor(stage);
 
         TextButton playButton = new TextButton("Play", Assets.skin);
         playButton.addListener(new ClickListener() {

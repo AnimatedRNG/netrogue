@@ -1,9 +1,14 @@
 package animated.spferical.netrogue;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -15,6 +20,8 @@ public class UserInterface {
 	SpriteBatch batch;
 	Camera camera;
 	Viewport viewport;
+	Stage stage;
+	TextField chatField;
 
 	public UserInterface() {
 		hp1 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9);
@@ -34,6 +41,24 @@ public class UserInterface {
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		viewport = new ExtendViewport(1024, 768, camera);
+
+		stage = new Stage(viewport);
+		Gdx.input.setInputProcessor(stage);
+
+		Table table = new Table();
+		table.setFillParent(true);
+		table.setDebug(true);
+		table.layout();
+
+		chatField = new TextField("", Assets.skin);
+		chatField.setMessageText("Enter to chat");
+		chatField.setAlignment(Align.bottomRight);
+
+		table.row();
+		table.add(chatField).bottom().right();
+		table.bottom().right().layout();
+		table.pack();
+		stage.addActor(table);
 	}
 
 	public void draw() {
@@ -90,9 +115,33 @@ public class UserInterface {
 		batch.draw(barRight.getKeyFrame(animationTime),
 				3 * tileSize, tileSize);
 		batch.end();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+		stage.draw();
 	}
 
 	public void handleResize(int width, int height) {
 		viewport.update(width, height, true);
+		stage.getViewport().update(width, height, true);
+	}
+
+	public String getChatMessage() {
+		return chatField.getMessageText();
+	}
+
+	public void clearChatField() {
+		chatField.setText("");
+	}
+
+	public void toggleChatFocus() {
+		if (stage.getKeyboardFocus() == chatField) {
+			stage.setKeyboardFocus(null);
+		} else {
+			stage.setKeyboardFocus(chatField);
+		}
+	}
+
+	public boolean isChatFocused() {
+		return stage.getKeyboardFocus() == chatField;
 	}
 }
