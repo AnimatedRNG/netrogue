@@ -24,7 +24,32 @@ public abstract class Diff {
 	 * object
 	 */
 	public boolean apply(NetworkObject old) {
-		if (old.lastUpdate + 1 == newUpdate)
+		if (targetID == old.ID)
+		{
+			if (old.lastUpdate + 1 == newUpdate)
+			{
+				old.lastUpdate++;
+				return this.onApply(old);
+			}
+			else
+			{
+				Log.error("Update numbers do not add up. Old update is "
+					+ old.lastUpdate + " and new update is " + newUpdate);
+				return false;
+			}
+		}
+		else
+		{
+			boolean result = false;
+			for (NetworkObject child : old.getAllChildren().values())
+			{
+				if (child.ID == targetID && actuallyDoSomething)
+					result = this.apply(child);
+			}
+			return result;
+		}
+		
+		/*if (old.lastUpdate + 1 == newUpdate)
 		{
 			boolean result = true;
 			if (targetID == old.ID)
@@ -34,7 +59,7 @@ public abstract class Diff {
 				for (NetworkObject child : old.getAllChildren().values())
 				{
 					if (child.ID == targetID && actuallyDoSomething)
-						result = this.onApply(child);
+						result = this.apply(child);
 				}
 			}
 			old.lastUpdate++;
@@ -45,7 +70,7 @@ public abstract class Diff {
 			Log.error("Update numbers do not add up. Old update is "
 					+ old.lastUpdate + " and new update is " + newUpdate);
 			return false;
-		}
+		}*/
 	}
 	
 	public abstract boolean onApply(NetworkObject old);

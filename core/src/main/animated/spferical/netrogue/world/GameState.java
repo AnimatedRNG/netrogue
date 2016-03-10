@@ -34,6 +34,7 @@ public class GameState extends NetworkObject {
 	// Handle player input
 	public void handlePlayerInput(Player player, ClientInputState input, float dt) {
 		// All your GameState input code here
+		Log.info("Tree", "" + this);
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
 		Level level = this.getLevelByNumber(player.getDungeonLevel());
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
