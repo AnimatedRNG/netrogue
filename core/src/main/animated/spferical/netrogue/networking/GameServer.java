@@ -115,6 +115,7 @@ public class GameServer extends Listener implements Runnable {
 				NetworkObject target = this.gameState.searchChildren((queryObj).queryID);
 				if (target != null)
 					this.server.sendToTCP(connection.getID(), new InfoResponse(target));
+				Log.info("Server Networking", "Client requested object " + target);
 			}
 		}
 		else if (object instanceof ClientInputState)
@@ -122,9 +123,14 @@ public class GameServer extends Listener implements Runnable {
 			Player player = (Player) this.gameState.getChild(this.playerIDs.get(connection));
 			player.put("input", object);
 			
+			Log.info("Server Networking", "Received ClientInputState " + object);
+			
 			long delta = System.currentTimeMillis() - timeSinceLastMove.get(connection);
 			this.gameState.handlePlayerInput(player, (float) delta / 1000f);
 			this.timeSinceLastMove.put(connection, System.currentTimeMillis());
+			
+			Log.info("Server Networking", "Player " + player + 
+					" is now at position (" + player.getX() + ", " + player.getY() + ")");
 		}
 	}
 	
