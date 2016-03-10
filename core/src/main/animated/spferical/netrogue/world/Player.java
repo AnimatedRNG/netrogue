@@ -26,6 +26,10 @@ public class Player extends NetworkObject {
 		super();
 		setX(x);
 		setY(y);
+		
+		this.put("characterLevel", 1);
+		this.put("hp", calculateMaxHP((Integer) this.get("characterLevel")));
+		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
 	}
@@ -57,5 +61,10 @@ public class Player extends NetworkObject {
 	public void randomlyAssignName() {
 		this.put("name", Constants.names[new Random().nextInt(
 				Constants.names.length)]);
+	}
+	
+	public int calculateMaxHP(int characterLevelNumber) {
+		return Constants.BASE_HP + 
+				characterLevelNumber * Constants.EXTRA_HP_PER_LEVEL;
 	}
 }

@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 		gameState = gameClient.currentGameState;
 		worldRenderer.render(gameState, delta);
-		ui.draw(gameState);
+		ui.draw(gameState, gameClient.findPlayer().ID);
 		handleKeys(delta);
 	}
 
