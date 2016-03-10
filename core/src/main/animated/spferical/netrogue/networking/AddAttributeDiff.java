@@ -33,6 +33,6 @@ public class AddAttributeDiff extends Diff {
 		return true;
 	}
 	
-	private String name;
-	private Object value;
+	public String name;
+	public Object value;
 }
