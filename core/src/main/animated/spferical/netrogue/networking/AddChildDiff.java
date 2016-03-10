@@ -34,6 +34,6 @@ public class AddChildDiff extends Diff {
 		return true;
 	}
 	
-	private Long ID;
-	private NetworkObject child;
+	public Long ID;
+	public NetworkObject child;
 }

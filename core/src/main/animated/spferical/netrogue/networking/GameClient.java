@@ -126,6 +126,8 @@ public class GameClient extends Listener {
 		}
 		else if (object instanceof List)
 		{
+			Player player = this.findPlayer();
+			
 			@SuppressWarnings("unchecked")
 			List<Object> objectList = ((List<Object>) object);
 			
@@ -135,21 +137,7 @@ public class GameClient extends Listener {
 				{
 					Diff diff = ((Diff) obj);
 					
-					if (diff.connectionID != connection.getID())
-					{
-						Log.warn("Client Networking", "Diff reports invalid connection. Ignoring.");
-						return;
-					}
-					
-					boolean result = diff.apply(this.oldGameState);
-					if (!result)
-					{
-						Log.error("Client Networking", "Failed to apply diff " + obj);
-					}
-					else
-					{
-						Log.info("Client Networking", "Applied Diff " + diff.newUpdate);
-					}
+					this.handleDiff(diff, connection, player);
 				}
 			}
 			this.currentGameState = (GameState) this.oldGameState.clone();
@@ -176,6 +164,54 @@ public class GameClient extends Listener {
 	@Override
 	public void idle(Connection connection) {
 		
+	}
+	
+	private void handleDiff(Diff diff, Connection connection, Player player) {
+		if (diff.connectionID != connection.getID())
+		{
+			Log.warn("Client Networking", "Diff reports invalid connection. Ignoring.");
+			return;
+		}
+		
+		if (player != null && diff instanceof ModifyAttributeDiff && 
+				((ModifyAttributeDiff) diff).targetID == player.ID)
+		{
+			if (((ModifyAttributeDiff) diff).name.equals("x"))
+			{
+				if (savePlayer((ModifyAttributeDiff) diff, player.getX(), player))
+					return;
+			}
+			else if (((ModifyAttributeDiff) diff).name.equals("y"))
+			{
+				if (savePlayer((ModifyAttributeDiff) diff, player.getY(), player))
+					return;
+			}
+			Log.info("Client Networking", "Player movement detected, handling case separately");
+		}
+		
+		boolean result = diff.apply(this.oldGameState);
+		if (!result)
+		{
+			Log.error("Client Networking", "Failed to apply diff " + diff);
+		}
+		else
+		{
+			Log.info("Client Networking", "Applied Diff " + diff.newUpdate);
+		}
+	}
+	
+	private boolean savePlayer(ModifyAttributeDiff diff, Integer value, Player player) {
+		// If the server argues with the client about its position
+		// and the client isn't too wrong, we don't do anything on 
+		// the client
+		if (Math.abs((float) value - (int) diff.value) < 1)
+		{
+			Log.info("Client Networking", "dx too small. Ignoring server.");
+			player.lastUpdate++;
+			return true;
+		}
+		else
+			return false;
 	}
 
 	private Client client;

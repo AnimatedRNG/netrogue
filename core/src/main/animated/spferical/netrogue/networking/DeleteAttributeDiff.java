@@ -33,5 +33,5 @@ public class DeleteAttributeDiff extends Diff {
 		return true;
 	}
 	
-	private String name;
+	public String name;
 }

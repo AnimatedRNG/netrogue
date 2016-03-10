@@ -33,5 +33,5 @@ public class DeleteChildDiff extends Diff {
 		return true;
 	}
 	
-	private Long ID;
+	public Long ID;
 }

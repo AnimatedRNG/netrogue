@@ -37,7 +37,6 @@ public class GameScreen implements Screen {
 	public void handleKeys(float delta) {
 		Player player = gameClient.findPlayer();
 		ClientInputState inputState = (ClientInputState) player.get("input");
-		inputState.resetAll();
 		
 		if (!ui.isChatFocused()) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
@@ -59,6 +58,7 @@ public class GameScreen implements Screen {
 		
 		player.put("input", inputState);
 		this.gameState.handlePlayerInput(player, delta);
+		this.sendInputToServer(inputState);
 	}
 
 	@Override
@@ -97,6 +97,16 @@ public class GameScreen implements Screen {
 		this.gameClient.disconnect();
 	}
 	
+	public void sendInputToServer(ClientInputState input) {
+		Player player = gameClient.findPlayer();
+		gameClient.sendObjectToServer(input);
+		
+		input.resetAll();
+		player.put("input", input);
+		
+		Log.info("Sent ClientInputState to server");
+	}
+	
 	public class ClientNetworkHandler implements Runnable {
 
 		public boolean running = true;
@@ -104,11 +114,6 @@ public class GameScreen implements Screen {
 		@Override
 		public void run() {
 			while (running) {
-				ClientInputState input = (ClientInputState) gameClient.findPlayer().get("input");
-				gameClient.sendObjectToServer(input);
-				
-				Log.info("Sent ClientInputState to server");
-				
 				try {
 					Thread.sleep((long) (((float) GameClient.CLIENT_NETWORK_UPDATE_RATE / 60f) * 1000L));
 				} catch (InterruptedException e) {
