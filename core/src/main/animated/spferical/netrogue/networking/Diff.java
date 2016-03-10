@@ -1,5 +1,7 @@
 package animated.spferical.netrogue.networking;
 
+import com.esotericsoftware.minlog.Log;
+
 /**
  * A Diff signifies an in-place modification of state
  * 
@@ -37,7 +39,11 @@ public abstract class Diff {
 			return result;
 		}
 		else
+		{
+			Log.error("Update numbers do not add up. Old update is "
+					+ old.lastUpdate + " and new update is " + newUpdate);
 			return false;
+		}
 	}
 	
 	public abstract boolean onApply(NetworkObject old);
