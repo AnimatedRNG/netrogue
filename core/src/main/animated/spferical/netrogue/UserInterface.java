@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -26,7 +27,10 @@ public class UserInterface {
 	Viewport viewport;
 	Stage stage;
 	TextField chatField;
-	Label chatLabel;
+	Table chatInnerTable;
+
+	final int chatPanelWidth = 200;
+	final int chatPanelHeight = 200;
 
 	public UserInterface() {
 		hp1 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9);
@@ -53,28 +57,29 @@ public class UserInterface {
 		Table table = new Table();
 		table.setFillParent(true);
 		table.setDebug(true);
-		table.layout();
 
-		chatLabel = new Label("Loading chat...\n\n\n\n...", Assets.skin);
+		Label chatLabel = new Label("Loading chat...\n\n\n\n...", Assets.skin);
 		chatLabel.setWrap(true);
+		chatLabel.setDebug(true);
 		
-		Table chatInnerTable = new Table();
-		chatInnerTable.row();
+		chatInnerTable = new Table();
 		chatInnerTable.add(new Label("Welcome to Netrogue! Please be civil.", Assets.skin)).left();
 		chatInnerTable.row();
 		chatInnerTable.add(chatLabel).left();
-		chatInnerTable.pack();
+		chatInnerTable.setDebug(true);
 
 		ScrollPane chatScrollPane = new ScrollPane(chatInnerTable, Assets.skin);
+		chatScrollPane.setScrollingDisabled(true, false);
+		chatScrollPane.setDebug(true);
 
 		chatField = new TextField("", Assets.skin);
 		chatField.setMessageText("Enter to chat");
 
-		table.add(chatScrollPane).left();
+		table.add(chatScrollPane).left()
+			.width(chatPanelWidth).height(chatPanelHeight);
 		table.row();
-		table.add(chatField).left();
-		table.bottom().right().layout();
-		table.pack();
+		table.add(chatField).left().width(chatPanelWidth);
+		table.bottom().right();
 		stage.addActor(table);
 	}
 
@@ -141,8 +146,15 @@ public class UserInterface {
 				break;
 			}
 		}
-		chatLabel.setText(chat.getChatLines());
-		chatLabel.pack();
+		chatInnerTable.clearChildren();
+		for (String line : chat.getChatLines().split("\n")) {
+			chatInnerTable.row();
+			Label label = new Label(line, Assets.skin);
+			label.setAlignment(Align.left);
+			label.setWrap(true);
+			chatInnerTable.add(label).left().width(chatPanelWidth);
+		}
+		chatInnerTable.invalidateHierarchy();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
