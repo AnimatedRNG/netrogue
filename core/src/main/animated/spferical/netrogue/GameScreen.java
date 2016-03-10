@@ -56,7 +56,8 @@ public class GameScreen implements Screen {
 				ui.toggleChatFocus();
 			}
 		} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-			inputState.stringInput = ui.getChatMessage();
+			inputState.stringInput = player.get("name") + ": "
+					+ ui.getChatMessage();
 			ui.clearChatField();
 			ui.toggleChatFocus();
 		}

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -85,6 +86,7 @@ public class GameServer extends Listener implements Runnable {
 		int mapCenterX = MapGenerator.mapWidth * Constants.chunkSize / 2;
 		int mapCenterY = MapGenerator.mapHeight * Constants.chunkSize / 2;
 		Player player = new Player(connection, mapCenterX, mapCenterY);
+		player.randomlyAssignName();
 		
 		this.playerIDs.put(connection, player.ID);
 		this.timeSinceLastMove.put(connection, System.currentTimeMillis());

@@ -1,8 +1,10 @@
 package animated.spferical.netrogue.world;
 
+import java.util.Random;
+
 import com.esotericsoftware.kryonet.Connection;
 
-import animated.spferical.netrogue.ClientInputState;
+import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.NetworkObject;
 
 public class Player extends NetworkObject {
@@ -50,5 +52,10 @@ public class Player extends NetworkObject {
 
 	public int getConnectionID() {
 		return (int) get("connection");
+	}
+	
+	public void randomlyAssignName() {
+		this.put("name", Constants.names[new Random().nextInt(
+				Constants.names.length)]);
 	}
 }
