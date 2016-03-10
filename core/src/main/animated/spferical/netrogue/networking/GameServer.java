@@ -66,13 +66,16 @@ public class GameServer extends Listener implements Runnable {
 		while (this.isRunning) {
 			// Get all diffs in the GameState object
 			// and send them to everybody
-			List<Diff> diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
+			synchronized (this.gameState) 
+			{
+				List<Diff> diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
 			
-			// Send everyone diffs
-			for (Connection connection : this.playerIDs.keySet())
-				this.sendUpdateToPlayer(diffs, connection);
-			
-			this.oldGameState = (GameState) this.gameState.clone();
+				// Send everyone diffs
+				for (Connection connection : this.playerIDs.keySet())
+					this.sendUpdateToPlayer(diffs, connection);
+				
+				this.oldGameState = (GameState) this.gameState.clone();
+			}
 			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
