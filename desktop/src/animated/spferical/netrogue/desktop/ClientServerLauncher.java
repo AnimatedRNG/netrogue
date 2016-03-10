@@ -1,9 +1,5 @@
 package animated.spferical.netrogue.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
-import animated.spferical.netrogue.Netrogue;
 import animated.spferical.netrogue.networking.GameServer;
 
 public class ClientServerLauncher {
@@ -12,8 +8,7 @@ public class ClientServerLauncher {
 		GameServer server = new GameServer();
 		server.start();
 		
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new Netrogue(), config);
+		new DesktopLauncher().main(args);
 	}
 
 }
