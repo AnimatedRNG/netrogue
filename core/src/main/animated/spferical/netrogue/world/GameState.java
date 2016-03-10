@@ -101,6 +101,5 @@ public class GameState extends NetworkObject {
 			if (!(child instanceof Chunk))
 				updateAllChildren(child, dt);
 		}
-		//this.put("lastTimeUpdate", System.currentTimeMillis());
 	}
 }
