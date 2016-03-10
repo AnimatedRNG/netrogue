@@ -14,7 +14,7 @@ import animated.spferical.netrogue.world.Player;
 
 public class GameClient extends Listener {
 	
-	public static final int TIMEOUT = 1000;
+	public static final int TIMEOUT = 10000;
 	public static final int LOAD_TIMEOUT = 10000;
 	public static final int BLOCKING_PERIOD = 10;
 	public static final int CLIENT_NETWORK_UPDATE_RATE = 10;
