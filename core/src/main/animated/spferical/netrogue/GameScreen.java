@@ -44,13 +44,13 @@ public class GameScreen implements Screen {
 		ClientInputState inputState = new ClientInputState();
 		
 		if (!ui.isChatFocused()) {
-			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 				inputState.moveUp = true;
-			} else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+			} else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 				inputState.moveLeft = true;
-			} else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+			} else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 				inputState.moveDown = true;
-			} else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+			} else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 				inputState.moveRight = true;
 			} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 				ui.toggleChatFocus();
