@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.GameClient;
 import animated.spferical.netrogue.world.GameState;
@@ -16,6 +17,7 @@ public class GameScreen implements Screen {
 	GameClient gameClient;
 	SpriteBatch batch;
 	WorldRenderer worldRenderer;
+	Thread networkThread;
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -27,6 +29,9 @@ public class GameScreen implements Screen {
 		Level level = gameState.getLevelByNumber(player.getDungeonLevel());
 
 		worldRenderer = new WorldRenderer(level, player);
+		
+		this.networkThread = new Thread(new ClientNetworkHandler());
+		this.networkThread.start();
 	}
 
 	public void handleKeys(float delta) {
@@ -89,5 +94,27 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		this.gameClient.disconnect();
+	}
+	
+	public class ClientNetworkHandler implements Runnable {
+
+		public boolean running = true;
+		
+		@Override
+		public void run() {
+			while (running) {
+				ClientInputState input = (ClientInputState) gameClient.findPlayer().get("input");
+				gameClient.sendObjectToServer(input);
+				
+				Log.info("Sent ClientInputState to server");
+				
+				try {
+					Thread.sleep((long) (((float) GameClient.CLIENT_NETWORK_UPDATE_RATE / 60f) * 1000L));
+				} catch (InterruptedException e) {
+					Log.error("Client Networking", "Interrupted", e);
+				}
+			}
+		}		
 	}
 }
