@@ -19,7 +19,7 @@ import animated.spferical.netrogue.world.Player;
 
 public class GameServer extends Listener implements Runnable {
 
-	public static final float NETWORK_UPDATE_RATE = 10f;
+	public static final float NETWORK_UPDATE_RATE = 10F;
 	public static final int PORT_NUMBER = 37707;
 	
 	public static final int[] BUFFER_SIZES = {131072 * 8, 131072 * 8};
@@ -58,13 +58,16 @@ public class GameServer extends Listener implements Runnable {
 		while (this.isRunning) {
 			// Get all diffs in the GameState object
 			// and send them to everybody
-			List<Diff> diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
+			synchronized (this.gameState) 
+			{
+				List<Diff> diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
 			
-			// Send everyone diffs
-			for (Connection connection : this.playerIDs.keySet())
-				this.sendUpdateToPlayer(diffs, connection);
-			
-			this.oldGameState = (GameState) this.gameState.clone();
+				// Send everyone diffs
+				for (Connection connection : this.playerIDs.keySet())
+					this.sendUpdateToPlayer(diffs, connection);
+				
+				this.oldGameState = (GameState) this.gameState.clone();
+			}
 			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
@@ -113,12 +116,11 @@ public class GameServer extends Listener implements Runnable {
 		else if (object instanceof ClientInputState)
 		{
 			Player player = (Player) this.gameState.getChild(this.playerIDs.get(connection));
-			player.put("input", object);
 			
 			Log.info("Server Networking", "Received ClientInputState " + object);
 			
 			long delta = System.currentTimeMillis() - timeSinceLastMove.get(connection);
-			this.gameState.handlePlayerInput(player, (float) delta / 1000f);
+			this.gameState.handlePlayerInput(player, (ClientInputState) object, (float) delta / 1000f);
 			this.timeSinceLastMove.put(connection, System.currentTimeMillis());
 			
 			Log.info("Server Networking", "Player " + player + 

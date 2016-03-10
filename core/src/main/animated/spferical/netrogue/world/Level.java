@@ -1,5 +1,6 @@
 package animated.spferical.netrogue.world;
 
+import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.NetworkObject;
 
 public class Level extends NetworkObject {
@@ -41,5 +42,19 @@ public class Level extends NetworkObject {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns whether you can move into a given tile
+	 * 
+	 * @param row
+	 * @param column
+	 * @return whether you can move into the tile
+	 */
+	public boolean checkOccupied(int row, int column) {
+		Chunk chunk = this.getChunk(row / Constants.chunkSize,
+				column / Constants.chunkSize);
+		return chunk.isOccupied(row % Constants.chunkSize, 
+				column % Constants.chunkSize); 
 	}
 }

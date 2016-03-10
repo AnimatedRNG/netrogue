@@ -12,12 +12,14 @@ import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Player;
 
 public class GameScreen implements Screen {
-	UserInterface ui;
-	GameState gameState;
-	GameClient gameClient;
-	SpriteBatch batch;
-	WorldRenderer worldRenderer;
-	Thread networkThread;
+	private UserInterface ui;
+	private GameState gameState;
+	private GameClient gameClient;
+	private SpriteBatch batch;
+	private WorldRenderer worldRenderer;
+	private Thread networkThread;
+	
+	private long lastUpdate;
 
 	public GameScreen() {
 		ui = new UserInterface();
@@ -30,13 +32,16 @@ public class GameScreen implements Screen {
 
 		worldRenderer = new WorldRenderer(level, player);
 		
+		this.lastUpdate = System.currentTimeMillis();
+		
 		this.networkThread = new Thread(new ClientNetworkHandler());
 		this.networkThread.start();
 	}
 
 	public void handleKeys(float delta) {
+		long newUpdate = System.currentTimeMillis();
 		Player player = gameClient.findPlayer();
-		ClientInputState inputState = (ClientInputState) player.get("input");
+		ClientInputState inputState = new ClientInputState();
 		
 		if (!ui.isChatFocused()) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
@@ -56,9 +61,12 @@ public class GameScreen implements Screen {
 			ui.toggleChatFocus();
 		}
 		
-		player.put("input", inputState);
-		this.gameState.handlePlayerInput(player, delta);
+		if (inputState.equals(new ClientInputState()))
+			return;
+		
+		this.gameState.handlePlayerInput(player, inputState, ((float) newUpdate - lastUpdate) / 1000f);
 		this.sendInputToServer(inputState);
+		this.lastUpdate = newUpdate;
 	}
 
 	@Override
@@ -98,10 +106,8 @@ public class GameScreen implements Screen {
 	}
 	
 	public void sendInputToServer(ClientInputState input) {
-		Player player = gameClient.findPlayer();
 		gameClient.sendObjectToServer(input);
 		
-		player.put("input", input);
 		input.resetAll();
 		
 		Log.info("Sent ClientInputState to server");

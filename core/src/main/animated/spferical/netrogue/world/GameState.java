@@ -32,29 +32,32 @@ public class GameState extends NetworkObject {
 	}
 	
 	// Handle player input
-	public void handlePlayerInput(Player player, float dt) {
-		if (!player.has("input"))
-		{
-			Log.warn("Input", "Client does not have input state! Skipping input");
-			return;
-		}
-		
-		ClientInputState input = (ClientInputState) player.get("input");
-		
+	public void handlePlayerInput(Player player, ClientInputState input, float dt) {
 		// All your GameState input code here
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
+		Level level = this.getLevelByNumber(player.getDungeonLevel());
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
+			int currentX = player.getX();
+			int currentY = player.getY();
 			if (input.moveUp) {
-				player.setY(player.getY() + 1);
+				int newY = player.getY() + 1;
+				if (!level.checkOccupied(newY, currentX))
+					player.setY(newY);
 				player.put("timeSinceLastAction", 0.0f);
 			} else if (input.moveLeft) {
-				player.setX(player.getX() - 1);
+				int newX = player.getX() - 1;
+				if (!level.checkOccupied(currentY, newX))
+					player.setX(newX);
 				player.put("timeSinceLastAction", 0.0f);
 			} else if (input.moveDown) {
-				player.setY(player.getY() - 1);
+				int newY = player.getY() - 1;
+				if (!level.checkOccupied(newY, currentX))
+					player.setY(newY);
 				player.put("timeSinceLastAction", 0.0f);
 			} else if (input.moveRight) {
-				player.setX(player.getX() + 1);
+				int newX = player.getX() + 1;
+				if (!level.checkOccupied(currentY, newX))
+					player.setX(newX);
 				player.put("timeSinceLastAction", 0.0f);
 			}
 

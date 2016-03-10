@@ -126,8 +126,6 @@ public class GameClient extends Listener {
 		}
 		else if (object instanceof List)
 		{
-			Player player = this.findPlayer();
-			
 			@SuppressWarnings("unchecked")
 			List<Object> objectList = ((List<Object>) object);
 			
@@ -137,7 +135,7 @@ public class GameClient extends Listener {
 				{
 					Diff diff = ((Diff) obj);
 					
-					this.handleDiff(diff, connection, player);
+					this.handleDiff(diff, connection);
 				}
 			}
 			this.currentGameState = (GameState) this.oldGameState.clone();
@@ -166,13 +164,14 @@ public class GameClient extends Listener {
 		
 	}
 	
-	private void handleDiff(Diff diff, Connection connection, Player player) {
+	private void handleDiff(Diff diff, Connection connection) {
 		if (diff.connectionID != connection.getID())
 		{
 			Log.warn("Client Networking", "Diff reports invalid connection. Ignoring.");
 			return;
 		}
 		
+		Player player = this.findPlayer();
 		if (player != null && diff instanceof ModifyAttributeDiff && 
 				((ModifyAttributeDiff) diff).targetID == player.ID)
 		{
@@ -202,10 +201,12 @@ public class GameClient extends Listener {
 		// If the server argues with the client about its position
 		// and the client isn't too wrong, we don't do anything on 
 		// the client
-		if (Math.abs((float) value - (int) diff.value) < 1)
+		Log.info("Client Networking", 
+				"Comparing client value " + value + " with server value " + diff.value);
+		if (Math.abs((float) value - (int) diff.value) < 0)
 		{
 			Log.info("Client Networking", "dx too small. Ignoring server.");
-			diff.value = value;
+			diff.actuallyDoSomething = false;
 		}
 		return diff;
 	}
