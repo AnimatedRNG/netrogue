@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -28,6 +30,8 @@ public class UserInterface {
 	Stage stage;
 	TextField chatField;
 	Table chatInnerTable;
+	ScrollPane chatScrollPane;
+	boolean shouldScrollToChatBottom = true;
 
 	final int chatPanelWidth = 200;
 	final int chatPanelHeight = 200;
@@ -67,8 +71,9 @@ public class UserInterface {
 		chatInnerTable.row();
 		chatInnerTable.add(chatLabel).left();
 		chatInnerTable.setDebug(true);
+		chatInnerTable.padBottom(10);
 
-		ScrollPane chatScrollPane = new ScrollPane(chatInnerTable, Assets.skin);
+		chatScrollPane = new ScrollPane(chatInnerTable, Assets.skin);
 		chatScrollPane.setScrollingDisabled(true, false);
 		chatScrollPane.setDebug(true);
 
@@ -138,6 +143,11 @@ public class UserInterface {
 				3 * tileSize, tileSize);
 		batch.end();
 
+		if (shouldScrollToChatBottom) {
+			chatScrollPane.setScrollPercentY(100);
+			shouldScrollToChatBottom = false;
+		}
+
 		ChatNetworkObject chat = null;
 		// load chat lines and set them
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
@@ -146,15 +156,21 @@ public class UserInterface {
 				break;
 			}
 		}
-		chatInnerTable.clearChildren();
-		for (String line : chat.getChatLines().split("\n")) {
-			chatInnerTable.row();
-			Label label = new Label(line, Assets.skin);
-			label.setAlignment(Align.left);
-			label.setWrap(true);
-			chatInnerTable.add(label).left().width(chatPanelWidth);
+		String[] chatLines = chat.getChatLines();
+		SnapshotArray<Actor> children = chatInnerTable.getChildren();
+		if (!((Label) children.first()).getText().toString().equals(chatLines[0])
+				|| chatInnerTable.getRows() != chatLines.length) {
+			chatInnerTable.clearChildren();
+			for (String line : chat.getChatLines()) {
+				chatInnerTable.row();
+				Label label = new Label(line, Assets.skin);
+				label.setAlignment(Align.left);
+				label.setWrap(true);
+				chatInnerTable.add(label).left().width(chatPanelWidth);
+			}
+			chatInnerTable.invalidateHierarchy();
+			shouldScrollToChatBottom = true;
 		}
-		chatInnerTable.invalidateHierarchy();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
