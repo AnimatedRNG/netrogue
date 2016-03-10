@@ -15,15 +15,7 @@ public class GameState extends NetworkObject {
 	}
 	
 	// Handle player input
-	public void handlePlayerInput(Player player, float dt) {
-		if (!player.has("input"))
-		{
-			Log.warn("Input", "Client does not have input state! Skipping input");
-			return;
-		}
-		
-		ClientInputState input = (ClientInputState) player.get("input");
-		
+	public void handlePlayerInput(Player player, ClientInputState input, float dt) {
 		// All your GameState input code here
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {

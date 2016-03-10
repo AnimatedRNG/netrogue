@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
 
 	public void handleKeys(float delta) {
 		Player player = gameClient.findPlayer();
-		ClientInputState inputState = (ClientInputState) player.get("input");
+		ClientInputState inputState = new ClientInputState();
 		
 		if (!ui.isChatFocused()) {
 			if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
@@ -56,8 +56,7 @@ public class GameScreen implements Screen {
 			ui.toggleChatFocus();
 		}
 		
-		player.put("input", inputState);
-		this.gameState.handlePlayerInput(player, delta);
+		this.gameState.handlePlayerInput(player, inputState, delta);
 		this.sendInputToServer(inputState);
 	}
 
@@ -98,10 +97,8 @@ public class GameScreen implements Screen {
 	}
 	
 	public void sendInputToServer(ClientInputState input) {
-		Player player = gameClient.findPlayer();
 		gameClient.sendObjectToServer(input);
 		
-		player.put("input", input);
 		input.resetAll();
 		
 		Log.info("Sent ClientInputState to server");

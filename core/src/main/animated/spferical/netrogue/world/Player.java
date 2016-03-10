@@ -18,7 +18,6 @@ public class Player extends NetworkObject {
 		this.put("connection", connection.getID());
 		// Temporary name until player identifies themselves
 		this.put("name", connection.getID());
-		this.put("input", new ClientInputState());
 	}
 
 	public Player(int x, int y) {
