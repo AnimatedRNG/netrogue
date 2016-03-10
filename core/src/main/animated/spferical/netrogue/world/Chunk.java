@@ -32,4 +32,15 @@ public class Chunk extends NetworkObject {
 	public TileTypeArray getTiles() {
 		return (TileTypeArray) get("tiles");
 	}
+	
+	/**
+	 * Returns whether you can move into a given tile
+	 * 
+	 * @param row
+	 * @param column
+	 * @return whether you can move there
+	 */
+	public boolean isOccupied(int row, int column) {
+		return this.getTiles().tiles[row][column] == Tile.Type.WALL;
+	}
 }
