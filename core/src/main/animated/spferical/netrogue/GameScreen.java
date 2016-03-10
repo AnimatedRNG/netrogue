@@ -121,8 +121,6 @@ public class GameScreen implements Screen {
 		@Override
 		public void run() {
 			while (running) {
-				Log.info("Client Networking", "Updating actors " + ((float) (System.currentTimeMillis() 
-						- (Long) gameState.get("lastTimeUpdate")) / 1000f));
 				gameState.updateAllChildren(gameState, ((float) (System.currentTimeMillis() 
 						- (Long) gameState.get("lastTimeUpdate")) / 1000f));
 				

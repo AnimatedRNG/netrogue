@@ -58,8 +58,7 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning) {
-			Log.info("Server Networking", "Updating actors " + (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate")));
-			//this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
+			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
 			this.gameState.updateAllChildren(this.gameState, 
 					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
 			
@@ -75,6 +74,8 @@ public class GameServer extends Listener implements Runnable {
 				
 				this.oldGameState = (GameState) this.gameState.clone();
 			}
+			
+			Log.info("Server GameState", this.gameState.toString());
 			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
