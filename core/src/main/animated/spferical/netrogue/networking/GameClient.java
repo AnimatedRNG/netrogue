@@ -178,13 +178,11 @@ public class GameClient extends Listener {
 		{
 			if (((ModifyAttributeDiff) diff).name.equals("x"))
 			{
-				if (savePlayer((ModifyAttributeDiff) diff, player.getX(), player))
-					return;
+				diff = savePlayer((ModifyAttributeDiff) diff, player.getX(), player);
 			}
 			else if (((ModifyAttributeDiff) diff).name.equals("y"))
 			{
-				if (savePlayer((ModifyAttributeDiff) diff, player.getY(), player))
-					return;
+				diff = savePlayer((ModifyAttributeDiff) diff, player.getY(), player);
 			}
 			Log.info("Client Networking", "Player movement detected, handling case separately");
 		}
@@ -200,18 +198,16 @@ public class GameClient extends Listener {
 		}
 	}
 	
-	private boolean savePlayer(ModifyAttributeDiff diff, Integer value, Player player) {
+	private Diff savePlayer(ModifyAttributeDiff diff, Integer value, Player player) {
 		// If the server argues with the client about its position
 		// and the client isn't too wrong, we don't do anything on 
 		// the client
-		if (Math.abs((float) value - (int) diff.value) < 1)
+		if (Math.abs((float) value - (int) diff.value) < 1000000)
 		{
 			Log.info("Client Networking", "dx too small. Ignoring server.");
-			player.lastUpdate++;
-			return true;
+			diff.value = value;
 		}
-		else
-			return false;
+		return diff;
 	}
 
 	private Client client;

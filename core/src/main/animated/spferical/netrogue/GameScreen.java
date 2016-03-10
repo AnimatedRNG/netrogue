@@ -92,8 +92,8 @@ public class GameScreen implements Screen {
 		Player player = gameClient.findPlayer();
 		gameClient.sendObjectToServer(input);
 		
-		input.resetAll();
 		player.put("input", input);
+		input.resetAll();
 		
 		Log.info("Sent ClientInputState to server");
 	}
