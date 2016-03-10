@@ -151,6 +151,12 @@ public class GameServer extends Listener implements Runnable {
 			child.killChildren();
 			this.server.sendToTCP(connection.getID(), 
 				new InfoResponse(child));
+			
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				Log.info("Server Networking", "Interrupted", e);
+			}
 		}
 		
 		children = object.getAllChildren().entrySet().iterator();

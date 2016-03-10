@@ -18,7 +18,7 @@ public class GameClient extends Listener {
 	public static final int LOAD_TIMEOUT = 10000;
 	public static final int BLOCKING_PERIOD = 10;
 	public static final int CLIENT_NETWORK_UPDATE_RATE = 10;
-	public static final int[] BUFFER_SIZES = {131072 * 8, 131072 * 8};
+	public static final int[] BUFFER_SIZES = {8192, 2048};
 
 	public GameState currentGameState;
 	public GameState oldGameState;
