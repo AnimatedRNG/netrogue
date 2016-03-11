@@ -52,6 +52,14 @@ public class Level extends NetworkObject {
 	 * @return whether you can move into the tile
 	 */
 	public boolean checkOccupied(int row, int column) {
+		for (NetworkObject obj : getAllChildren().values()) {
+			if (obj instanceof Mob) {
+				Mob m = (Mob) obj;
+				if (m.getX() == column && m.getY() == row) {
+					return true;
+				}
+			}
+		}
 		Chunk chunk = this.getChunk(row / Constants.chunkSize,
 				column / Constants.chunkSize);
 		return chunk.isOccupied(row % Constants.chunkSize, 
@@ -61,7 +69,16 @@ public class Level extends NetworkObject {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(" "+this.getClass().getName() +" " + this.ID + "lastUpdate:" + this.lastUpdate);
-		builder.append("\n  ...and TONS of Chunks...");
+		int numChunks = 0;
+		int numMobs = 0;
+		for (NetworkObject obj : getAllChildren().values()) {
+			if (obj instanceof Mob) {
+				numMobs++;
+			} else if (obj instanceof Chunk) {
+				numChunks++;
+			}
+		}
+		builder.append("\n  " + numChunks + " Chunks\n  " + numMobs + " Mobs");
 		return builder.toString();
 	}
 }

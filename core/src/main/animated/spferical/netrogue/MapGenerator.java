@@ -135,6 +135,7 @@ public class MapGenerator {
 				level.putChild(chunks[chunkRow][chunkCol]);
 			}
 		}
+
 		Log.info("Done generating level" + level.ID);
 	}
 
