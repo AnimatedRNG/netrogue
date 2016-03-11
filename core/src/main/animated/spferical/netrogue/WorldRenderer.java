@@ -109,10 +109,30 @@ public class WorldRenderer {
 				String type = (String) m.get("type");
 				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
 						m.getX() * tileSize, m.getY() * tileSize);
+				int hp = (int)m.get("hp");
+				int maxHP = (int)m.get("maxHp");
+				if (hp < maxHP) {
+					drawHealthBar(m.getX(), m.getY(), ((float) hp) / maxHP);
+
+				}
 
 			}
 		}
 		batch.end();
+	}
+
+	public void drawHealthBar(int x, int y, float healthFraction) {
+		x = x * Constants.tileSize;
+		y = y * Constants.tileSize;
+		if (healthFraction > .75) {
+			batch.draw(Assets.animations.get("hpfull").getKeyFrame(timeElapsed), x, y);
+		} else if (healthFraction > .5) {
+			batch.draw(Assets.animations.get("hp3").getKeyFrame(timeElapsed), x, y);
+		} else if (healthFraction > .25) {
+			batch.draw(Assets.animations.get("hp2").getKeyFrame(timeElapsed), x, y);
+		} else {
+			batch.draw(Assets.animations.get("hp1").getKeyFrame(timeElapsed), x, y);
+		}
 	}
 
 	public void handleResize(int width, int height) {

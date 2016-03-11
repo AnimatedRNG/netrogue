@@ -38,19 +38,20 @@ public class UserInterface {
 	final int chatPanelHeight = 200;
 
 	public UserInterface() {
-		hp1 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9);
-		hp2 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 8);
-		hp3 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 7);
-		hpfull = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 6);
+		hp1 = Assets.animations.get("hp1");
+		hp2 = Assets.animations.get("hp2");
+		hp3 = Assets.animations.get("hp3");
+		hpfull = Assets.animations.get("hpfull");
 
-		ap1 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 2, 9);
-		ap2 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 2, 8);
-		ap3 = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 2, 7);
-		apfull = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 2, 6);
+		ap1 = Assets.animations.get("ap1");
+		ap2 = Assets.animations.get("ap2");
+		ap3 = Assets.animations.get("ap3");
+		apfull = Assets.animations.get("apfull");
 
-		barLeft = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 6);
-		barMiddle = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 7);
-		barRight = Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 8);
+		barLeft = Assets.animations.get("barLeft");
+		barMiddle = Assets.animations.get("barMiddle");
+		barRight = Assets.animations.get("barRight");
+
 		startTime = TimeUtils.millis();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
