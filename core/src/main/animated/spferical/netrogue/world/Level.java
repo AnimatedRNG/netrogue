@@ -55,7 +55,8 @@ public class Level extends NetworkObject {
 		Chunk chunk = this.getChunk(row / Constants.chunkSize,
 				column / Constants.chunkSize);
 		return chunk.isOccupied(row % Constants.chunkSize, 
-				column % Constants.chunkSize); 
+				column % Constants.chunkSize) 
+				&& checkMobCollision(row, column) == null; 
 	}
 
 	public Mob checkMobCollision(int row, int column) {
