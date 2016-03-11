@@ -40,4 +40,8 @@ public class Mob extends NetworkObject implements Actor {
 	public void setY(int y) {
 		put("y", y);
 	}
+
+	public void takeDamage(int damage) {
+		put("hp", ((int) get("hp")) - damage);
+	}
 }

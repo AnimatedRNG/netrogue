@@ -97,8 +97,13 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 	}
 	
 	public synchronized NetworkObject removeChild(Long ID) {
-		this.parent = 0;
-		return this.children.remove(ID);
+		System.out.println("Removing child with " + ID);
+		NetworkObject child = this.children.get(ID);
+		if (child != null) {
+			child.parent = 0;
+			return this.children.remove(ID);
+		}
+		return null;
 	}
 	
 	public synchronized NetworkObject getChild(Long ID) {

@@ -1,5 +1,7 @@
 package animated.spferical.netrogue.world;
 
+import com.esotericsoftware.minlog.Log;
+
 import animated.spferical.netrogue.ChatLine;
 import animated.spferical.netrogue.ChatNetworkObject;
 import animated.spferical.netrogue.ClientInputState;
@@ -29,6 +31,13 @@ public class GameState extends NetworkObject {
 		putChild(chat);
 
 	}
+
+	public void removeFromTree(NetworkObject obj) {
+		System.out.println("Deleting " + obj.ID);
+		long parentID = obj.parent;
+		NetworkObject parent = searchChildren(parentID);
+		parent.removeChild(obj.ID);
+	}
 	
 	// Handle player input
 	public void handlePlayerInput(Player player, ClientInputState input, float dt) {
@@ -38,26 +47,34 @@ public class GameState extends NetworkObject {
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
 			int currentX = player.getX();
 			int currentY = player.getY();
+			int newX = currentX;
+			int newY = currentY;
 			if (input.moveUp) {
-				int newY = player.getY() + 1;
-				if (!level.checkOccupied(newY, currentX))
-					player.setY(newY);
-				player.put("timeSinceLastAction", 0.0f);
+				newY = currentY + 1;
 			} else if (input.moveLeft) {
-				int newX = player.getX() - 1;
-				if (!level.checkOccupied(currentY, newX))
-					player.setX(newX);
-				player.put("timeSinceLastAction", 0.0f);
+				newX = currentX - 1;
 			} else if (input.moveDown) {
-				int newY = player.getY() - 1;
-				if (!level.checkOccupied(newY, currentX))
-					player.setY(newY);
-				player.put("timeSinceLastAction", 0.0f);
+				newY = currentY - 1;
 			} else if (input.moveRight) {
-				int newX = player.getX() + 1;
-				if (!level.checkOccupied(currentY, newX))
+				newX = currentX + 1;
+			}
+			if (!level.checkOccupied(newY, newX)) {
+				Mob m = level.checkMobCollision(newY, newX);
+				if (m != null) {
+					Log.info("Player attacks mob at " + newX + ", " + newY);
+					// attack the mob!
+					m.takeDamage(player.calculateDamage());
+					if (((int) m.get("hp")) <= 0) {
+						removeFromTree(m);
+						Log.info("Player kills mob at " + newX + ", " + newY);
+					}
+					player.put("timeSinceLastAction", 0.0f);
+				} else {
+					// nothing here, so move
 					player.setX(newX);
-				player.put("timeSinceLastAction", 0.0f);
+					player.setY(newY);
+					player.put("timeSinceLastAction", 0.0f);
+				}
 			}
 
 			if (input.stringInput != null) {

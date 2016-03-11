@@ -39,6 +39,10 @@ public class Player extends NetworkObject implements Actor {
 		return (int) get("level");
 	}
 
+	public int calculateDamage() {
+		return (int) this.get("characterLevel");
+	}
+
 	public int getX() {
 		return (int) get("x");
 	}

@@ -110,9 +110,9 @@ public class WorldRenderer {
 				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
 						m.getX() * tileSize, m.getY() * tileSize);
 				int hp = (int)m.get("hp");
-				int maxHP = (int)m.get("maxHp");
+				int maxHP = (int)m.get("maxHP");
 				if (hp < maxHP) {
-					drawHealthBar(m.getX(), m.getY(), ((float) hp) / maxHP);
+					drawHealthBar(m.getX(), m.getY(), ((float) hp) / ((float)maxHP));
 
 				}
 

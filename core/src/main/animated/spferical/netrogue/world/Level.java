@@ -52,18 +52,22 @@ public class Level extends NetworkObject {
 	 * @return whether you can move into the tile
 	 */
 	public boolean checkOccupied(int row, int column) {
-		for (NetworkObject obj : getAllChildren().values()) {
-			if (obj instanceof Mob) {
-				Mob m = (Mob) obj;
-				if (m.getX() == column && m.getY() == row) {
-					return true;
-				}
-			}
-		}
 		Chunk chunk = this.getChunk(row / Constants.chunkSize,
 				column / Constants.chunkSize);
 		return chunk.isOccupied(row % Constants.chunkSize, 
 				column % Constants.chunkSize); 
+	}
+
+	public Mob checkMobCollision(int row, int column) {
+		for (NetworkObject obj : getAllChildren().values()) {
+			if (obj instanceof Mob) {
+				Mob m = (Mob) obj;
+				if (m.getX() == column && m.getY() == row) {
+					return m;
+				}
+			}
+		}
+		return null;
 	}
 
 	public String toString() {

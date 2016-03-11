@@ -48,8 +48,9 @@ public abstract class Diff {
 			boolean result = false;
 			for (NetworkObject child : old.getAllChildren().values())
 			{
-				if (child.ID == targetID && actuallyDoSomething)
-					result = this.apply(child);
+				if (this.apply(child)) {
+					return true;
+				}
 			}
 			return result;
 		}

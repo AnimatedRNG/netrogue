@@ -129,10 +129,6 @@ public class GameClient extends Listener {
 							"Received InfoResponse but haven't yet received GameState!");
 					return;
 				}
-				else
-				{
-					Log.info("Received an InfoResponse of " + networkObject);
-				}
 				this.oldGameState.searchChildren(parent).putChild(networkObject);
 			}
 		}
@@ -155,8 +151,6 @@ public class GameClient extends Listener {
 					System.currentTimeMillis() + connection.getReturnTripTime() / 2);
 			
 			this.currentGameState = (GameState) this.oldGameState.clone();
-			
-			Log.info("Client GameState", this.currentGameState.toString());
 		}
 	}
 	
@@ -201,7 +195,6 @@ public class GameClient extends Listener {
 			{
 				diff = savePlayer((ModifyAttributeDiff) diff, player.getY(), player);
 			}
-			Log.info("Client Networking", "Player movement detected, handling case separately");
 		}
 		
 		boolean result = diff.apply(this.oldGameState);
@@ -209,21 +202,14 @@ public class GameClient extends Listener {
 		{
 			Log.error("Client Networking", "Failed to apply diff " + diff);
 		}
-		else
-		{
-			Log.info("Client Networking", "Applied Diff " + diff.newUpdate);
-		}
 	}
 	
 	private Diff savePlayer(ModifyAttributeDiff diff, Integer value, Player player) {
 		// If the server argues with the client about its position
 		// and the client isn't too wrong, we don't do anything on 
 		// the client
-		Log.info("Client Networking", 
-				"Comparing client value " + value + " with server value " + diff.value);
 		if (Math.abs((float) value - (int) diff.value) < 0)
 		{
-			Log.info("Client Networking", "dx too small. Ignoring server.");
 			diff.actuallyDoSomething = false;
 		}
 		return diff;

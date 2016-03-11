@@ -80,8 +80,6 @@ public class GameServer extends Listener implements Runnable {
 				this.oldGameState = (GameState) this.gameState.clone();
 			}
 			
-			Log.info("Server GameState", this.gameState.toString());
-			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
 			} catch (Exception e) {
