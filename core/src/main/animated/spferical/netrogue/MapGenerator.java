@@ -12,8 +12,8 @@ import animated.spferical.netrogue.world.TileTypeArray;
 
 public class MapGenerator {
 
-	public static final int mapHeight = 62;
-	public static final int mapWidth = 62;
+	public static final int mapHeight = 6;
+	public static final int mapWidth = 6;
 
 	private static class MapVector {
 		public int row, col;
