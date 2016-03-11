@@ -14,14 +14,12 @@ import com.esotericsoftware.minlog.Log;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.MapGenerator;
-import animated.spferical.netrogue.world.Actor;
-import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
 public class GameServer extends Listener implements Runnable {
 
-	public static final float NETWORK_UPDATE_RATE = 10F;
+	public static final float NETWORK_UPDATE_RATE = 30F;
 	public static final int PORT_NUMBER = 37707;
 	
 	public static final int[] BUFFER_SIZES = {131072 * 8, 131072 * 8};
@@ -34,6 +32,7 @@ public class GameServer extends Listener implements Runnable {
 		this.gameState = (GameState) this.oldGameState.clone();
 		this.isRunning = true;
 		this.networkingThead = new Thread(this);
+		this.lastNetworkUpdate = System.currentTimeMillis();
 		Registrar.register(server.getKryo());
 		
 		this.playerIDs = new HashMap<>();
@@ -62,20 +61,22 @@ public class GameServer extends Listener implements Runnable {
 			this.gameState.updateAllChildren(this.gameState, 
 					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
 			
+			List<Diff> diffs = null;
 			// Get all diffs in the GameState object
 			// and send them to everybody
 			synchronized (this.gameState) 
 			{
-				List<Diff> diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
-			
-				// Send everyone diffs
-				for (Connection connection : this.playerIDs.keySet())
-					this.sendUpdateToPlayer(diffs, connection);
-				
+				diffs = DiffGenerator.generateDiffs(this.oldGameState, this.gameState);
 				this.oldGameState = (GameState) this.gameState.clone();
 			}
+			// Send everyone diffs
+			for (Connection connection : this.playerIDs.keySet())
+				this.sendUpdateToPlayer(diffs, connection);
 			
-			Log.info("Server GameState", this.gameState.toString());
+			//Log.info("Server GameState", this.gameState.toString());
+			Log.info("Server Networking", "Last update was " + 
+					((float) (System.currentTimeMillis() - this.lastNetworkUpdate)) / 1000f);
+			this.lastNetworkUpdate = System.currentTimeMillis();
 			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
@@ -190,6 +191,8 @@ public class GameServer extends Listener implements Runnable {
 	private GameState gameState;
 	private GameState oldGameState;
 	private boolean isRunning;
+	
+	private long lastNetworkUpdate;
 	
 	private HashMap<Connection, Long> playerIDs;
 	

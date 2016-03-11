@@ -17,7 +17,7 @@ public class GameClient extends Listener {
 	
 	public static final int TIMEOUT = 10000;
 	public static final int LOAD_TIMEOUT = 10000;
-	public static final int BLOCKING_PERIOD = 10;
+	public static final int BLOCKING_PERIOD = 30;
 	
 	// Try to keep this value close to the server update rate
 	public static final int CLIENT_LOGIC_UPDATE_RATE = 10;
@@ -141,7 +141,6 @@ public class GameClient extends Listener {
 			@SuppressWarnings("unchecked")
 			List<Object> objectList = ((List<Object>) object);
 			
-			
 			for (Object obj : objectList)
 			{
 				if (obj instanceof Diff)
@@ -153,23 +152,21 @@ public class GameClient extends Listener {
 			}
 			this.oldGameState.put("lastTimeUpdate", 
 					System.currentTimeMillis() + connection.getReturnTripTime() / 2);
-
-			//HACK
-			if (currentGameState != null && oldGameState != null) {
-				Player currPlayer = findPlayer();
-				Player oldPlayer = findPlayer(this.oldGameState);
-				if (currPlayer != null && oldPlayer != null &&
-						Math.abs(currPlayer.getX() - oldPlayer.getX()) <= 1 &&
-						Math.abs(currPlayer.getY()- oldPlayer.getY()) <= 1) {
-					System.out.println("Keeping currentGameState player position " + currPlayer.getX() + " " + currPlayer.getY());
-					oldPlayer.setX(currPlayer.getX());
-					oldPlayer.setY(currPlayer.getY());
-				}
-			}
+			
+			Player currPlayer = this.findPlayer();
+			Player oldPlayer = this.findPlayer(oldGameState);
 			
 			this.currentGameState = (GameState) this.oldGameState.clone();
 			
-			Log.info("Client GameState", this.currentGameState.toString());
+			if (currPlayer != null && oldPlayer != null)
+			{
+				float delta = Math.abs(currPlayer.getX() - oldPlayer.getX()) + 
+						Math.abs(currPlayer.getY() - oldPlayer.getY()); 
+				if (Math.random() > 0.1f * delta)
+					this.currentGameState.putChild(currPlayer);
+			}
+			
+			//Log.info("Client GameState", this.currentGameState.toString());
 		}
 	}
 	
@@ -238,7 +235,7 @@ public class GameClient extends Listener {
 		// the client
 		Log.info("Client Networking", 
 				"Comparing client value " + value + " with server value " + diff.value);
-		if (Math.abs((float) value - (int) diff.value) < 1000000)
+		if (Math.abs((float) value - (int) diff.value) < 0)
 		{
 			//Log.info("Client Networking", "dx too small. Ignoring server.");
 			//Log.info("Client Networking", "Setting diff value to " + value + " instead of " + diff.value);
