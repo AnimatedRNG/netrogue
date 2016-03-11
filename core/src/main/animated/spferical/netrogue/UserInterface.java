@@ -113,6 +113,9 @@ public class UserInterface {
 				batch.draw(hp1.getKeyFrame(animationTime),
 						i * tileSize, tileSize);
 			}
+		}
+		for (int i = 0; i < apFraction * 4; i++) {
+			float baseFraction = i/4f;
 			if (apFraction >= baseFraction + .25) {
 				batch.draw(apfull.getKeyFrame(animationTime), i * tileSize, 0);
 			} else if (apFraction >= baseFraction + 3f/16) {
