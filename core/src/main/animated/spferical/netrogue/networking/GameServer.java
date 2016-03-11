@@ -135,8 +135,8 @@ public class GameServer extends Listener implements Runnable {
 			this.gameState.handlePlayerInput(player, (ClientInputState) object, (float) delta / 1000f);
 			this.timeSinceLastMove.put(connection, System.currentTimeMillis());
 			
-			Log.info("Server Networking", "Player " + player + 
-					" is now at position (" + player.getX() + ", " + player.getY() + ")");
+			//Log.info("Server Networking", "Player " + player + 
+			//		" is now at position (" + player.getX() + ", " + player.getY() + ")");
 		}
 	}
 	

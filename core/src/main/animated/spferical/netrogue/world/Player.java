@@ -89,6 +89,24 @@ public class Player extends NetworkObject implements Actor {
 	public void onKillMob(Mob mob) {
 		this.put("xp", mob.get("xp"));
 	}
+	
+	public void gainExperience(int xp) {
+		int currentXP = (int) this.get("xp");
+		int currentLevel = (int) this.get("characterLevel");
+		int newLevel = appropriateLevelUp(currentXP);
+		if (newLevel > currentLevel)
+		{
+			Log.info("Game Logic", "PLAYER LEVELED UP!");
+			this.put("characterLevel", newLevel);
+		}
+	}
+	
+	public int appropriateLevelUp(int currentXP) {
+		float xp = currentXP;
+		if (xp <= 0)
+			xp = 1;
+		return (int) Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER);
+	}
 
 	@Override
 	public void onUpdate(GameState gameState, float dt) {
@@ -96,10 +114,12 @@ public class Player extends NetworkObject implements Actor {
 		
 		if (currentAPAccumulator > Constants.AP_REGEN_TIME)
 		{
-			float max_ap = (float) this.calculateMaxAP((int) this.get("characterLevel"));
+			int max_ap = this.calculateMaxAP((int) this.get("characterLevel"));
 			int current_ap = (int) this.get("ap");
 			if (current_ap < max_ap)
 				current_ap += Constants.AP_REGEN_AMOUNT;
+			if (current_ap > max_ap)
+				current_ap = max_ap;
 			this.put("ap", current_ap);
 			currentAPAccumulator = 0;
 		}
