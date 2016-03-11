@@ -29,7 +29,10 @@ public abstract class Diff {
 			if (old.lastUpdate + 1 == newUpdate)
 			{
 				old.lastUpdate++;
-				return this.onApply(old);
+				if (this.actuallyDoSomething)
+					return this.onApply(old);
+				else
+					return true;
 			}
 			else
 			{
@@ -38,7 +41,8 @@ public abstract class Diff {
 				
 				Log.warn("Applying update regardless. May cause unintended consequences.");
 				old.lastUpdate = newUpdate;
-				this.onApply(old);
+				if (this.actuallyDoSomething)
+					this.onApply(old);
 				
 				return false;
 			}
