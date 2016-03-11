@@ -33,6 +33,7 @@ public class Player extends NetworkObject implements Actor {
 		
 		this.put("ap", calculateMaxAP((Integer) this.get("characterLevel")));
 		this.put("ap_accumulator", 0.0f);
+		this.put("xp", 0);
 		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
@@ -83,6 +84,10 @@ public class Player extends NetworkObject implements Actor {
 	public int calculateMaxAP(int characterLevelNumber) {
 		return Constants.BASE_AP + 
 				characterLevelNumber * Constants.EXTRA_AP_PER_LEVEL;
+	}
+	
+	public void onKillMob(Mob mob) {
+		this.put("xp", mob.get("xp"));
 	}
 
 	@Override

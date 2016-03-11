@@ -9,12 +9,13 @@ public class Mob extends NetworkObject implements Actor {
 	public Mob() {
 	}
 
-	public Mob(String type, int x, int y, int maxHP, int damage, float moveSpeed) {
+	public Mob(String type, int x, int y, int maxHP, int XP, int damage, float moveSpeed) {
 		put("type", type);
 		put("x", x);
 		put("y", y);
 		put("hp", maxHP);
 		put("maxHP", maxHP);
+		put("xp", XP);
 		put("damage", damage);
 		put("moveSpeed", moveSpeed);
 		put("timeSinceLastAction", 0.0f);

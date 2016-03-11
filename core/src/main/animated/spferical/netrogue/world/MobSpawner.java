@@ -14,18 +14,20 @@ public class MobSpawner {
 		public String name;
 		public int maxHP;
 		public int damage;
+		public int XP;
 		public float moveSpeed;
 
-		public MobType(String name, int maxHP, int damage, float moveSpeed) {
+		public MobType(String name, int maxHP, int XP, int damage, float moveSpeed) {
 			this.name = name;
 			this.maxHP = maxHP;
 			this.damage = damage;
 			this.moveSpeed = moveSpeed;
+			this.XP = XP;
 		}
 	};
 
 	final MobType[] mobTypes = {
-		new MobType("worm", 5, 1, 1),
+		new MobType("worm", 5, 1, 1, 1),
 	};
 
 	public MobSpawner() {
@@ -63,7 +65,7 @@ public class MobSpawner {
 		if (!level.checkOccupied(y, x)) {
 			// spawn a mob there
 			MobType type = mobTypes[random.nextInt(mobTypes.length)];
-			Mob mob = new Mob(type.name, x, y, type.maxHP, type.damage, type.moveSpeed);
+			Mob mob = new Mob(type.name, x, y, type.maxHP, type.XP, type.damage, type.moveSpeed);
 			level.putChild(mob);
 		}
 	}
