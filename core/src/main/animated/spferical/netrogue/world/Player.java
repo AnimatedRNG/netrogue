@@ -62,6 +62,10 @@ public class Player extends NetworkObject implements Actor {
 		put("y", y);
 	}
 
+	public void takeDamage(int damage) {
+		put("hp", ((int) get("hp")) - damage);
+	}
+
 	public int getConnectionID() {
 		return (int) get("connection");
 	}
