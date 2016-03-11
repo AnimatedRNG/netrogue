@@ -45,6 +45,8 @@ public class GameState extends NetworkObject {
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
 		Level level = this.getLevelByNumber(player.getDungeonLevel());
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
+			int AP = (int) player.get("ap");
+			boolean lowAP = AP <= 0;
 			int currentX = player.getX();
 			int currentY = player.getY();
 			int newX = currentX;
@@ -58,7 +60,7 @@ public class GameState extends NetworkObject {
 			} else if (input.moveRight) {
 				newX = currentX + 1;
 			}
-			if (!level.checkOccupied(newY, newX)) {
+			if (!level.checkOccupied(newY, newX) && !lowAP) {
 				Mob m = level.checkMobCollision(newY, newX);
 				if (m != null) {
 					Log.info("Player attacks mob at " + newX + ", " + newY);
@@ -69,13 +71,18 @@ public class GameState extends NetworkObject {
 						Log.info("Player kills mob at " + newX + ", " + newY);
 					}
 					player.put("timeSinceLastAction", 0.0f);
+					if (AP > 0)
+						player.put("ap", AP - 1);
 				} else {
 					// nothing here, so move
 					player.setX(newX);
 					player.setY(newY);
 					player.put("timeSinceLastAction", 0.0f);
+					if (AP > 0)
+						player.put("ap", AP - 1);
 				}
 			}
+			
 
 			if (input.stringInput != null) {
 				// player sent message

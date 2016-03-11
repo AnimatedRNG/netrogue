@@ -62,9 +62,9 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning) {
-			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
 			this.gameState.updateAllChildren(this.gameState, 
 					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
+			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
 			this.spawner.spawnMobs(this.gameState);
 			
 			// Get all diffs in the GameState object
