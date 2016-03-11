@@ -90,7 +90,8 @@ public class UserInterface {
 		int hp = (int) player.get("hp");
 		int maxHP = player.calculateMaxHP((int) player.get("characterLevel"));
 		float hpFraction = (float) hp / maxHP;
-		float apFraction = 0.1f;
+		int ap = (Integer) player.get("ap");
+		float apFraction = (float) ap / (float) player.calculateMaxAP((int) player.get("characterLevel"));
 		long currTime = TimeUtils.millis();
 		float animationTime = (currTime - startTime) / 1000f;
 		batch.setProjectionMatrix(camera.combined);

@@ -156,7 +156,7 @@ public class GameClient extends Listener {
 			
 			this.currentGameState = (GameState) this.oldGameState.clone();
 			
-			Log.info("Client GameState", this.currentGameState.toString());
+			//Log.info("Client GameState", this.currentGameState.toString());
 		}
 	}
 	

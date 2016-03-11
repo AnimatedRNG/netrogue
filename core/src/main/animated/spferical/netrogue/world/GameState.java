@@ -36,29 +36,34 @@ public class GameState extends NetworkObject {
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
 		Level level = this.getLevelByNumber(player.getDungeonLevel());
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
+			int AP = (int) player.get("ap");
+			boolean lowAP = AP <= 0;
 			int currentX = player.getX();
 			int currentY = player.getY();
-			if (input.moveUp) {
+			if (input.moveUp && !lowAP) {
 				int newY = player.getY() + 1;
 				if (!level.checkOccupied(newY, currentX))
 					player.setY(newY);
 				player.put("timeSinceLastAction", 0.0f);
-			} else if (input.moveLeft) {
+			} else if (input.moveLeft && !lowAP) {
 				int newX = player.getX() - 1;
 				if (!level.checkOccupied(currentY, newX))
 					player.setX(newX);
 				player.put("timeSinceLastAction", 0.0f);
-			} else if (input.moveDown) {
+			} else if (input.moveDown && !lowAP) {
 				int newY = player.getY() - 1;
 				if (!level.checkOccupied(newY, currentX))
 					player.setY(newY);
 				player.put("timeSinceLastAction", 0.0f);
-			} else if (input.moveRight) {
+			} else if (input.moveRight && !lowAP) {
 				int newX = player.getX() + 1;
 				if (!level.checkOccupied(currentY, newX))
 					player.setX(newX);
 				player.put("timeSinceLastAction", 0.0f);
 			}
+			
+			if (AP > 0)
+				player.put("ap", AP - 1);
 
 			if (input.stringInput != null) {
 				// player sent message

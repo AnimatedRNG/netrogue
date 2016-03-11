@@ -58,9 +58,9 @@ public class GameServer extends Listener implements Runnable {
 	@Override
 	public void run() {
 		while (this.isRunning) {
-			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
 			this.gameState.updateAllChildren(this.gameState, 
 					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
+			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
 			
 			// Get all diffs in the GameState object
 			// and send them to everybody
@@ -75,7 +75,7 @@ public class GameServer extends Listener implements Runnable {
 				this.oldGameState = (GameState) this.gameState.clone();
 			}
 			
-			Log.info("Server GameState", this.gameState.toString());
+			//Log.info("Server GameState", this.gameState.toString());
 			
 			try {
 				Thread.sleep((long) ((1f / NETWORK_UPDATE_RATE) * 1000));
