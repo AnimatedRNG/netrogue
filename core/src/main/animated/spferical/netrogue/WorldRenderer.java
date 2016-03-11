@@ -16,6 +16,7 @@ import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.LevelCacher;
+import animated.spferical.netrogue.world.Mob;
 import animated.spferical.netrogue.world.Player;
 import animated.spferical.netrogue.world.Tile;
 import animated.spferical.netrogue.world.TileTypeArray;
@@ -28,8 +29,10 @@ public class WorldRenderer {
 	Viewport viewport;
 	long playerID;
 	EnumMap<Tile.Type, TextureRegion> tileTextureRegions;
+	long levelID;
 
 	public WorldRenderer(Level level, Player player) {
+		this.levelID = level.ID;
 		this.levelCacher = new LevelCacher(level);
 		this.playerID = player.ID;
 		camera = new OrthographicCamera();
@@ -95,8 +98,18 @@ public class WorldRenderer {
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
 			if (obj instanceof Player) {
 				Player p = (Player) obj;
-				batch.draw(Assets.animations.get(0).getKeyFrame(timeElapsed, true),
+				batch.draw(Assets.animations.get("player").getKeyFrame(timeElapsed, true),
 						p.getX() * tileSize, p.getY() * tileSize);
+			}
+		}
+		Level level = (Level) gameState.searchChildren(levelID);
+		for (NetworkObject obj : level.getAllChildren().values()) {
+			if (obj instanceof Mob) {
+				Mob m = (Mob) obj;
+				String type = (String) m.get("type");
+				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+						m.getX() * tileSize, m.getY() * tileSize);
+
 			}
 		}
 		batch.end();

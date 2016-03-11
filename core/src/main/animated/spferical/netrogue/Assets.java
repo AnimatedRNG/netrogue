@@ -17,14 +17,18 @@ import com.badlogic.gdx.utils.Array;
 public class Assets {
 	static HashMap<String, Texture> spriteMaps = new HashMap<>();
 	static float animationTime = 0.5f;
-	static List<Animation> animations = new ArrayList<>();
+	static HashMap<String, Animation> animations = new HashMap<>();
 	static FreeTypeFontGenerator fontGenerator;
 	static HashMap<Integer, BitmapFont> fonts = new HashMap<>();
 	static Skin skin;
 
 	public static void load() {
-		animations.add(
+		animations.put(
+			"player", 
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
+		animations.put(
+			"worm",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 0));
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));

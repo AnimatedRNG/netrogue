@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -17,6 +18,8 @@ import animated.spferical.netrogue.MapGenerator;
 import animated.spferical.netrogue.world.Actor;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Level;
+import animated.spferical.netrogue.world.MobSpawner;
 import animated.spferical.netrogue.world.Player;
 
 public class GameServer extends Listener implements Runnable {
@@ -25,6 +28,7 @@ public class GameServer extends Listener implements Runnable {
 	public static final int PORT_NUMBER = 37707;
 	
 	public static final int[] BUFFER_SIZES = {131072 * 8, 131072 * 8};
+	MobSpawner spawner = new MobSpawner();
 	
 	public GameServer() {
 		this.server = new Server(BUFFER_SIZES[0], BUFFER_SIZES[1]);
@@ -54,13 +58,14 @@ public class GameServer extends Listener implements Runnable {
 			Log.error("Server Networking", "Error binding to port", e);
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		while (this.isRunning) {
 			this.gameState.updateAllChildren(this.gameState, 
 					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
 			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
+			this.spawner.spawnMobs(this.gameState);
 			
 			// Get all diffs in the GameState object
 			// and send them to everybody
