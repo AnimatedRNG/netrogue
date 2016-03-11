@@ -46,16 +46,54 @@ public class Mob extends NetworkObject implements Actor {
 				if (distanceSquared <= 1) {
 					// we can attack player!
 					p.takeDamage((int) get("damage"));
-				} else if (distanceSquared < 5) {
-					moveTowards(p.getX(), p.getY());
+				} else if (distanceSquared < 25) {
+					moveTowards(p.getX(), p.getY(), gameState);
 					return;
 				}
 			}
 		}
 	}
 
-	public void moveTowards(int x, int y) {
+	public void moveTowards(int x, int y, GameState gameState) {
 		// TODO: simple pathfinding
+		int dx = x - getX();
+		int dy = y - getY();
+		if (dx == 0 && dy == 0) {
+			return;
+		}
+		// normalize direction values
+		int xdir, ydir;
+		if (dx < 0) xdir = -1;
+		else if (dx > 0) xdir= 1;
+		else xdir = 0;
+		if (dy < 0) ydir = -1;
+		else if (dy > 0) ydir = 1;
+		else ydir = 0;
+		if (Math.abs(dx) > Math.abs(dy)) {
+			// try moving x, then moving y
+			if (!tryToMove(xdir, 0, gameState)) {
+				tryToMove(0, ydir, gameState);
+			}
+		} else {
+			// try moving y, then moving x
+			if (!tryToMove(0, ydir, gameState)) {
+				tryToMove(xdir, 0, gameState);
+			}
+		}
+	}
+
+	public boolean tryToMove(int dx, int dy, GameState gameState) {
+		int x = getX() + dx;
+		int y = getY() + dy;
+		Level level = (Level) gameState.searchChildren(parent);
+		if (!level.checkOccupied(y, x)
+				&& level.checkMobCollision(y, x) == null) {
+			// we can move!
+			setX(x);
+			setY(y);
+			return true;
+		}
+		return false;
 	}
 
 	public int getX() {

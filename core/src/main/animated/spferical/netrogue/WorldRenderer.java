@@ -4,6 +4,7 @@ import java.util.EnumMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -122,6 +123,8 @@ public class WorldRenderer {
 	}
 
 	public void drawHealthBar(int x, int y, float healthFraction) {
+		Color c = batch.getColor();
+		batch.setColor(c.r, c.g, c.b, 0.6f);
 		x = x * Constants.tileSize;
 		y = y * Constants.tileSize;
 		if (healthFraction > .75) {
@@ -133,6 +136,7 @@ public class WorldRenderer {
 		} else {
 			batch.draw(Assets.animations.get("hp1").getKeyFrame(timeElapsed), x, y);
 		}
+		batch.setColor(c.r, c.g, c.b, 1f);
 	}
 
 	public void handleResize(int width, int height) {
