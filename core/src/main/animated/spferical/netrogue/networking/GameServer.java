@@ -35,6 +35,7 @@ public class GameServer extends Listener implements Runnable {
 		this.threaded = new ThreadedListener(this);
 		this.server.addListener(this.threaded);
 		this.oldGameState = new GameState();
+		this.oldGameState.setupGame();
 		this.gameState = (GameState) this.oldGameState.clone();
 		this.isRunning = true;
 		this.networkingThead = new Thread(this);
@@ -129,9 +130,6 @@ public class GameServer extends Listener implements Runnable {
 		else if (object instanceof ClientInputState)
 		{
 			Player player = (Player) this.gameState.getChild(this.playerIDs.get(connection));
-			
-			Log.info("Server Networking", "Received ClientInputState " + object);
-			
 			long delta = System.currentTimeMillis() - timeSinceLastMove.get(connection);
 			this.gameState.handlePlayerInput(player, (ClientInputState) object, (float) delta / 1000f);
 			this.timeSinceLastMove.put(connection, System.currentTimeMillis());

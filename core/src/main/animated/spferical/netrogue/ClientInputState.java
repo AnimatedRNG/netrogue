@@ -7,7 +7,7 @@ public class ClientInputState implements Serializable {
 	private static final long serialVersionUID = -8444092253112268601L;
 	
 	public enum InputType {
-		
+		SELECT_OPTION
 	};
 	
 	public ClientInputState() {
@@ -29,21 +29,27 @@ public class ClientInputState implements Serializable {
 					this.mouseXOffset == otherInputState.mouseXOffset &&
 					this.mouseYOffset == otherInputState.mouseYOffset &&
 					this.mouseClicked == otherInputState.mouseClicked &&
-					this.pickUpItem == otherInputState.pickUpItem)
+					this.pickUpItem == otherInputState.pickUpItem &&
+					this.checkEquivalence(this.stringInput, 
+							otherInputState.stringInput) &&
+					this.checkEquivalence(this.inputType, 
+							otherInputState.inputType) &&
+					this.intInput == otherInputState.intInput)
 			{
-					if (this.stringInput == null ^ otherInputState.stringInput == null)
-						return false;
-					else
-					{
-						if (this.stringInput == null && otherInputState.stringInput == null)
-							return true;
-						else
-							return this.stringInput.equals(otherInputState.stringInput);
-					}
+				return true;
 			}
 			else
 				return false;
 		}
+	}
+	
+	public boolean checkEquivalence(Object obj1, Object obj2) {
+		if (obj1 == null && obj2 == null)
+			return true;
+		else if (obj1 == null || obj2 == null)
+			return false;
+		else
+			return obj1.equals(obj2);
 	}
 	
 	public void resetAll() {
@@ -59,6 +65,8 @@ public class ClientInputState implements Serializable {
 		this.mouseClicked = false;
 		
 		this.stringInput = null;
+		this.intInput = 0;
+		this.inputType = null;
 	}
 
 	public boolean moveLeft = false;
@@ -76,4 +84,10 @@ public class ClientInputState implements Serializable {
 	// Use this for login, chat, and other player
 	// commands
 	public String stringInput = null;
+	
+	// Used for handling any generic integer input
+	// back to the server
+	public int intInput;
+	
+	public InputType inputType = null;
 }

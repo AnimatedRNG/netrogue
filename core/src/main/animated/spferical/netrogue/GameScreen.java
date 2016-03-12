@@ -65,6 +65,13 @@ public class GameScreen implements Screen {
 			ui.toggleChatFocus();
 		}
 		
+		if (ui.selectedIndex != -1)
+		{
+			inputState.inputType = ClientInputState.InputType.SELECT_OPTION;
+			inputState.intInput = ui.selectedIndex;
+			ui.selectedIndex = -1;
+		}
+		
 		if (inputState.equals(new ClientInputState()))
 			return;
 		
@@ -119,8 +126,6 @@ public class GameScreen implements Screen {
 		gameClient.sendObjectToServer(input);
 		
 		input.resetAll();
-		
-		Log.info("Sent ClientInputState to server");
 	}
 	
 	public class ClientNetworkHandler implements Runnable {

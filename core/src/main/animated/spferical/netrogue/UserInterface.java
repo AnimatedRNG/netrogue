@@ -7,11 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -20,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.NetworkObject;
+import animated.spferical.netrogue.networking.StringArray;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
@@ -45,6 +51,11 @@ public class UserInterface {
 	Label playerMessage;
 	long playerMessageTime;
 	Long lastMessageID;
+	HorizontalGroup serverGUI_layout;
+	SelectBox<String> serverGUI;
+	TextButton serverGUI_OK;
+	Long serverGUI_ID;
+	public int selectedIndex = -1;
 
 	public UserInterface() {
 		hp1 = Assets.animations.get("hp1");
@@ -96,10 +107,26 @@ public class UserInterface {
 		
 		playerMessage = new Label("", Assets.skin);
 		playerMessage.setFontScale(1.5f);
-		playerMessageTime = System.currentTimeMillis();
+		playerMessageTime = -1;
 		lastMessageID = 0L;
 		playerMessage.setAlignment(Align.center);
 		stage.addActor(playerMessage);
+		
+		serverGUI = new SelectBox<String>(Assets.skin);
+		serverGUI.setWidth(100);
+		serverGUI_OK = new TextButton("OK", Assets.skin); 
+		serverGUI_OK.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				selectedIndex = serverGUI.getSelectedIndex();
+				serverGUI_layout.remove();
+			}
+		});
+		serverGUI_layout = new HorizontalGroup();
+		serverGUI_layout.align(Align.center);
+		serverGUI_layout.addActor(serverGUI);
+		serverGUI_layout.addActor(serverGUI_OK);
+		serverGUI_ID = 0L;
 	}
 
 	public void draw(GameState gameState, long playerID) {
@@ -118,7 +145,7 @@ public class UserInterface {
 		if (player != null && player.has("playerMessage") && this.playerMessageTime == -1 &&
 				!(player.get("playerMessageID").equals(lastMessageID)))
 		{
-			Log.info("Client GUI", "Rendering message for player");
+			Log.info("Client GUI", "Rendering message for player. Last message ID: " + lastMessageID);
 			String message = (String) player.get("playerMessage");
 			this.renderPlayerMessage(message);
 			this.playerMessageTime = System.currentTimeMillis();
@@ -127,9 +154,23 @@ public class UserInterface {
 		else if (this.playerMessageTime != -1 && 
 				System.currentTimeMillis() - this.playerMessageTime > MESSAGE_DURATION)
 		{
-			Log.info("Client GUI", "No longer rendering message for player");
+			Log.info("Client GUI", "No longer rendering message for player. Last Message ID: " + lastMessageID);
 			this.playerMessageTime = -1;
 			this.renderPlayerMessage("");
+		}
+		
+		if (player != null && player.has("playerGUI_options") && 
+				!(player.get("playerGUI_ID").equals(serverGUI_ID)))
+		{
+			Log.info("Client GUI", "Giving the player options from the server");
+			StringArray options = (StringArray) player.get("playerGUI_options");
+			stage.addActor(this.serverGUI_layout);
+			this.serverGUI.setItems(options.data);
+			this.serverGUI_layout.layout();
+			this.serverGUI_layout.setPosition(this.stage.getWidth() / 2 - 
+					this.serverGUI.getWidth() / 2, 
+					this.stage.getHeight() / 2 - 100);
+			this.serverGUI_ID = (Long) player.get("playerGUI_ID");
 		}
 		
 		int tileSize = Constants.tileSize;
@@ -277,6 +318,10 @@ public class UserInterface {
 		playerMessage.setPosition(stage.getWidth() / 2 - playerMessage.getWidth() / 2, 
 				stage.getHeight() / 2 - playerMessage.getHeight() / 2);
 		playerMessage.layout();
+	}
+	
+	public void renderServerGUI(String options) {
+		
 	}
 	
 	public boolean isChatFocused() {

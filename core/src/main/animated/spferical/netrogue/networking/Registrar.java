@@ -30,6 +30,8 @@ public abstract class Registrar {
 		kryo.register(ArrayList.class);
 		kryo.register(Diff.class);
 		kryo.register(List.class);
+		kryo.register(String[].class);
+		kryo.register(StringArray.class);
 		kryo.register(AddAttributeDiff.class);
 		kryo.register(AddChildDiff.class);
 		kryo.register(DeleteAttributeDiff.class);

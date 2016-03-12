@@ -15,11 +15,10 @@ public class GameState extends NetworkObject {
 
 	public GameState() {
 		super();
-		this.put("lastTimeUpdate", System.currentTimeMillis());
-		setupGame();
 	}
 
 	public void setupGame() {
+		this.put("lastTimeUpdate", System.currentTimeMillis());
 		// generate levels
 		Level level = new Level(1, MapGenerator.mapHeight,
 				MapGenerator.mapWidth);
@@ -66,7 +65,7 @@ public class GameState extends NetworkObject {
 					if (m != null) {
 						Log.info("Player attacks mob at " + newX + ", " + newY);
 						// attack the mob!
-						m.takeDamage(player.calculateDamage());
+						m.takeDamage(player.calculateMeleeDamage());
 						if (((boolean) m.check("dead"))) {
 							player.onKillMob(m);
 							Log.info("Player kills mob at " + newX + ", " + newY);
@@ -115,6 +114,7 @@ public class GameState extends NetworkObject {
 				}
 			}
 			
+			player.onPlayerInput(input);
 
 			if (input.stringInput != null) {
 				// player sent message
