@@ -87,7 +87,7 @@ public class Mob extends NetworkObject implements Actor {
 		else ydir = 0;
 		if (Math.abs(dx) > Math.abs(dy)) {
 			// try moving x, then moving y
-			if (!tryToMove(xdir, 0, gameState) ||
+			if (tryToMove(xdir, 0, gameState) ||
 					tryToMove(0, ydir, gameState))
 				return true;
 		} else {
