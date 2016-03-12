@@ -67,7 +67,6 @@ public class Player extends PositionedObject implements Actor {
 			int weaponDamage = Constants.weaponInfos.get(weapon).damage;
 			attack += weaponDamage;
 		}
-		Log.info("Game Logic", "Attack: " + attack);
 		return attack;
 	}
 	

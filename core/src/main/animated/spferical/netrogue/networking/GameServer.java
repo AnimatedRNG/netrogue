@@ -5,22 +5,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.ChatNetworkObject;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.MapGenerator;
-import animated.spferical.netrogue.world.Actor;
-import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
-import animated.spferical.netrogue.world.Level;
-import animated.spferical.netrogue.world.Spawner;
 import animated.spferical.netrogue.world.Player;
+import animated.spferical.netrogue.world.Spawner;
 
 public class GameServer extends Listener implements Runnable {
 
@@ -105,12 +102,17 @@ public class GameServer extends Listener implements Runnable {
 		this.gameState.putChild(player);
 		
 		Log.info("Server Networking", "Player " + connection.getID() + " connected with ID: " + player.ID);
+		
+		this.gameState.announce("Player " + player.get("name") + " has joined the dungeon.");
 	}
 	
 	@Override
 	public void disconnected(Connection connection) {
 		// Player disconnected, destroy Player object
-		this.gameState.removeChild(this.playerIDs.remove(connection));
+		Long id = this.playerIDs.remove(connection);
+		this.gameState.announce("Player " + this.gameState.getChild(id).get("name") +
+				" has left the dungeon.");
+		this.gameState.removeChild(id);
 		this.timeSinceLastMove.remove(connection);
 	}
 	
