@@ -97,7 +97,7 @@ public class Assets {
 		items.put("club", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 2, 0));
 		items.put("mace", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 4, 0));
 		items.put("sword", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 0, 0));
-		items.put("axe", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 0, 1));
+		items.put("axe", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 1, 1));
 		items.put("double-axe", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 1, 1));
 
 		fontGenerator = new FreeTypeFontGenerator(
