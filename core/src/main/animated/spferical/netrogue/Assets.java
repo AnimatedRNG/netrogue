@@ -1,8 +1,6 @@
 package animated.spferical.netrogue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,9 +24,16 @@ public class Assets {
 		animations.put(
 			"player", 
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
-		animations.put(
-			"worm",
+		animations.put("worm",
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 0));
+		animations.put("ant",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 4, 0));
+		animations.put("beetle",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 10, 0));
+		animations.put("butterfly",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 1, 3));
+		animations.put("slime",
+			loadAnimationFromBasePath("DawnLike/Characters/Slime", 1, 1));
 		animations.put(
 			"hp1", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9));
 		animations.put(
