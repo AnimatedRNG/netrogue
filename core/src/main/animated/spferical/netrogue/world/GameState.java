@@ -203,5 +203,21 @@ public class GameState extends NetworkObject {
 			if (!(child instanceof Chunk))
 				updateAllChildren(child, dt);
 		}
+
+		boolean bossDead = true;
+		Level level = getLevelByNumber(4);
+		for (NetworkObject mob : level.getAllChildrenOfType(Mob.class, false)) {
+			// only one mob on final level
+			bossDead = false;
+			break;
+		}
+		if (bossDead) {
+			for (NetworkObject obj : getAllChildrenOfType(Player.class, false)) {
+				if (((Player) obj).getDungeonLevel() == 4) {
+					// win message
+					((Player) obj).addPlayerMessage("YOU WIN!");
+				}
+			}
+		}
 	}
 }
