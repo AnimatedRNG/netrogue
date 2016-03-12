@@ -150,6 +150,7 @@ public class GameScreen implements Screen {
 			while (running) {
 				gameState.updateAllChildren(gameState, ((float) (System.currentTimeMillis() 
 						- (Long) gameState.get("lastTimeUpdate")) / 1000f));
+				gameState.put("lastTimeUpdate", System.currentTimeMillis() / 1000f);
 				
 				try {
 					Thread.sleep((long) (((float) GameClient.CLIENT_LOGIC_UPDATE_RATE / 60f) * 1000L));
