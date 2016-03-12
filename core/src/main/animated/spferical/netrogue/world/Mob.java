@@ -2,7 +2,7 @@ package animated.spferical.netrogue.world;
 
 import animated.spferical.netrogue.networking.NetworkObject;
 
-public class Mob extends NetworkObject implements Actor {
+public class Mob extends PositionedObject implements Actor {
 
 	private static final long serialVersionUID = 8074582393481611122L;
 
@@ -10,9 +10,7 @@ public class Mob extends NetworkObject implements Actor {
 	}
 
 	public Mob(String type, int x, int y, int maxHP, int XP, int damage, float moveSpeed, float attackSpeed) {
-		put("type", type);
-		put("x", x);
-		put("y", y);
+		super(type, x, y);
 		put("hp", maxHP);
 		put("maxHP", maxHP);
 		put("xp", XP);
@@ -117,23 +115,13 @@ public class Mob extends NetworkObject implements Actor {
 		return false;
 	}
 
-	public int getX() {
-		return (int) get("x");
-	}
-
-	public int getY() {
-		return (int) get("y");
-	}
-
-	public void setX(int x) {
-		put("x", x);
-	}
-
-	public void setY(int y) {
-		put("y", y);
-	}
-
 	public void takeDamage(int damage) {
 		put("hp", ((int) get("hp")) - damage);
+	}
+
+	@Override
+	public void onDeath(GameState gameState) {
+		// TODO place corpse
+
 	}
 }
