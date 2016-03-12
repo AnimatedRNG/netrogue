@@ -1,8 +1,7 @@
 package animated.spferical.netrogue.world;
 
-import com.esotericsoftware.minlog.Log;
-
 import animated.spferical.netrogue.Constants;
+import animated.spferical.netrogue.networking.NetworkObject;
 
 public class Projectile extends PositionedObject implements Actor {
 
@@ -38,9 +37,30 @@ public class Projectile extends PositionedObject implements Actor {
 		else
 		{
 			put("lifetime", lifetime);
+			if (!check("hasAttacked"))
+			{
+				Level level = gameState.getLevelByNumber((int) this.get("level"));
+				for (NetworkObject actor : level.getAllChildrenOfType(Actor.class, false))
+				{
+					if (!actor.has("x") || !actor.has("y"))
+						continue;
+					if ((int) actor.get("x") != this.getX() || (int) actor.get("y") != this.getY())
+						continue;
+					if (actor instanceof Player && actor.ID != (Long) get("caster"))
+					{
+						((Player) actor).takeDamage((int) get("damage"), 
+								(String) gameState.searchChildren((Long) get("caster")).get("name"));
+					}
+					else if (actor instanceof Mob) {
+						((Mob) actor).takeDamage((int) get("damage"));
+					}
+				}
+			}
+			put("hasAttacked", true);
 			if (lifetime > (float) get("speed"))
 			{
-				double thetaRadians = Math.toRadians((double) ((Integer) get("theta")));
+				int theta = ((Integer) get("theta"));
+				double thetaRadians = Math.toRadians((double) theta);
 				double magnitude = 0.1;
 				float newX = (float) get("actualX");
 				float newY = (float) get("actualY");
@@ -50,8 +70,6 @@ public class Projectile extends PositionedObject implements Actor {
 					newY += (float) Math.sin(thetaRadians) * magnitude;
 				}
 				
-				Log.info("Projectile Physics", "Lifetime: " + lifetime);
-				Log.info("Projectile Physics", "(" + newX + ", " + newY + ")");
 				Level level = gameState.getLevelByNumber((int) this.get("level"));
 				
 				if (newX > level.getWidth() * Constants.chunkSize || 
@@ -59,12 +77,20 @@ public class Projectile extends PositionedObject implements Actor {
 						|| newX < 0 || newY < 0)
 					return;
 				
-				Projectile child = new Projectile(
-						(String) get("type"), newX, newY, (int) get("theta"),
-						(float) get("speed"), (float) this.get("duration") - lifetime, (int) this.get("damage"), 
-						(Long) this.get("caster"));
-				child.put("level", get("level"));
-				level.putChild(child);
+				if (level.checkOccupied((int) newY, (int) newX))
+					return;
+				
+				Projectile child = null;
+				if (!this.check("spawnedChild"))
+				{
+					child = new Projectile(
+							(String) get("type"), newX, newY, theta,
+							(float) get("speed"), (float) this.get("duration") - lifetime,
+							(int) this.get("damage"), (Long) this.get("caster"));
+					child.put("level", get("level"));
+					level.putChild(child);
+				}
+				this.put("spawnedChild", true);
 			}
 		}
 	}
