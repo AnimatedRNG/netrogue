@@ -110,8 +110,11 @@ public class GameServer extends Listener implements Runnable {
 	public void disconnected(Connection connection) {
 		// Player disconnected, destroy Player object
 		Long id = this.playerIDs.remove(connection);
-		this.gameState.announce("Player " + this.gameState.getChild(id).get("name") +
-				" has left the dungeon.");
+		NetworkObject obj = this.gameState.getChild(id);
+		if (obj != null) {
+			this.gameState.announce("Player " + this.gameState.getChild(id).get("name") +
+					" has left the dungeon.");
+		}
 		this.gameState.removeChild(id);
 		this.timeSinceLastMove.remove(connection);
 	}
