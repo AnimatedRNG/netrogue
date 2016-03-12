@@ -58,12 +58,15 @@ public class Spawner {
 
 	final ItemType[] itemTypes = {
 		new ItemType(1, "dagger", "weapon"),
+		new ItemType(1, "healing potion", "potion"),
 		new ItemType(1, "fire", "spell"),
 		new ItemType(1, "club", "weapon"),
 		new ItemType(2, "mace", "weapon"),
 		new ItemType(2, "sword", "weapon"),
+		new ItemType(2, "healing potion", "potion"),
 		new ItemType(3, "axe", "weapon"),
 		new ItemType(3, "double-axe", "weapon"),
+		new ItemType(3, "healing potion", "potion"),
 	};
 
 	public Spawner() {
@@ -188,7 +191,9 @@ public class Spawner {
 		int y = random.nextInt(height);
 		if (!level.checkOccupied(y, x) && !isNearPlayer(x, y, level, gameState)) {
 			ItemType type = getRandomItem((int) level.get("number"));
-			if (type != null) {
+			if (type.item == "healing potion") {
+				level.putChild(new HealingPotion(x, y));
+			} else if (type != null) {
 				String name = type.item;
 				String slot = type.slot;
 				Item item = new Item(name, slot, x, y);

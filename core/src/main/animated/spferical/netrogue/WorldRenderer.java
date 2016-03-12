@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.HealingPotion;
 import animated.spferical.netrogue.world.Item;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.LevelCacher;
@@ -157,7 +158,7 @@ public class WorldRenderer {
 		if (!(obj instanceof PositionedObject)) return;
 		PositionedObject po = (PositionedObject) obj;
 		String type = (String) po.get("type");
-		if (po instanceof Item) {
+		if (po instanceof Item || po instanceof HealingPotion) {
 			batch.draw(Assets.items.get(type),
 				po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
 		} else {
