@@ -272,6 +272,7 @@ public class Player extends PositionedObject implements Actor {
 			message += " by a " + killer;
 		}
 		message += " on dungeon level " + getDungeonLevel();
+		gameState.announce(message);
 		PositionedObject tombStone = new Tombstone(getX(), getY(), message);
 		NetworkObject level = gameState.getLevelByNumber(getDungeonLevel());
 		level.putChild(tombStone);

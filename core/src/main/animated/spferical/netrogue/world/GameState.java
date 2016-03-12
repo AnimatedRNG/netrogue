@@ -140,7 +140,6 @@ public class GameState extends NetworkObject {
 				{
 					if (Constants.spellInfos.containsKey((String) player.get(slotType)))
 					{
-						Log.info("Game Logic", "Player should fire spell");
 						player.castSpell(this, input.theta, 
 								Constants.spellInfos.get((String) player.get(slotType)));
 					}
