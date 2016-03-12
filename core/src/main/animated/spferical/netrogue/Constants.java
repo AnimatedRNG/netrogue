@@ -63,7 +63,7 @@ public class Constants {
 	public static final float CHUNKS_PER_MOB = 1;
 	public static final int DOWNSTAIRS_PER_LEVEL = 4;
 
-	public static final String[] slots = {"weapon", "spell", "bleh", "blah"};
+	public static final String[] slots = {"weapon", "spell", "spell1", "spell2"};
 
 	public static class SpellInfo {
 		public float range;
@@ -99,6 +99,8 @@ public class Constants {
 	static {
 		spellInfos.put("fire",
 			new SpellInfo(5.0f, 2, 4, "fire"));
+		spellInfos.put("ice",
+			new SpellInfo(10.0f, 1, 3, "ice"));
 		weaponInfos.put("dagger", new WeaponInfo(1));
 		weaponInfos.put("club", new WeaponInfo(2));
 		weaponInfos.put("mace", new WeaponInfo(4));
