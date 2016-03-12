@@ -2,6 +2,8 @@ package animated.spferical.netrogue.world;
 
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.Constants;
+
 public class Projectile extends PositionedObject implements Actor {
 
 	/**
@@ -52,8 +54,10 @@ public class Projectile extends PositionedObject implements Actor {
 				Log.info("Projectile Physics", "(" + newX + ", " + newY + ")");
 				Level level = gameState.getLevelByNumber((int) this.get("level"));
 				
-				/*if (newX > level.getWidth() || newY > level.getHeight() || newX < 0 || newY < 0)
-					return;*/
+				if (newX > level.getWidth() * Constants.chunkSize || 
+						newY > level.getHeight() * Constants.chunkSize 
+						|| newX < 0 || newY < 0)
+					return;
 				
 				Projectile child = new Projectile(
 						(String) get("type"), newX, newY, (int) get("theta"),
