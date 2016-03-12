@@ -89,17 +89,17 @@ public class Spawner {
 	}
 	
 	public void spawnDownstairs(GameState gameState) {
+		// create and populate list of levels
 		List<Level> levels = new ArrayList<Level>(Constants.LEVEL_NUM);
-		for (int i = 0; i < Constants.LEVEL_NUM - 1; i++)
+		for (int i = 0; i < Constants.LEVEL_NUM; i++)
 			levels.add(null);
-		
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
-			if (obj instanceof Level && 
-					!obj.get("number").equals(Constants.LEVEL_NUM)) {
+			if (obj instanceof Level) {
 				levels.set((int) ((Level) obj).get("number") - 1, (Level) obj);
 			}
 		}
 		
+		// spawn down stairs on each level from above
 		for (int i = 0; i < levels.size() - 1; i++)
 			spawnDownstairsOnLevel((Level) levels.get(i),
 					(Level) levels.get(i + 1));
