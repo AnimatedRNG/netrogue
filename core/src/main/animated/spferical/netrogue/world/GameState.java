@@ -68,6 +68,7 @@ public class GameState extends NetworkObject {
 				} else if (input.moveRight) {
 					newX = currentX + 1;
 				}
+				
 				if (!level.checkOccupied(newY, newX) && !lowAP) {
 					Mob m = level.checkMobCollision(newY, newX);
 					if (m != null) {
@@ -118,6 +119,21 @@ public class GameState extends NetworkObject {
 							// equip the picked-up item
 							player.put(itemSlot, item.get("type"));
 						}
+					}
+				}
+			}
+			if (input.mouseClicked && (input.theta >= 0 && input.theta < 360))
+			{
+				player.put("timeSinceLastAction", 0.0f);
+				String slotType = Constants.slots[(int) player.get("selection")];
+				
+				if (player.has(slotType))
+				{
+					if (Constants.spellInfos.containsKey((String) player.get(slotType)))
+					{
+						Log.info("Game Logic", "Player should fire spell");
+						player.castSpell(this, input.theta, 
+								Constants.spellInfos.get((String) player.get(slotType)));
 					}
 				}
 			}

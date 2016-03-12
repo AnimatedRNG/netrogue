@@ -22,6 +22,15 @@ public class Constants {
 	public static final int XP_BASE_NUMBER = 2;
 	
 	public static final int MELEE_BUFF = 1;
+	public static final int SPELL_BUFF = 1;
+	public static final int SPELL_RANGE_BUFF = 1;
+	public static final int SPELL_SAVINGS_CUTOFF = 3;
+	public static final int SPELL_SAVINGS_AMOUNT = 2;
+	public static final float SPELL_BASE_DURATION = 1;
+	public static final float SPELL_DURATION_BUFF = 1;
+	public static final float SPELL_BASE_SPEED = 0.2f;
+	public static final float SPELL_SPEED_BUFF = 0.02f;
+	public static final float FASTEST_SPELL = 0.05f;
 	
 	public static final int LEVEL_NUM = 3;
 	
@@ -50,7 +59,7 @@ public class Constants {
 
 	public static final int FLOOR_DENSITY = 1000;
 	
-	public static final float CHUNKS_PER_ITEM = 10;
+	public static final float CHUNKS_PER_ITEM = 1;
 	public static final float CHUNKS_PER_MOB = 1;
 	public static final int DOWNSTAIRS_PER_LEVEL = 4;
 
@@ -62,13 +71,15 @@ public class Constants {
 	}};
 
 	public static class SpellInfo {
-		float range;
-		int damage;
-		int apCost;
-		public SpellInfo(float range, int damage, int apCost) {
+		public float range;
+		public int damage;
+		public int apCost;
+		public String name;
+		public SpellInfo(float range, int damage, int apCost, String name) {
 			this.range = range;
 			this.damage = damage;
 			this.apCost = apCost;
+			this.name = name;
 		}
 	};
 
@@ -76,6 +87,6 @@ public class Constants {
 
 	static {
 		spellInfos.put("fire",
-			new SpellInfo(5.0f, 2, 2));
+			new SpellInfo(5.0f, 2, 4, "fire"));
 	}
 }

@@ -11,6 +11,7 @@ import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
+import animated.spferical.netrogue.Constants.SpellInfo;
 import animated.spferical.netrogue.networking.LocalCache;
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.networking.StringArray;
@@ -43,6 +44,7 @@ public class Player extends PositionedObject implements Actor {
 		this.put("xp", 0);
 		
 		this.put("melee_buff", 0);
+		this.put("spell_buff", 0);
 		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
@@ -60,7 +62,13 @@ public class Player extends PositionedObject implements Actor {
 		int characterLevel = (int) this.get("characterLevel");
 		int meleeBuff = (int) this.get("melee_buff");
 		int attack = characterLevel + meleeBuff * Constants.MELEE_BUFF;
-		Log.info("Game Logic", "Attack: " + attack);
+		return attack;
+	}
+	
+	public int calculateSpellDamage(SpellInfo spell) {
+		int baseDamage = (int) spell.damage;
+		int spellBuff = (int) this.get("spell_buff");
+		int attack = baseDamage + spellBuff * Constants.SPELL_BUFF;
 		return attack;
 	}
 
@@ -90,6 +98,33 @@ public class Player extends PositionedObject implements Actor {
 	public int calculateMaxAP(int characterLevelNumber) {
 		return Constants.BASE_AP + 
 				characterLevelNumber * Constants.EXTRA_AP_PER_LEVEL;
+	}
+	
+	public float calculateSpellRange(SpellInfo spell) {
+		int spellBuff = (int) this.get("spell_buff");
+		return spell.range + spellBuff * Constants.SPELL_RANGE_BUFF;
+	}
+	
+	public int calculateSpellAPDrain(SpellInfo spell) {
+		int spellBuff = (int) this.get("spell_buff");
+		if (spellBuff > Constants.SPELL_SAVINGS_CUTOFF)
+			return spell.apCost / Constants.SPELL_SAVINGS_AMOUNT;
+		else
+			return spell.apCost;
+	}
+	
+	public float calculateSpellDuration(SpellInfo spell) {
+		int spellBuff = (int) this.get("spell_buff");
+		return Constants.SPELL_BASE_DURATION + spellBuff * Constants.SPELL_DURATION_BUFF;
+	}
+	
+	public float calculateSpellSpeed(SpellInfo spell) {
+		int spellBuff = (int) this.get("spell_buff");
+		float speed = Constants.SPELL_BASE_SPEED - spellBuff * Constants.SPELL_SPEED_BUFF;
+		if (speed < Constants.FASTEST_SPELL)
+			return Constants.FASTEST_SPELL;
+		else
+			return speed;
 	}
 	
 	public void onKillMob(Mob mob) {
@@ -208,6 +243,17 @@ public class Player extends PositionedObject implements Actor {
 		}
 		if (!ignore)
 			this.remove("justOnStairs");
+	}
+	
+	public void castSpell(GameState gameState, int theta, Constants.SpellInfo spell) {
+		Projectile projectile = new Projectile(spell.name, this.getX(), this.getY(),
+				theta, this.calculateSpellSpeed(spell), this.calculateSpellDuration(spell),
+				this.calculateSpellDamage(spell), this.ID);
+		projectile.put("level", this.get("level"));
+		int ap = ((int) get("ap")) - calculateSpellAPDrain(spell);
+		this.put("ap", ap);
+		Log.info("Game Logic", "Firing spell");
+		gameState.getLevelByNumber((int) this.get("level")).putChild(projectile);
 	}
 
 	@Override
