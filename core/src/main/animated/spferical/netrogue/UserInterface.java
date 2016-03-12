@@ -75,7 +75,6 @@ public class UserInterface {
 		table.setDebug(true);
 
 		chatInnerTable = new Table();
-		chatInnerTable.add(new Label("Welcome to Netrogue! Please be civil.", Assets.skin)).left();
 		chatInnerTable.setDebug(true);
 		chatInnerTable.padBottom(10);
 
