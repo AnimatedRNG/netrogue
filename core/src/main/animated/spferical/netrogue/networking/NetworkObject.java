@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
@@ -139,6 +141,23 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 			}
 		}
 		return null;
+	}
+	
+	public List<NetworkObject> getAllChildrenOfType(Class<NetworkObject> type,
+			boolean recursive) {
+		List<NetworkObject> children = new ArrayList<NetworkObject>();
+		for (NetworkObject child : this.getAllChildren().values()) {
+			if (type.isInstance(child))
+				children.add(child);
+		}
+		
+		if (recursive)
+		{
+			for (NetworkObject child : this.getAllChildren().values()) {
+				children.addAll(child.getAllChildrenOfType(type, recursive));
+			}
+		}
+		return children;
 	}
 	
 	/**
