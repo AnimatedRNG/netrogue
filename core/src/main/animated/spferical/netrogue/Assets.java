@@ -75,6 +75,8 @@ public class Assets {
 			"downstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 5));
 		objects.put(
 			"upstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 4));
+		animations.put(
+			"redbox", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 8, 6));
 
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 

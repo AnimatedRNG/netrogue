@@ -243,5 +243,9 @@ public class Player extends PositionedObject implements Actor {
 				Log.error("Game Logic", "Unable to handle Player GUI input", e);
 			}
 		}
+
+		if (inputState.inputType == ClientInputState.InputType.SELECT_ITEM) {
+			put("selection", inputState.intInput);
+		}
 	}
 }

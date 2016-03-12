@@ -2,7 +2,9 @@ package animated.spferical.netrogue;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -35,6 +37,9 @@ public class WorldRenderer {
 	long playerID;
 	EnumMap<Tile.Type, TextureRegion> tileTextureRegions;
 	long levelID;
+
+	Map<Long, Integer> hpCache = new HashMap<>();
+	Map<Long, Float> timeSinceInjured = new HashMap<>();
 
 	public WorldRenderer(Level level, Player player) {
 		this.levelID = level.ID;
@@ -124,7 +129,7 @@ public class WorldRenderer {
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof PositionedObject) {
 				if (obj.check("renderLower")) {
-					renderObject(obj);
+					renderObject(obj, delta);
 				}
 			}
 		}
@@ -135,20 +140,20 @@ public class WorldRenderer {
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof PositionedObject) {
 				if (!obj.check("renderLower")) {
-					renderObject(obj);
+					renderObject(obj, delta);
 				}
 			}
 		}
 
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
 			if (obj instanceof Player) {
-				renderObject(obj);
+				renderObject(obj, delta);
 			}
 		}
 		batch.end();
 	}
 
-	public void renderObject(NetworkObject obj) {
+	public void renderObject(NetworkObject obj, float dt) {
 		if (!(obj instanceof PositionedObject)) return;
 		PositionedObject po = (PositionedObject) obj;
 		String type = (String) po.get("type");
@@ -162,10 +167,38 @@ public class WorldRenderer {
 			else
 				batch.draw(Assets.objects.get(type), 
 						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
-			if (obj instanceof Mob) {
+			if (obj instanceof Mob || obj instanceof Player) {
 				int hp = (int)po.get("hp");
-				int maxHP = (int)po.get("maxHP");
-				if (hp < maxHP) {
+				int maxHP;
+				if (obj instanceof Player)
+					maxHP = ((Player) obj).calculateMaxHP((int) obj.get("level"));
+				else 
+					maxHP = (int)po.get("maxHP");
+
+				// update HP cache / timeSinceInjured things
+				if (hpCache.containsKey(po.ID)) {
+					int oldHP = hpCache.get(po.ID);
+					if (hp != oldHP) {
+						hpCache.put(po.ID, hp);
+						timeSinceInjured.put(po.ID, 0f);
+					} else {
+						float oldTime = timeSinceInjured.get(po.ID);
+						timeSinceInjured.put(po.ID, oldTime + dt);
+					}
+				} else {
+					hpCache.put(po.ID, hp);
+					timeSinceInjured.put(po.ID, 1.0f);
+				}
+
+				if (timeSinceInjured.get(po.ID) < 0.1f) {
+					Color c = batch.getColor();
+					batch.setColor(c.r, c.b, c.g, 0.5f);
+					batch.draw(Assets.animations.get("redbox").getKeyFrame(timeElapsed, true),
+						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+					batch.setColor(c.r, c.b, c.g, 1);
+				}
+
+				if (obj instanceof Mob && hp < maxHP) {
 					drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
 				}
 			}

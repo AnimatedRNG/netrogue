@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.ClientInputState.InputType;
 import animated.spferical.netrogue.networking.GameClient;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
@@ -57,6 +58,18 @@ public class GameScreen implements Screen {
 			} else if (Gdx.input.isKeyJustPressed(Input.Keys.G)
 					|| Gdx.input.isKeyJustPressed(Input.Keys.COMMA)) {
 				inputState.pickUpItem = true;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+				inputState.inputType = ClientInputState.InputType.SELECT_ITEM;
+				inputState.intInput = 0;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+				inputState.inputType = ClientInputState.InputType.SELECT_ITEM;
+				inputState.intInput = 1;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+				inputState.inputType = ClientInputState.InputType.SELECT_ITEM;
+				inputState.intInput = 2;
+			} else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+				inputState.inputType = ClientInputState.InputType.SELECT_ITEM;
+				inputState.intInput = 3;
 			}
 		} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 			inputState.stringInput = player.get("name") + ": "
