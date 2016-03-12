@@ -86,8 +86,8 @@ public class MapGenerator {
 		}
 
 		// create first room, with up stairs, in the center
-		digRect(tiles, tiles.length / 2 - 8, tiles[0].length / 2 - 8,
-				tiles.length / 2 + 8, tiles[0].length / 2 + 8);
+		digRect(tiles, tiles.length / 2 - 2, tiles[0].length / 2 - 2,
+				tiles.length / 2 + 2, tiles[0].length / 2 + 2);
 
 		// dig more
 		for (int i = 0; i < Constants.FLOOR_DENSITY; i++) {
