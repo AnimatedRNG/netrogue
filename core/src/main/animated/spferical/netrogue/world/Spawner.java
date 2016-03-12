@@ -44,7 +44,7 @@ public class Spawner {
 		// spawn mobs around the server
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
 			if (obj instanceof Level) {
-				spawnMobs((Level) obj);
+				spawnMobs((Level) obj, gameState);
 			}
 		}
 	}
@@ -53,12 +53,12 @@ public class Spawner {
 		// spawn mobs around the server
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
 			if (obj instanceof Level) {
-				spawnItems((Level) obj);
+				spawnItems((Level) obj, gameState);
 			}
 		}
 	}
 
-	public void spawnMobs(Level level) {
+	public void spawnMobs(Level level, GameState gameState) {
 		// let's try to keep at least one mob per chunk
 		int targetMobs = level.getWidth() * level.getHeight();
 		int numMobs = 0;
@@ -68,11 +68,11 @@ public class Spawner {
 			}
 		}
 		for (int i = numMobs; i < targetMobs; i++) {
-			spawnOneMob(level);
+			spawnOneMob(level, gameState);
 		}
 	}
 
-	public void spawnItems(Level level) {
+	public void spawnItems(Level level, GameState gameState) {
 		// one item per two chunks?
 		// SOUNDS GREAT
 		int targetItems = level.getWidth() * level.getHeight() / 2;
@@ -83,16 +83,30 @@ public class Spawner {
 			}
 		}
 		for (int i = numItems; i < targetItems; i++) {
-			spawnOneItem(level);
+			spawnOneItem(level, gameState);
 		}
 	}
 
-	public void spawnOneItem(Level level) {
+	public boolean isNearPlayer(int x, int y, Level level, GameState gameState) {
+		for (NetworkObject obj: gameState.getAllChildren().values()) {
+			if (obj instanceof Player) {
+				Player p = (Player) obj;
+				if (p.getDungeonLevel() == (int) level.get("number")) {
+					if (Math.pow(p.getX() - x, 2) + Math.pow(p.getY() - y, 2) < 64) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public void spawnOneItem(Level level, GameState gameState) {
 		int width = level.getWidth() * Constants.chunkSize;
 		int height = level.getHeight() * Constants.chunkSize;
 		int x = random.nextInt(width);
 		int y = random.nextInt(height);
-		if (!level.checkOccupied(y, x)) {
+		if (!level.checkOccupied(y, x) && !isNearPlayer(x, y, level, gameState)) {
 			// spawn a mob there
 			int itemType = random.nextInt(Constants.itemTypes.length);
 			String name = Constants.itemTypes[itemType][0];
@@ -102,12 +116,12 @@ public class Spawner {
 		}
 	}
 
-	public void spawnOneMob(Level level) {
+	public void spawnOneMob(Level level, GameState gameState) {
 		int width = level.getWidth() * Constants.chunkSize;
 		int height = level.getHeight() * Constants.chunkSize;
 		int x = random.nextInt(width);
 		int y = random.nextInt(height);
-		if (!level.checkOccupied(y, x)) {
+		if (!level.checkOccupied(y, x) && !isNearPlayer(x, y, level, gameState)) {
 			// spawn a mob there
 			MobType type = mobTypes[random.nextInt(mobTypes.length)];
 			Mob mob = new Mob(type.name, x, y, type.maxHP, type.XP,
