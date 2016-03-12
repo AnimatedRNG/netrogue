@@ -149,28 +149,32 @@ public class WorldRenderer {
 
 		double closestPlayerDist = Integer.MAX_VALUE;
 		Player closestPlayer = null;
-		for (NetworkObject obj : gameState.getAllChildren().values()) {
-			if (obj instanceof Player && (int) obj.get("level") == (int) level.get("number")) {
-				renderObject(obj, delta);
-				if (obj.ID != player.ID)
-				{
-					Player otherPlayer = (Player) obj;
-					double dx = player.getX() - otherPlayer.getX();
-					double dy = player.getY() - otherPlayer.getY();
-					double dist = Math.sqrt(dx * dx + dy * dy);
-					if (dist < closestPlayerDist)
+		
+		if (player != null)
+		{
+			for (NetworkObject obj : gameState.getAllChildren().values()) {
+				if (obj instanceof Player && (int) obj.get("level") == (int) level.get("number")) {
+					renderObject(obj, delta);
+					if (obj.ID != player.ID)
 					{
-						closestPlayerDist = dist;
-						closestPlayer = otherPlayer;
+						Player otherPlayer = (Player) obj;
+						double dx = player.getX() - otherPlayer.getX();
+						double dy = player.getY() - otherPlayer.getY();
+						double dist = Math.sqrt(dx * dx + dy * dy);
+						if (dist < closestPlayerDist)
+						{
+							closestPlayerDist = dist;
+							closestPlayer = otherPlayer;
+						}
 					}
 				}
 			}
-		}
-		
-		if (closestPlayer != null) {
-			this.drawArrows(closestPlayer.getX() - player.getX(), 
-					closestPlayer.getY() - player.getY(), player.getX(),
-					player.getY());
+			
+			if (closestPlayer != null) {
+				this.drawArrows(closestPlayer.getX() - player.getX(), 
+						closestPlayer.getY() - player.getY(), player.getX(),
+						player.getY());
+			}
 		}
 		
 		batch.end();
