@@ -46,6 +46,8 @@ public class Player extends PositionedObject implements Actor {
 		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
+
+		this.put("selection", 0);
 		
 		LocalCache.put("player_random", new Random(this.ID));
 	}

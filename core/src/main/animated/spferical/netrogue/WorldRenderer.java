@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Item;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.LevelCacher;
 import animated.spferical.netrogue.world.Mob;
@@ -106,25 +107,25 @@ public class WorldRenderer {
 		}
 		batch.end();
 
-		List<NetworkObject> objToRenderOnTop = new ArrayList<>();
-
 		batch.begin();
 		Level level = (Level) gameState.searchChildren(levelID);
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof PositionedObject) {
-				if (!obj.check("renderLower")) {
-					objToRenderOnTop.add(obj);
-					continue;
+				if (obj.check("renderLower")) {
+					renderObject(obj);
 				}
-				renderObject(obj);
 			}
 		}
 		batch.end();
 
 		batch.begin();
 
-		for (NetworkObject obj : objToRenderOnTop) {
-			renderObject(obj);
+		for (NetworkObject obj : level.getAllChildren().values()) {
+			if (obj instanceof PositionedObject) {
+				if (!obj.check("renderLower")) {
+					renderObject(obj);
+				}
+			}
 		}
 
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
@@ -139,13 +140,18 @@ public class WorldRenderer {
 		if (!(obj instanceof PositionedObject)) return;
 		PositionedObject po = (PositionedObject) obj;
 		String type = (String) po.get("type");
-		batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+		if (po instanceof Item) {
+			batch.draw(Assets.items.get(type),
 				po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
-		if (obj instanceof Mob) {
-			int hp = (int)po.get("hp");
-			int maxHP = (int)po.get("maxHP");
-			if (hp < maxHP) {
-				drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
+		} else {
+			batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+					po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+			if (obj instanceof Mob) {
+				int hp = (int)po.get("hp");
+				int maxHP = (int)po.get("maxHP");
+				if (hp < maxHP) {
+					drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
+				}
 			}
 		}
 	}

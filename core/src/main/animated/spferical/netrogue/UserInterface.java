@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,7 +34,7 @@ public class UserInterface {
 	public static final int MESSAGE_DURATION = 1000;
 	
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
-	Animation barLeft, barMiddle, barRight;
+	Animation barLeft, barMiddle, barRight, slot, selectedSlot;
 	long startTime;
 	SpriteBatch batch;
 	Camera camera;
@@ -71,6 +72,9 @@ public class UserInterface {
 		barMiddle = Assets.animations.get("barMiddle");
 		barRight = Assets.animations.get("barRight");
 
+		slot = Assets.animations.get("slot");
+		selectedSlot = Assets.animations.get("selectedSlot");
+
 		startTime = TimeUtils.millis();
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -84,7 +88,6 @@ public class UserInterface {
 		table.setDebug(true);
 
 		chatInnerTable = new Table();
-		chatInnerTable.add(new Label("Welcome to Netrogue! Please be civil.", Assets.skin)).left();
 		chatInnerTable.setDebug(true);
 		chatInnerTable.padBottom(10);
 
@@ -253,8 +256,40 @@ public class UserInterface {
 			shouldScrollToChatBottom = true;
 		}
 
+		drawItems(player, animationTime);
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
+	}
+
+	public void drawItems(Player player, float animationTime) {
+		int tileSize = Constants.tileSize;
+		if (player != null) {
+			batch.begin();
+			for (int i = 0; i < Constants.slots.length; i++) {
+				if ((int) player.get("selection") == i) {
+					batch.draw(selectedSlot.getKeyFrame(animationTime), (6 + i) * tileSize, tileSize);
+				} else {
+					batch.draw(slot.getKeyFrame(animationTime), (6 + i) * tileSize, tileSize);
+				}
+			}
+			batch.end();
+			batch.begin();
+			for (int i = 0; i < Constants.slots.length; i++) {
+				String itemType = (String) player.get(Constants.slots[i]);
+				if (itemType != null) {
+					TextureRegion tex = Assets.animations.get(itemType).getKeyFrame(animationTime);
+					batch.draw(tex, (6 + i) * tileSize, tileSize);
+				}
+			}
+			String weapon = (String) player.get("weapon");
+			String spell = (String) player.get("spell");
+			if (weapon != null) 
+				batch.draw(Assets.animations.get(weapon).getKeyFrame(animationTime), 6 * tileSize, tileSize);
+			if (spell != null) 
+				batch.draw(Assets.animations.get(spell).getKeyFrame(animationTime), 7 * tileSize, tileSize);
+			batch.end();
+		}
 	}
 
 	public void handleResize(int width, int height) {

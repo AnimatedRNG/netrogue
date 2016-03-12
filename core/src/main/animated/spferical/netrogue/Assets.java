@@ -20,6 +20,7 @@ public class Assets {
 	static HashMap<String, Animation> animations = new HashMap<>();
 	static FreeTypeFontGenerator fontGenerator;
 	static HashMap<Integer, BitmapFont> fonts = new HashMap<>();
+	static HashMap<String, TextureRegion> items = new HashMap<>();
 	static Skin skin;
 
 	public static void load() {
@@ -62,6 +63,14 @@ public class Assets {
 			"barMiddle", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 7));
 		animations.put(
 			"barRight", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 8));
+		animations.put(
+			"slot", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 7, 8));
+		animations.put(
+			"selectedSlot", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 7, 12));
+		animations.put(
+			"fire", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 21, 0));
+
+		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));

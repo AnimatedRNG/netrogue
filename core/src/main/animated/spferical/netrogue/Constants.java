@@ -46,4 +46,11 @@ public class Constants {
 	};
 
 	public static final int FLOOR_DENSITY = 1000;
+
+	public static final String[] slots = {"weapon", "spell", "bleh", "blah"};
+
+	public static final String[][] itemTypes = {{
+		// item name, slot
+		"fire", "spell"
+	}};
 }
