@@ -1,5 +1,8 @@
 package animated.spferical.netrogue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
 	public static final float actionDelay = 0.25f; // in seconds
 	public static final int tileSize = 64;
@@ -57,4 +60,22 @@ public class Constants {
 		// item name, slot
 		"fire", "spell"
 	}};
+
+	public static class SpellInfo {
+		float range;
+		int damage;
+		int apCost;
+		public SpellInfo(float range, int damage, int apCost) {
+			this.range = range;
+			this.damage = damage;
+			this.apCost = apCost;
+		}
+	};
+
+	public static final Map<String, SpellInfo> spellInfos = new HashMap<>();
+
+	static {
+		spellInfos.put("fire",
+			new SpellInfo(5.0f, 2, 2));
+	}
 }

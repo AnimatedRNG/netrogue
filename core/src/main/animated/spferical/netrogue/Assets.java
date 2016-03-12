@@ -70,6 +70,12 @@ public class Assets {
 			"selectedSlot", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 7, 12));
 		animations.put(
 			"fire", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 21, 0));
+		animations.put(
+			"firerayvert", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 0));
+		animations.put(
+			"firerayhoriz", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 1));
+		animations.put(
+			"fireraydiag", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 2));
 		
 		objects.put(
 			"downstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 5));
