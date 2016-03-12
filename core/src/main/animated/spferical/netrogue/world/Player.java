@@ -87,17 +87,21 @@ public class Player extends NetworkObject implements Actor {
 	}
 	
 	public void onKillMob(Mob mob) {
-		this.put("xp", mob.get("xp"));
+		this.gainExperience((int) mob.get("xp"));
 	}
 	
 	public void gainExperience(int xp) {
-		int currentXP = (int) this.get("xp");
+		int currentXP = (int) this.get("xp") + xp;
 		int currentLevel = (int) this.get("characterLevel");
 		int newLevel = appropriateLevelUp(currentXP);
+		
+		this.put("xp", currentXP);
 		if (newLevel > currentLevel)
 		{
-			Log.info("Game Logic", "PLAYER LEVELED UP!");
 			this.put("characterLevel", newLevel);
+			this.put("xp", 0);
+			this.put("hp", this.calculateMaxHP(newLevel));
+			this.put("ap", this.calculateMaxAP(newLevel));
 		}
 	}
 	
@@ -105,7 +109,7 @@ public class Player extends NetworkObject implements Actor {
 		float xp = currentXP;
 		if (xp <= 0)
 			xp = 1;
-		return (int) Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER);
+		return (int) Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER) + 1;
 	}
 
 	@Override
