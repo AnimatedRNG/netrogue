@@ -158,9 +158,6 @@ public class Player extends PositionedObject implements Actor {
 		this.put("playerGUI_options", new StringArray(options.keySet()));
 		LocalCache.put("playerGUI_callbacks", 
 				new ArrayList<Runnable>(options.values()));
-		Log.info("Here is what's in options: " + options.values());
-		Log.info("Here is what's in the callbacks earlier: " + 
-					LocalCache.get("playerGUI_callbacks"));
 		this.put("playerGUI_ID", ((Random) LocalCache.get("player_random")).
 				nextLong());
 	}
@@ -201,11 +198,7 @@ public class Player extends PositionedObject implements Actor {
 	// One day we'll move all that crap in handlePlayerInput here
 	public void onPlayerInput(ClientInputState inputState) {
 		if (inputState.inputType == ClientInputState.InputType.SELECT_OPTION)
-		{
 			Log.info("Player selected option " + inputState.intInput);
-			Log.info("Here is what's in the callbacks: " + 
-					LocalCache.get("playerGUI_callbacks"));
-		}
 		@SuppressWarnings("unchecked")
 		List<Runnable> callbacks = 
 				(List<Runnable>) LocalCache.get("playerGUI_callbacks");

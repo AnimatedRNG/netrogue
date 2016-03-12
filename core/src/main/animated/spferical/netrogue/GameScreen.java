@@ -123,8 +123,6 @@ public class GameScreen implements Screen {
 		gameClient.sendObjectToServer(input);
 		
 		input.resetAll();
-		
-		Log.info("Sent ClientInputState to server");
 	}
 	
 	public class ClientNetworkHandler implements Runnable {
