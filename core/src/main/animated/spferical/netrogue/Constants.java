@@ -59,7 +59,7 @@ public class Constants {
 
 	public static final int FLOOR_DENSITY = 1000;
 	
-	public static final float CHUNKS_PER_ITEM = 1;
+	public static final float CHUNKS_PER_ITEM = 3;
 	public static final float CHUNKS_PER_MOB = 1;
 	public static final int DOWNSTAIRS_PER_LEVEL = 4;
 
