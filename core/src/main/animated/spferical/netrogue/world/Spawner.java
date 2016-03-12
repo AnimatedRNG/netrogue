@@ -54,6 +54,8 @@ public class Spawner {
 		new MobType(2, "bat", 10, 2, 2, .3f, 0.5f),
 		new MobType(2, "big worm", 20, 2, 3, 1, 0.9f),
 		new MobType(3, "big bat", 20, 2, 2, .3f, .5f),
+
+		// keep boss at bottom of list
 		new MobType(4, "boss", 100, 100, 10, .5f, .5f),
 	};
 
@@ -145,18 +147,47 @@ public class Spawner {
 		// let's try to keep at least one mob per chunk
 		int targetMobs = (int) (level.getWidth() * level.getHeight() /
 				Constants.CHUNKS_PER_MOB);
-		int numMobs = 0;
-		for (NetworkObject obj : level.getAllChildren().values()) {
-			if (obj instanceof Mob) {
-				numMobs++;
+		if ((int)level.get("number") == 4) {
+			// spawn only one mob, the big boss
+			boolean playerOnLevel = false;
+			for (NetworkObject obj : gameState.getAllChildrenOfType(Player.class, false)) {
+				if (((Player) obj).getDungeonLevel() == 4) {
+					playerOnLevel = true;
+					break;
+				}
 			}
-		}
-		for (int i = numMobs; i < targetMobs; i++) {
-			spawnOneMob(level, gameState);
+			if (!playerOnLevel) {
+				// reset boss to starting location
+				for (NetworkObject obj: level.getAllChildrenOfType(Mob.class, false)) {
+					if ((String) obj.get("type") == "boss") {
+						// boss is here, delete him and respawn him
+						level.removeChild(obj.ID);
+						MobType bossType = mobTypes[-1];
+						int x = level.getWidth() * Constants.tileSize / 2;
+						int y = level.getHeight() * Constants.tileSize / 2 + 39;
+						level.putChild(new Mob(bossType.name, x, y, bossType.maxHP, bossType.XP,
+								bossType.damage, bossType.moveSpeed, bossType.attackSpeed));
+					}
+				}
+			}
+		} else {
+			int numMobs = 0;
+			for (NetworkObject obj : level.getAllChildren().values()) {
+				if (obj instanceof Mob) {
+					numMobs++;
+				}
+			}
+			for (int i = numMobs; i < targetMobs; i++) {
+				spawnOneMob(level, gameState);
+			}
 		}
 	}
 
 	public void spawnItems(Level level, GameState gameState) {
+		if ((int) level.get("number") == 4) {
+			// don't spawn items on final level
+			return;
+		}
 		int targetItems = (int) (level.getWidth() * level.getHeight()
 				/ Constants.CHUNKS_PER_ITEM);
 		int numItems = 0;
