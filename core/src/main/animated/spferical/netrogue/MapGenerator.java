@@ -81,12 +81,8 @@ public class MapGenerator {
 		Random random = new Random();
 		int chunkSize = Constants.chunkSize;
 		Tile.Type[][] tiles;
-		if ((int) level.get("number") == 4) {
-			tiles = new Tile.Type[chunkSize][chunkSize];
-		} else {
-			tiles = new Tile.Type
-				[mapWidth * chunkSize][mapHeight * chunkSize];
-		}
+		tiles = new Tile.Type
+			[mapWidth * chunkSize][mapHeight * chunkSize];
 
 		// initialize with walls
 		for (int row = 0; row < tiles.length; row++) {
