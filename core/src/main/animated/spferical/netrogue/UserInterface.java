@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,7 +28,7 @@ public class UserInterface {
 	public static final int MESSAGE_DURATION = 1000;
 	
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
-	Animation barLeft, barMiddle, barRight, slot;
+	Animation barLeft, barMiddle, barRight, slot, selectedSlot;
 	long startTime;
 	SpriteBatch batch;
 	Camera camera;
@@ -61,6 +62,7 @@ public class UserInterface {
 		barRight = Assets.animations.get("barRight");
 
 		slot = Assets.animations.get("slot");
+		selectedSlot = Assets.animations.get("selectedSlot");
 
 		startTime = TimeUtils.millis();
 		batch = new SpriteBatch();
@@ -221,14 +223,24 @@ public class UserInterface {
 
 	public void drawItems(Player player, float animationTime) {
 		int tileSize = Constants.tileSize;
-		batch.begin();
-		batch.draw(slot.getKeyFrame(animationTime), 6 * tileSize, tileSize);
-		batch.draw(slot.getKeyFrame(animationTime), 7 * tileSize, tileSize);
-		batch.draw(slot.getKeyFrame(animationTime), 8 * tileSize, tileSize);
-		batch.draw(slot.getKeyFrame(animationTime), 9 * tileSize, tileSize);
-		batch.end();
 		if (player != null) {
 			batch.begin();
+			for (int i = 0; i < Constants.slots.length; i++) {
+				if ((int) player.get("selection") == i) {
+					batch.draw(selectedSlot.getKeyFrame(animationTime), (6 + i) * tileSize, tileSize);
+				} else {
+					batch.draw(slot.getKeyFrame(animationTime), (6 + i) * tileSize, tileSize);
+				}
+			}
+			batch.end();
+			batch.begin();
+			for (int i = 0; i < Constants.slots.length; i++) {
+				String itemType = (String) player.get(Constants.slots[i]);
+				if (itemType != null) {
+					TextureRegion tex = Assets.animations.get(itemType).getKeyFrame(animationTime);
+					batch.draw(tex, (6 + i) * tileSize, tileSize);
+				}
+			}
 			String weapon = (String) player.get("weapon");
 			String spell = (String) player.get("spell");
 			if (weapon != null) 
