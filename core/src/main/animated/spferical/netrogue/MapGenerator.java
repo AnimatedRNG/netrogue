@@ -120,6 +120,10 @@ public class MapGenerator {
 						break;
 				}
 			}
+		} else {
+			int centerRow = tiles.length / 2;
+			int centerCol = tiles[0].length / 2;
+			digRect(tiles, centerRow, centerCol - 8, centerRow + 40, centerCol + 8);
 		}
 
 		// create the 2d chunk array
