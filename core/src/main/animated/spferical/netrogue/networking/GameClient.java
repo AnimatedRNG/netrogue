@@ -21,7 +21,7 @@ public class GameClient extends Listener {
 	
 	// Try to keep this value close to the server update rate
 	public static final int CLIENT_LOGIC_UPDATE_RATE = 10;
-	public static final int[] BUFFER_SIZES = {8192, 2048};
+	public static final int[] BUFFER_SIZES = {131072, 131072};
 
 	public GameState currentGameState;
 	public GameState oldGameState;

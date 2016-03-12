@@ -20,6 +20,8 @@ public class Constants {
 	
 	public static final int MELEE_BUFF = 1;
 	
+	public static final int LEVEL_NUM = 3;
+	
 	public static final String[] names = new String[] {
 		"Aeto",
 		"Dasre",

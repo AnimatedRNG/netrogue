@@ -20,10 +20,13 @@ public class GameState extends NetworkObject {
 	public void setupGame() {
 		this.put("lastTimeUpdate", System.currentTimeMillis());
 		// generate levels
-		Level level = new Level(1, MapGenerator.mapHeight,
-				MapGenerator.mapWidth);
-		MapGenerator.generateMap(level);
-		putChild(level);
+		for (int i = 1; i <= Constants.LEVEL_NUM; i++)
+		{
+			Level level = new Level(i, MapGenerator.mapHeight,
+					MapGenerator.mapWidth);
+			MapGenerator.generateMap(level);
+			putChild(level);
+		}
 
 		// create chat directory
 		ChatNetworkObject chat = new ChatNetworkObject();
@@ -40,6 +43,9 @@ public class GameState extends NetworkObject {
 	
 	// Handle player input
 	public void handlePlayerInput(Player player, ClientInputState input, float dt) {
+		if (player == null)
+			return;
+		
 		// All your GameState input code here
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
 		Level level = this.getLevelByNumber(player.getDungeonLevel());

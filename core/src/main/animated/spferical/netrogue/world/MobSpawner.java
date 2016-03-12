@@ -75,6 +75,7 @@ public class MobSpawner {
 			MobType type = mobTypes[random.nextInt(mobTypes.length)];
 			Mob mob = new Mob(type.name, x, y, type.maxHP, type.XP,
 					type.damage, type.moveSpeed, type.attackSpeed);
+			mob.put("level", level.get("number"));
 			level.putChild(mob);
 		}
 	}
