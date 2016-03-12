@@ -2,36 +2,34 @@ package animated.spferical.netrogue.world;
 
 import animated.spferical.netrogue.networking.NetworkObject;
 
-public class Mob extends NetworkObject implements Actor {
+public class Mob extends PositionedObject implements Actor {
 
 	private static final long serialVersionUID = 8074582393481611122L;
 
 	public Mob() {
 	}
 
-	public Mob(String type, int x, int y, int maxHP, int XP, int damage, float moveSpeed) {
-		put("type", type);
-		put("x", x);
-		put("y", y);
+	public Mob(String type, int x, int y, int maxHP, int XP, int damage, float moveSpeed, float attackSpeed) {
+		super(type, x, y);
 		put("hp", maxHP);
 		put("maxHP", maxHP);
 		put("xp", XP);
 		put("damage", damage);
 		put("moveSpeed", moveSpeed);
+		put("attackSpeed", attackSpeed);
 		put("timeSinceLastAction", 0.0f);
 	}
 
 	@Override
 	public void onUpdate(GameState gameState, float dt) {
 		// attack player if he's right next to us
-		float timeSinceLastAction = (float) get("timeSinceLastAction");
+		float timeSinceLastAction = getTimeSinceLastAction();
 		timeSinceLastAction += dt;
 		put("timeSinceLastAction", timeSinceLastAction);
 		float moveSpeed = (float) get("moveSpeed");
 		if (timeSinceLastAction >= moveSpeed) {
 			// we can move!
 			makeMove(gameState);
-			put("timeSinceLastAction", 0.0f);
 		}
 
 	}
@@ -43,23 +41,39 @@ public class Mob extends NetworkObject implements Actor {
 				Player p = (Player) obj;
 				// is the player close enough to us?
 				double distanceSquared = (Math.pow(p.getX() - getX(), 2) + Math.pow(p.getY() - getY(), 2));
-				if (distanceSquared <= 1) {
+				if (distanceSquared <= 1 && canAttackYet()) {
 					// we can attack player!
 					p.takeDamage((int) get("damage"));
-				} else if (distanceSquared < 25) {
-					moveTowards(p.getX(), p.getY(), gameState);
+					resetTimeSinceLastAction();
 					return;
+				} else if (distanceSquared > 1 && distanceSquared < 25
+						&& canMoveYet()) {
+					if (moveTowards(p.getX(), p.getY(), gameState)) {
+						resetTimeSinceLastAction();
+						return;
+					}
 				}
 			}
 		}
 	}
 
-	public void moveTowards(int x, int y, GameState gameState) {
-		// TODO: simple pathfinding
+	public void resetTimeSinceLastAction() {
+		put("timeSinceLastAction", 0.0f);
+	}
+
+	public boolean canMoveYet() {
+		return (float) get("moveSpeed") < getTimeSinceLastAction();
+	}
+
+	public boolean canAttackYet() {
+		return (float) get("attackSpeed") < getTimeSinceLastAction();
+	}
+
+	public boolean moveTowards(int x, int y, GameState gameState) {
 		int dx = x - getX();
 		int dy = y - getY();
 		if (dx == 0 && dy == 0) {
-			return;
+			return false;
 		}
 		// normalize direction values
 		int xdir, ydir;
@@ -71,15 +85,20 @@ public class Mob extends NetworkObject implements Actor {
 		else ydir = 0;
 		if (Math.abs(dx) > Math.abs(dy)) {
 			// try moving x, then moving y
-			if (!tryToMove(xdir, 0, gameState)) {
-				tryToMove(0, ydir, gameState);
-			}
+			if (tryToMove(xdir, 0, gameState) ||
+					tryToMove(0, ydir, gameState))
+				return true;
 		} else {
 			// try moving y, then moving x
-			if (!tryToMove(0, ydir, gameState)) {
-				tryToMove(xdir, 0, gameState);
-			}
+			if (tryToMove(0, ydir, gameState) ||
+					tryToMove(xdir, 0, gameState))
+				return true;
 		}
+		return false;
+	}
+
+	public float getTimeSinceLastAction() {
+		return (float) get("timeSinceLastAction");
 	}
 
 	public boolean tryToMove(int dx, int dy, GameState gameState) {
@@ -96,23 +115,13 @@ public class Mob extends NetworkObject implements Actor {
 		return false;
 	}
 
-	public int getX() {
-		return (int) get("x");
-	}
-
-	public int getY() {
-		return (int) get("y");
-	}
-
-	public void setX(int x) {
-		put("x", x);
-	}
-
-	public void setY(int y) {
-		put("y", y);
-	}
-
 	public void takeDamage(int damage) {
 		put("hp", ((int) get("hp")) - damage);
+	}
+
+	@Override
+	public void onDeath(GameState gameState) {
+		// TODO place corpse
+
 	}
 }

@@ -1,7 +1,5 @@
 package animated.spferical.netrogue.world;
 
-import animated.spferical.netrogue.networking.NetworkObject;
-
 /**
  * Any entity that does things in the game world
  * should implement onUpdate.
@@ -29,4 +27,9 @@ public interface Actor {
 	 * @param dt Time elapsed since last update
 	 */
 	public abstract void onUpdate(GameState gameState, float dt);
+
+	/**
+	 * To be called when an actor is removed from the tree.
+	 */
+	public void onDeath(GameState gameState);
 }

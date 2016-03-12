@@ -5,9 +5,8 @@ import java.util.Random;
 import com.esotericsoftware.kryonet.Connection;
 
 import animated.spferical.netrogue.Constants;
-import animated.spferical.netrogue.networking.NetworkObject;
 
-public class Player extends NetworkObject implements Actor {
+public class Player extends PositionedObject implements Actor {
 	
 	private static final long serialVersionUID = 818494368830828933L;
 
@@ -23,7 +22,7 @@ public class Player extends NetworkObject implements Actor {
 	}
 
 	public Player(int x, int y) {
-		super();
+		super("player", x, y);
 		setX(x);
 		setY(y);
 		
@@ -44,22 +43,6 @@ public class Player extends NetworkObject implements Actor {
 
 	public int calculateDamage() {
 		return (int) this.get("characterLevel");
-	}
-
-	public int getX() {
-		return (int) get("x");
-	}
-
-	public int getY() {
-		return (int) get("y");
-	}
-
-	public void setX(int x) {
-		put("x", x);
-	}
-
-	public void setY(int y) {
-		put("y", y);
 	}
 
 	public void takeDamage(int damage) {
@@ -136,5 +119,10 @@ public class Player extends NetworkObject implements Actor {
 		}
 		
 		this.put("ap_accumulator", currentAPAccumulator + dt);
+	}
+
+	@Override
+	public void onDeath(GameState gameState) {
+		// TODO: add a tombstone
 	}
 }

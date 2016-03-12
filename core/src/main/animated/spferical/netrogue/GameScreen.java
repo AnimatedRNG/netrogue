@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
 		if (inputState.equals(new ClientInputState()))
 			return;
 		
-		this.gameState.handlePlayerInput(player, inputState, ((float) newUpdate - lastUpdate) / 1000f);
+		this.gameState.handlePlayerInput(player, inputState, (float) (newUpdate - lastUpdate) / 1000f);
 		this.sendInputToServer(inputState);
 		this.lastUpdate = newUpdate;
 	}

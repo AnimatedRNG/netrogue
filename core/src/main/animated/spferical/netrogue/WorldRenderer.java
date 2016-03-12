@@ -19,6 +19,7 @@ import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.LevelCacher;
 import animated.spferical.netrogue.world.Mob;
 import animated.spferical.netrogue.world.Player;
+import animated.spferical.netrogue.world.PositionedObject;
 import animated.spferical.netrogue.world.Tile;
 import animated.spferical.netrogue.world.TileTypeArray;
 
@@ -105,16 +106,17 @@ public class WorldRenderer {
 		}
 		Level level = (Level) gameState.searchChildren(levelID);
 		for (NetworkObject obj : level.getAllChildren().values()) {
-			if (obj instanceof Mob) {
-				Mob m = (Mob) obj;
-				String type = (String) m.get("type");
+			if (obj instanceof PositionedObject) {
+				PositionedObject po = (PositionedObject) obj;
+				String type = (String) po.get("type");
 				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
-						m.getX() * tileSize, m.getY() * tileSize);
-				int hp = (int)m.get("hp");
-				int maxHP = (int)m.get("maxHP");
-				if (hp < maxHP) {
-					drawHealthBar(m.getX(), m.getY(), ((float) hp) / ((float)maxHP));
-
+						po.getX() * tileSize, po.getY() * tileSize);
+				if (obj instanceof Mob) {
+					int hp = (int)po.get("hp");
+					int maxHP = (int)po.get("maxHP");
+					if (hp < maxHP) {
+						drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
+					}
 				}
 
 			}
