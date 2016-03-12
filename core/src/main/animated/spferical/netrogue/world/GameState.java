@@ -45,49 +45,71 @@ public class GameState extends NetworkObject {
 		player.put("timeSinceLastAction", ((float) player.get("timeSinceLastAction")) + dt);
 		Level level = this.getLevelByNumber(player.getDungeonLevel());
 		if ((float) player.get("timeSinceLastAction") > Constants.actionDelay) {
-			int AP = (int) player.get("ap");
-			boolean lowAP = AP <= 0;
-			int currentX = player.getX();
-			int currentY = player.getY();
-			int newX = currentX;
-			int newY = currentY;
-			if (input.moveUp) {
-				newY = currentY + 1;
-			} else if (input.moveLeft) {
-				newX = currentX - 1;
-			} else if (input.moveDown) {
-				newY = currentY - 1;
-			} else if (input.moveRight) {
-				newX = currentX + 1;
-			}
-			if (!level.checkOccupied(newY, newX) && !lowAP) {
-				Mob m = level.checkMobCollision(newY, newX);
-				if (m != null) {
-					Log.info("Player attacks mob at " + newX + ", " + newY);
-					// attack the mob!
-					m.takeDamage(player.calculateDamage());
-					if (((boolean) m.check("dead"))) {
-						player.onKillMob(m);
-						Log.info("Player kills mob at " + newX + ", " + newY);
-					}
-					player.put("timeSinceLastAction", 0.0f);
-					if (AP > 0)
-						player.put("ap", AP - 1);
-				} else {
-					// nothing here, so move
-					player.setX(newX);
-					player.setY(newY);
-					player.put("timeSinceLastAction", 0.0f);
-					if (AP > 0)
-						player.put("ap", AP - 1);
-					// tombstone messages
-					for (NetworkObject obj : level.getAllChildren().values()) {
-						if (obj instanceof Tombstone) {
-							Tombstone ts = (Tombstone) obj;
-							if (ts.getX() == player.getX() && ts.getY() == player.getY()) {
-								String message = (String) obj.get("message");
-								player.addPlayerMessage(message);
+			if (input.moveUp || input.moveDown || input.moveLeft || input.moveRight) {
+				int AP = (int) player.get("ap");
+				boolean lowAP = AP <= 0;
+				int currentX = player.getX();
+				int currentY = player.getY();
+				int newX = currentX;
+				int newY = currentY;
+				if (input.moveUp) {
+					newY = currentY + 1;
+				} else if (input.moveLeft) {
+					newX = currentX - 1;
+				} else if (input.moveDown) {
+					newY = currentY - 1;
+				} else if (input.moveRight) {
+					newX = currentX + 1;
+				}
+				if (!level.checkOccupied(newY, newX) && !lowAP) {
+					Mob m = level.checkMobCollision(newY, newX);
+					if (m != null) {
+						Log.info("Player attacks mob at " + newX + ", " + newY);
+						// attack the mob!
+						m.takeDamage(player.calculateDamage());
+						if (((boolean) m.check("dead"))) {
+							player.onKillMob(m);
+							Log.info("Player kills mob at " + newX + ", " + newY);
+						}
+						player.put("timeSinceLastAction", 0.0f);
+						if (AP > 0)
+							player.put("ap", AP - 1);
+					} else {
+						// nothing here, so move
+						player.setX(newX);
+						player.setY(newY);
+						player.put("timeSinceLastAction", 0.0f);
+						if (AP > 0)
+							player.put("ap", AP - 1);
+						for (NetworkObject obj : level.getAllChildren().values()) {
+							if (obj instanceof Tombstone) {
+								// tombstone messages
+								Tombstone ts = (Tombstone) obj;
+								if (ts.getX() == player.getX() && ts.getY() == player.getY()) {
+									String message = (String) obj.get("message");
+									player.addPlayerMessage(message);
+								}
 							}
+						}
+					}
+				}
+			} else if (input.pickUpItem) {
+				for (NetworkObject obj : level.getAllChildren().values()) {
+					if (obj instanceof Item) {
+						Item item = (Item) obj;
+						if (item.getX() == player.getX()
+								&& item.getY() == player.getY()) {
+							level.removeChild(item.ID);
+							String itemSlot = (String) item.get("itemSlot");
+							String equippedItem = (String) player.get(itemSlot);
+							if (equippedItem != null) {
+								// drop the player's equipped item
+								Item newItem = new Item(equippedItem, itemSlot,
+										item.getX(), item.getY());
+								level.putChild(newItem);
+							}
+							// equip the picked-up item
+							player.put(itemSlot, item.get("type"));
 						}
 					}
 				}

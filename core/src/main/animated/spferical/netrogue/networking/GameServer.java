@@ -19,7 +19,7 @@ import animated.spferical.netrogue.world.Actor;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
-import animated.spferical.netrogue.world.MobSpawner;
+import animated.spferical.netrogue.world.Spawner;
 import animated.spferical.netrogue.world.Player;
 
 public class GameServer extends Listener implements Runnable {
@@ -28,7 +28,7 @@ public class GameServer extends Listener implements Runnable {
 	public static final int PORT_NUMBER = 37707;
 	
 	public static final int[] BUFFER_SIZES = {131072 * 8, 131072 * 8};
-	MobSpawner spawner = new MobSpawner();
+	Spawner spawner = new Spawner();
 	
 	public GameServer() {
 		this.server = new Server(BUFFER_SIZES[0], BUFFER_SIZES[1]);
@@ -66,6 +66,7 @@ public class GameServer extends Listener implements Runnable {
 					((float) (System.currentTimeMillis() - (Long) gameState.get("lastTimeUpdate"))) / 1000f);
 			this.gameState.put("lastTimeUpdate", System.currentTimeMillis());
 			this.spawner.spawnMobs(this.gameState);
+			this.spawner.spawnItems(this.gameState);
 			
 			// Get all diffs in the GameState object
 			// and send them to everybody

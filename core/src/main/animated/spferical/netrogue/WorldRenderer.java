@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.Chunk;
 import animated.spferical.netrogue.world.GameState;
+import animated.spferical.netrogue.world.Item;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.LevelCacher;
 import animated.spferical.netrogue.world.Mob;
@@ -137,13 +138,18 @@ public class WorldRenderer {
 		if (!(obj instanceof PositionedObject)) return;
 		PositionedObject po = (PositionedObject) obj;
 		String type = (String) po.get("type");
-		batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+		if (po instanceof Item) {
+			batch.draw(Assets.items.get(type),
 				po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
-		if (obj instanceof Mob) {
-			int hp = (int)po.get("hp");
-			int maxHP = (int)po.get("maxHP");
-			if (hp < maxHP) {
-				drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
+		} else {
+			batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+					po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+			if (obj instanceof Mob) {
+				int hp = (int)po.get("hp");
+				int maxHP = (int)po.get("maxHP");
+				if (hp < maxHP) {
+					drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
+				}
 			}
 		}
 	}

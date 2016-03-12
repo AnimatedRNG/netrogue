@@ -214,14 +214,13 @@ public class UserInterface {
 			shouldScrollToChatBottom = true;
 		}
 
-		drawItems(animationTime);
+		drawItems(player, animationTime);
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 	}
 
-	public void drawItems(float animationTime) {
-		//TODO: draw something other than dummy items
+	public void drawItems(Player player, float animationTime) {
 		int tileSize = Constants.tileSize;
 		batch.begin();
 		batch.draw(slot.getKeyFrame(animationTime), 6 * tileSize, tileSize);
@@ -229,9 +228,16 @@ public class UserInterface {
 		batch.draw(slot.getKeyFrame(animationTime), 8 * tileSize, tileSize);
 		batch.draw(slot.getKeyFrame(animationTime), 9 * tileSize, tileSize);
 		batch.end();
-		batch.begin();
-		batch.draw(Assets.animations.get("fireball").getKeyFrame(animationTime), 6 * tileSize, tileSize);
-		batch.end();
+		if (player != null) {
+			batch.begin();
+			String weapon = (String) player.get("weapon");
+			String spell = (String) player.get("spell");
+			if (weapon != null) 
+				batch.draw(Assets.animations.get(weapon).getKeyFrame(animationTime), 6 * tileSize, tileSize);
+			if (spell != null) 
+				batch.draw(Assets.animations.get(spell).getKeyFrame(animationTime), 7 * tileSize, tileSize);
+			batch.end();
+		}
 	}
 
 	public void handleResize(int width, int height) {
