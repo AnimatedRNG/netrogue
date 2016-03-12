@@ -85,7 +85,7 @@ public class Assets {
 		animations.put(
 			"fireraydiag2", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 3));
 		animations.put(
-			"boss", Assets.loadAnimationFromBasePath("DawnLike/Characters/Reptile", 11, 3));
+			"boss", Assets.loadAnimationFromBasePath("DawnLike/Characters/Reptile", 12, 3));
 		
 		objects.put(
 			"downstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 5));
