@@ -112,7 +112,7 @@ public class UserInterface {
 			apFraction = (float) ap / (float) player.calculateMaxAP((int) player.get("characterLevel"));
 		}
 		
-		if (player.has("playerMessage") && this.playerMessageTime == -1 &&
+		if (player != null && player.has("playerMessage") && this.playerMessageTime == -1 &&
 				!(player.get("playerMessageID").equals(lastMessageID)))
 		{
 			Log.info("Client GUI", "Rendering message for player");
