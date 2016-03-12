@@ -117,6 +117,10 @@ public class GameState extends NetworkObject {
 							}
 							// equip the picked-up item
 							player.put(itemSlot, item.get("type"));
+							String itemInfo = "";
+							if (itemSlot.contains("spell"))
+								itemInfo = Constants.spellInfos.get(item.get("type").toString()).toString();
+							player.addPlayerMessage("You equip the " + item.get("type") + "! " + itemInfo);
 						}
 					}
 				}

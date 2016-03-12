@@ -70,6 +70,10 @@ public class Constants {
 			this.damage = damage;
 			this.apCost = apCost;
 		}
+
+		public String toString() {
+			return "Range: " + range + " Damage: " + damage + " AP Cost: " + apCost;
+		}
 	};
 
 	public static final Map<String, SpellInfo> spellInfos = new HashMap<>();
