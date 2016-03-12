@@ -158,17 +158,31 @@ public class Spawner {
 				}
 			}
 			if (!playerOnLevel) {
+				int x = level.getWidth() * Constants.chunkSize / 2;
+				int y = level.getHeight() * Constants.chunkSize / 2;
+				while (!level.checkOccupied(y, x)) {
+					y++;
+				}
+				y--;
+
 				// reset boss to starting location
+				boolean bossGone = true;
 				for (NetworkObject obj: level.getAllChildrenOfType(Mob.class, false)) {
 					if ((String) obj.get("type") == "boss") {
-						// boss is here, delete him and respawn him
-						level.removeChild(obj.ID);
-						MobType bossType = mobTypes[-1];
-						int x = level.getWidth() * Constants.tileSize / 2;
-						int y = level.getHeight() * Constants.tileSize / 2 + 39;
-						level.putChild(new Mob(bossType.name, x, y, bossType.maxHP, bossType.XP,
-								bossType.damage, bossType.moveSpeed, bossType.attackSpeed));
+						bossGone = false;
+						Mob mob = (Mob) obj;
+						if (mob.getX() != x || mob.getY() != y) {
+							level.removeChild(obj.ID);
+							bossGone = true;
+						}
 					}
+				}
+				if (bossGone) {
+					MobType bossType = mobTypes[mobTypes.length - 1];
+					Mob mob = new Mob(bossType.name, x, y, bossType.maxHP, bossType.XP,
+							bossType.damage, bossType.moveSpeed, bossType.attackSpeed);
+					mob.put("level", level.get("number"));
+					level.putChild(mob);
 				}
 			}
 		} else {
