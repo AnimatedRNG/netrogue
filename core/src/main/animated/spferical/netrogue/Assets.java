@@ -44,6 +44,10 @@ public class Assets {
 			loadAnimationFromBasePath("DawnLike/Characters/Avian", 1, 0));
 		animations.put("big bat",
 			loadAnimationFromBasePath("DawnLike/Characters/Avian", 2, 0));
+		animations.put("scorpion",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 2, 5));
+		animations.put("mimic",
+			loadAnimationFromBasePath("DawnLike/Characters/Elemental", 8, 0));
 		animations.put("tombstone",
 			loadAnimationFromBasePath("DawnLike/Objects/Decor", 17, 0));
 		animations.put(

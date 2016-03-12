@@ -54,6 +54,8 @@ public class Spawner {
 		new MobType(2, "bat", 10, 2, 2, .3f, 0.5f),
 		new MobType(2, "big worm", 20, 2, 3, 1, 0.9f),
 		new MobType(3, "big bat", 20, 2, 2, .3f, .5f),
+		new MobType(3, "scorpion", 10, 2, 5, .3f, .5f),
+		new MobType(3, "mimic", 10, 2, 5, 999999f, .5f),
 
 		// keep boss at bottom of list
 		new MobType(4, "boss", 100, 100, 10, .5f, .5f),
