@@ -181,6 +181,16 @@ public class Player extends PositionedObject implements Actor {
 		}
 		
 		this.put("ap_accumulator", currentAPAccumulator + dt);
+		
+		List<NetworkObject> downstairs = gameState.getLevelByNumber(
+				this.getDungeonLevel()).getAllChildrenOfType(
+						Downstairs.class, false);
+		for (NetworkObject downstair : downstairs) {
+			if (downstair.get("x").equals(get("x")) &&
+					downstair.get("y").equals(get("y")) &&
+					downstair.get("level").equals(get("level")))
+				this.put("level", this.getDungeonLevel() + 1);
+		}
 	}
 
 	@Override

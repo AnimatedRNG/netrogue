@@ -46,6 +46,10 @@ public class Constants {
 	};
 
 	public static final int FLOOR_DENSITY = 1000;
+	
+	public static final float CHUNKS_PER_ITEM = 10;
+	public static final float CHUNKS_PER_MOB = 1;
+	public static final int DOWNSTAIRS_PER_LEVEL = 3;
 
 	public static final String[] slots = {"weapon", "spell", "bleh", "blah"};
 

@@ -2,6 +2,8 @@ package animated.spferical.netrogue.world;
 
 import java.util.Random;
 
+import com.esotericsoftware.minlog.Log;
+
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.NetworkObject;
 
@@ -57,10 +59,38 @@ public class Spawner {
 			}
 		}
 	}
+	
+	public void spawnDownstairs(GameState gameState) {
+		for (NetworkObject obj : gameState.getAllChildren().values()) {
+			if (obj instanceof Level) {
+				spawnDownstairsOnLevel((Level) obj);
+			}
+		}
+	}
+	
+	public void spawnDownstairsOnLevel(Level level) {
+		int width = level.getWidth() * Constants.chunkSize;
+		int height = level.getHeight() * Constants.chunkSize;
+		for (int i = 0; i < Constants.DOWNSTAIRS_PER_LEVEL - 1; i++)
+		{
+			int x = random.nextInt(width);
+			int y = random.nextInt(height);
+			
+			if (!level.checkOccupied(y, x)) {
+				Downstairs downstairs = new Downstairs("downstairs", x, y);
+				downstairs.put("level", level.get("number"));
+				level.putChild(downstairs);
+			} else {
+				// I'm sorry, but it's late and I don't care anymore
+				i--;
+			}
+		}
+	}
 
 	public void spawnMobs(Level level) {
 		// let's try to keep at least one mob per chunk
-		int targetMobs = level.getWidth() * level.getHeight();
+		int targetMobs = (int) (level.getWidth() * level.getHeight() /
+				Constants.CHUNKS_PER_MOB);
 		int numMobs = 0;
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof Mob) {
@@ -73,9 +103,8 @@ public class Spawner {
 	}
 
 	public void spawnItems(Level level) {
-		// one item per two chunks?
-		// SOUNDS GREAT
-		int targetItems = level.getWidth() * level.getHeight() / 2;
+		int targetItems = (int) (level.getWidth() * level.getHeight()
+				/ Constants.CHUNKS_PER_ITEM);
 		int numItems = 0;
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof Item) {

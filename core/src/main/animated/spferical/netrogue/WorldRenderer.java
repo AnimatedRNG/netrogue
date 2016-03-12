@@ -65,6 +65,18 @@ public class WorldRenderer {
 
 	public void render(GameState gameState, float delta) {
 		Player player = (Player) gameState.searchChildren(playerID);
+		
+		if (player != null)
+		{
+			Level currentLevel = gameState.getLevelByNumber(player.getDungeonLevel());
+			
+			if (currentLevel.ID != this.levelID)
+			{
+				this.levelCacher = new LevelCacher(currentLevel);
+				this.levelID = currentLevel.ID;
+			}
+		}
+		
 		int tileSize = Constants.tileSize;
 		int chunkSize = Constants.chunkSize;
 		timeElapsed += delta;
@@ -144,8 +156,12 @@ public class WorldRenderer {
 			batch.draw(Assets.items.get(type),
 				po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
 		} else {
-			batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
-					po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+			if (Assets.animations.containsKey(type))
+				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+			else
+				batch.draw(Assets.objects.get(type), 
+						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
 			if (obj instanceof Mob) {
 				int hp = (int)po.get("hp");
 				int maxHP = (int)po.get("maxHP");

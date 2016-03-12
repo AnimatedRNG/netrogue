@@ -27,6 +27,8 @@ public class GameState extends NetworkObject {
 			MapGenerator.generateMap(level);
 			putChild(level);
 		}
+		
+		new Spawner().spawnDownstairs(this);
 
 		// create chat directory
 		ChatNetworkObject chat = new ChatNetworkObject();

@@ -143,7 +143,7 @@ public abstract class NetworkObject implements Serializable, Cloneable {
 		return null;
 	}
 	
-	public List<NetworkObject> getAllChildrenOfType(Class<NetworkObject> type,
+	public List<NetworkObject> getAllChildrenOfType(Class<?> type,
 			boolean recursive) {
 		List<NetworkObject> children = new ArrayList<NetworkObject>();
 		for (NetworkObject child : this.getAllChildren().values()) {
