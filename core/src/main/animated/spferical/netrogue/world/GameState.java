@@ -15,11 +15,10 @@ public class GameState extends NetworkObject {
 
 	public GameState() {
 		super();
-		this.put("lastTimeUpdate", System.currentTimeMillis());
-		setupGame();
 	}
 
 	public void setupGame() {
+		this.put("lastTimeUpdate", System.currentTimeMillis());
 		// generate levels
 		Level level = new Level(1, MapGenerator.mapHeight,
 				MapGenerator.mapWidth);

@@ -35,6 +35,7 @@ public class GameServer extends Listener implements Runnable {
 		this.threaded = new ThreadedListener(this);
 		this.server.addListener(this.threaded);
 		this.oldGameState = new GameState();
+		this.oldGameState.setupGame();
 		this.gameState = (GameState) this.oldGameState.clone();
 		this.isRunning = true;
 		this.networkingThead = new Thread(this);
