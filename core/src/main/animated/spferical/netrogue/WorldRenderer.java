@@ -105,25 +105,25 @@ public class WorldRenderer {
 		}
 		batch.end();
 
-		List<NetworkObject> objToRenderOnTop = new ArrayList<>();
-
 		batch.begin();
 		Level level = (Level) gameState.searchChildren(levelID);
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof PositionedObject) {
-				if (!obj.check("renderLower")) {
-					objToRenderOnTop.add(obj);
-					continue;
+				if (obj.check("renderLower")) {
+					renderObject(obj);
 				}
-				renderObject(obj);
 			}
 		}
 		batch.end();
 
 		batch.begin();
 
-		for (NetworkObject obj : objToRenderOnTop) {
-			renderObject(obj);
+		for (NetworkObject obj : level.getAllChildren().values()) {
+			if (obj instanceof PositionedObject) {
+				if (!obj.check("renderLower")) {
+					renderObject(obj);
+				}
+			}
 		}
 
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
