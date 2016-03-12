@@ -1,5 +1,7 @@
 package animated.spferical.netrogue.world;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.esotericsoftware.minlog.Log;
@@ -61,25 +63,45 @@ public class Spawner {
 	}
 	
 	public void spawnDownstairs(GameState gameState) {
+		List<Level> levels = new ArrayList<Level>(Constants.LEVEL_NUM);
+		for (int i = 0; i < Constants.LEVEL_NUM - 1; i++)
+			levels.add(null);
+		
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
-			if (obj instanceof Level) {
-				spawnDownstairsOnLevel((Level) obj);
+			if (obj instanceof Level && 
+					!obj.get("number").equals(Constants.LEVEL_NUM)) {
+				levels.set((int) ((Level) obj).get("number") - 1, (Level) obj);
 			}
 		}
+		
+		for (int i = 0; i < levels.size() - 1; i++)
+			spawnDownstairsOnLevel((Level) levels.get(i),
+					(Level) levels.get(i + 1));
 	}
 	
-	public void spawnDownstairsOnLevel(Level level) {
+	public void spawnDownstairsOnLevel(Level level, Level nextLevel) {
 		int width = level.getWidth() * Constants.chunkSize;
 		int height = level.getHeight() * Constants.chunkSize;
-		for (int i = 0; i < Constants.DOWNSTAIRS_PER_LEVEL - 1; i++)
+		int levelNumber = (int) level.get("number");
+		Log.info("Trying to spawn downstairs on level " + levelNumber);
+		
+		for (int i = 0; i < Constants.DOWNSTAIRS_PER_LEVEL; i++)
 		{
 			int x = random.nextInt(width);
 			int y = random.nextInt(height);
 			
-			if (!level.checkOccupied(y, x)) {
-				Downstairs downstairs = new Downstairs("downstairs", x, y);
-				downstairs.put("level", level.get("number"));
+			if (!level.checkOccupied(y, x) &&
+					!nextLevel.checkOccupied(y, x)) {
+				Stairs downstairs = new Stairs("downstairs", 
+						levelNumber + 1, x, y);
+				Stairs upstairs = new Stairs("upstairs", 
+						levelNumber, x, y);
+				downstairs.put("level", levelNumber);
+				upstairs.put("level", levelNumber + 1);
+				Log.info("Game Logic", "Spawning downstair on level " 
+						+ levelNumber);
 				level.putChild(downstairs);
+				nextLevel.putChild(upstairs);
 			} else {
 				// I'm sorry, but it's late and I don't care anymore
 				i--;

@@ -13,7 +13,7 @@ import animated.spferical.netrogue.ChatLine;
 import animated.spferical.netrogue.ChatNetworkObject;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.world.Chunk;
-import animated.spferical.netrogue.world.Downstairs;
+import animated.spferical.netrogue.world.Stairs;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Item;
 import animated.spferical.netrogue.world.Level;
@@ -65,6 +65,6 @@ public abstract class Registrar {
 		kryo.register(PositionedObject.class);
 		kryo.register(Tombstone.class);
 		kryo.register(Item.class);
-		kryo.register(Downstairs.class);
+		kryo.register(Stairs.class);
 	}
 }

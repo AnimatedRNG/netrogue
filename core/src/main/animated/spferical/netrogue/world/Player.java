@@ -182,15 +182,32 @@ public class Player extends PositionedObject implements Actor {
 		
 		this.put("ap_accumulator", currentAPAccumulator + dt);
 		
-		List<NetworkObject> downstairs = gameState.getLevelByNumber(
+		List<NetworkObject> stairs = gameState.getLevelByNumber(
 				this.getDungeonLevel()).getAllChildrenOfType(
-						Downstairs.class, false);
-		for (NetworkObject downstair : downstairs) {
-			if (downstair.get("x").equals(get("x")) &&
-					downstair.get("y").equals(get("y")) &&
-					downstair.get("level").equals(get("level")))
-				this.put("level", this.getDungeonLevel() + 1);
+						Stairs.class, false);
+		
+		boolean ignore = false;
+		for (NetworkObject stair : stairs) {
+			if (stair.get("x").equals(get("x")) &&
+					stair.get("y").equals(get("y")) &&
+					stair.get("level").equals(get("level")))
+			{
+				if (!this.check("justOnStairs"))
+				{
+					this.put("level", stair.get("targetLevel"));
+					this.put("justOnStairs", true);
+					if (stair.get("type").equals("downstairs"))
+						this.addPlayerMessage("Descended to dungeon level "
+								+ stair.get("targetLevel"));
+					else
+						this.addPlayerMessage("Ascended to dungeon level "
+								+ stair.get("targetLevel"));
+				}
+				ignore = true;
+			}
 		}
+		if (!ignore)
+			this.remove("justOnStairs");
 	}
 
 	@Override

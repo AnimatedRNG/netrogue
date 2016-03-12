@@ -1,15 +1,16 @@
 package animated.spferical.netrogue.world;
 
-public class Downstairs extends PositionedObject {
+public class Stairs extends PositionedObject {
 	
 	private static final long serialVersionUID = -8601274277990687047L;
 
-	public Downstairs() {
+	public Stairs() {
 		super();
 	}
 
-	public Downstairs(String type, int x, int y) {
+	public Stairs(String type, int targetLevel, int x, int y) {
 		super(type, x, y);
+		put("targetLevel", targetLevel);
 		put("renderLower", true);
 	}
 }

@@ -73,6 +73,8 @@ public class Assets {
 		
 		objects.put(
 			"downstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 5));
+		objects.put(
+			"upstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 4));
 
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 
