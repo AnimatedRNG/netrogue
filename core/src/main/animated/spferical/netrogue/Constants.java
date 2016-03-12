@@ -38,26 +38,15 @@ public class Constants {
 	public static final int LEVEL_NUM = 4;
 	
 	public static final String[] names = new String[] {
-		"Aeto",
-		"Dasre",
-		"Der",
-		"Dera",
-		"Ditani",
-		"Frig",
-		"Gabram",
-		"Gal",
-		"Govul",
-		"Hhart",
-		"Ieni",
-		"Marih",
-		"Mribm",
-		"Nalah",
-		"Rahi",
-		"Ranih",
-		"Relah",
-		"Riter",
-		"Ror",
-		"Side"
+		"Aeto", "Dasre", "Der", "Dera", "Ditani", "Frig", "Gabram", "Gal",
+		"Govul", "Hhart", "Ieni", "Marih", "Mribm", "Nalah", "Rahi",
+		"Ranih", "Relah", "Riter", "Ror", "Side", "Urist", "Nil", "Olin",
+		"Mezbuth", "Shorast", "Tobul", "Kol", "Libash", "Fath", "Meng",
+		"Kivish", "Asmel", "Amost", "Deler", "Onget", "Dodok", "Kulet", "Onol",
+		"Olon", "Kikrost", "Kib", "Ushat", "Uvash", "Lokum", "Endok", "Erib",
+		"Sigun", "Erith", "Eral", "Degel", "Ustuth", "Litast", "Ilral",
+		"Bomrek", "Stodir", "Zaneg", "Vucar", "Ingish", "Vabok", "Eshtan",
+		"Zan", "Avuz", "Udil", "Tulon"
 	};
 
 	public static final int FLOOR_DENSITY = 1000;

@@ -187,7 +187,10 @@ public class WorldRenderer {
 			this.drawProjectile((Projectile) po, dt);
 		}
 		else {
-			if (Assets.animations.containsKey(type))
+			if (obj instanceof Player) {
+				batch.draw(Assets.animations.get(((Player) obj).getAnimation()).getKeyFrame(timeElapsed, true),
+						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+			} else if (Assets.animations.containsKey(type))
 				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
 						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
 			else
