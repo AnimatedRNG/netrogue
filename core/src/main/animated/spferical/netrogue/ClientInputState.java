@@ -26,8 +26,7 @@ public class ClientInputState implements Serializable {
 					this.moveDown == otherInputState.moveDown &&
 					this.moveLeft == otherInputState.moveLeft &&
 					this.moveRight == otherInputState.moveRight &&
-					this.mouseXOffset == otherInputState.mouseXOffset &&
-					this.mouseYOffset == otherInputState.mouseYOffset &&
+					this.theta == otherInputState.theta &&
 					this.mouseClicked == otherInputState.mouseClicked &&
 					this.pickUpItem == otherInputState.pickUpItem &&
 					this.checkEquivalence(this.stringInput, 
@@ -59,8 +58,7 @@ public class ClientInputState implements Serializable {
 		this.moveDown = false;
 		this.pickUpItem = false;
 		
-		this.mouseXOffset = 0;
-		this.mouseYOffset = 0;
+		this.theta = 0;
 		
 		this.mouseClicked = false;
 		
@@ -76,8 +74,7 @@ public class ClientInputState implements Serializable {
 	public boolean pickUpItem = false;
 
 	// offsets from the player, in tiles
-	public int mouseXOffset = 0;
-	public int mouseYOffset = 0;
+	public int theta;
 
 	public boolean mouseClicked = false;
 	
