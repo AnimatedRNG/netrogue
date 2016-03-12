@@ -1,9 +1,7 @@
 package animated.spferical.netrogue;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -13,8 +11,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.Chunk;
@@ -26,6 +26,7 @@ import animated.spferical.netrogue.world.LevelCacher;
 import animated.spferical.netrogue.world.Mob;
 import animated.spferical.netrogue.world.Player;
 import animated.spferical.netrogue.world.PositionedObject;
+import animated.spferical.netrogue.world.Projectile;
 import animated.spferical.netrogue.world.Tile;
 import animated.spferical.netrogue.world.TileTypeArray;
 
@@ -161,7 +162,10 @@ public class WorldRenderer {
 		if (po instanceof Item || po instanceof HealingPotion) {
 			batch.draw(Assets.items.get(type),
 				po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
-		} else {
+		} else if (po instanceof Projectile) {
+			this.drawProjectile((Projectile) po, dt);
+		}
+		else {
 			if (Assets.animations.containsKey(type))
 				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
 						po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
@@ -204,6 +208,35 @@ public class WorldRenderer {
 				}
 			}
 		}
+	}
+	
+	public void drawProjectile(Projectile projectile, float dt) {
+		String name = (String) projectile.get("type");
+		
+		int theta = (int) projectile.get("theta");
+		float deltaX = (((float) projectile.get("actualX")) - projectile.getX());
+		float deltaY = (((float) projectile.get("actualY")) - projectile.getY());
+		
+		if (deltaY != 0 || deltaX != 0)
+		{
+			theta = (int) (Math.toDegrees(Math.atan2(deltaY, deltaX)));;
+			if (theta < 0)
+				theta += 360;
+		}
+			
+		name += "ray";
+		if ((theta > 22.5 && theta < 67.5) || (theta > 202.5 && theta < 247.5))
+			name += "diag2";
+		else if ((theta > 112.5 && theta < 157.5) || (theta > 292.5 && theta < 337.5))
+			name += "diag1";
+		else if ((theta > 67.5 && theta < 112.5) || (theta > 247.5 && theta < 292.5))
+			name += "vert";
+		else
+			name += "horiz";
+		
+		batch.draw(Assets.animations.get(name).getKeyFrame(timeElapsed, true),
+					(float) projectile.getX() * Constants.tileSize, 
+					(float) projectile.getY() * Constants.tileSize);
 	}
 
 	public void drawHealthBar(int x, int y, float healthFraction) {

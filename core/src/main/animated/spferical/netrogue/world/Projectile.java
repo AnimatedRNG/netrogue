@@ -25,6 +25,8 @@ public class Projectile extends PositionedObject implements Actor {
 		put("caster", caster);
 		put("actualX", x);
 		put("actualY", y);
+		put("lastX", (int) x);
+		put("lastY", (int) y);
 	}
 
 	@Override
@@ -88,6 +90,8 @@ public class Projectile extends PositionedObject implements Actor {
 							(float) get("speed"), (float) this.get("duration") - lifetime,
 							(int) this.get("damage"), (Long) this.get("caster"));
 					child.put("level", get("level"));
+					child.put("lastX", this.getX());
+					child.put("lastY", this.getY());
 					level.putChild(child);
 				}
 				this.put("spawnedChild", true);
