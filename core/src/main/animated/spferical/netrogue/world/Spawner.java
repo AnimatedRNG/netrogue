@@ -61,6 +61,7 @@ public class Spawner {
 		new ItemType(1, "dagger", "weapon"),
 		new ItemType(1, "healing potion", "potion"),
 		new ItemType(1, "fire", "spell"),
+		new ItemType(1, "ice", "spell1"),
 		new ItemType(1, "club", "weapon"),
 		new ItemType(2, "mace", "weapon"),
 		new ItemType(2, "sword", "weapon"),
@@ -111,8 +112,8 @@ public class Spawner {
 	}
 	
 	public void spawnDownstairsOnLevel(Level level, Level nextLevel) {
-		int width = level.getWidth() * Constants.chunkSize;
-		int height = level.getHeight() * Constants.chunkSize;
+		int width = nextLevel.getWidth() * Constants.chunkSize;
+		int height = nextLevel.getHeight() * Constants.chunkSize;
 		int levelNumber = (int) level.get("number");
 		Log.info("Trying to spawn downstairs on level " + levelNumber);
 		
