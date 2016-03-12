@@ -85,15 +85,12 @@ public class UserInterface {
 
 		Table table = new Table();
 		table.setFillParent(true);
-		table.setDebug(true);
 
 		chatInnerTable = new Table();
-		chatInnerTable.setDebug(true);
 		chatInnerTable.padBottom(10);
 
 		chatScrollPane = new ScrollPane(chatInnerTable, Assets.skin);
 		chatScrollPane.setScrollingDisabled(true, false);
-		chatScrollPane.setDebug(true);
 
 		chatField = new TextField("", Assets.skin);
 		chatField.setMessageText("Enter to chat");

@@ -307,7 +307,7 @@ public class Player extends PositionedObject implements Actor {
 	public String getAnimation() {
 		int meleeBuff = (int) get("melee_buff");
 		int spellBuff = (int) get("spell_buff");
-		if (meleeBuff <= 3 && spellBuff <= 3) {
+		if (meleeBuff < 3 && spellBuff < 3) {
 			return "player";
 		} else {
 			if (meleeBuff >= 3 && spellBuff >= 3) {
