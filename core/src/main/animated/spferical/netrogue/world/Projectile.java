@@ -1,5 +1,9 @@
 package animated.spferical.netrogue.world;
 
+import java.util.List;
+
+import com.esotericsoftware.minlog.Log;
+
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.NetworkObject;
 
@@ -42,7 +46,9 @@ public class Projectile extends PositionedObject implements Actor {
 			if (!check("hasAttacked"))
 			{
 				Level level = gameState.getLevelByNumber((int) this.get("level"));
-				for (NetworkObject actor : level.getAllChildrenOfType(Actor.class, false))
+				List<NetworkObject> children = level.getAllChildrenOfType(Actor.class, false);
+				children.addAll(gameState.getAllChildrenOfType(Player.class, false));
+				for (NetworkObject actor : children)
 				{
 					if (!actor.has("x") || !actor.has("y"))
 						continue;
@@ -50,6 +56,7 @@ public class Projectile extends PositionedObject implements Actor {
 						continue;
 					if (actor instanceof Player && actor.ID != (Long) get("caster"))
 					{
+						Log.info("Should harm player");
 						((Player) actor).takeDamage((int) get("damage"), 
 								(String) gameState.searchChildren((Long) get("caster")).get("name"));
 					}
