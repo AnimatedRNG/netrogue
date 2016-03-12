@@ -139,6 +139,9 @@ public class Spawner {
 	}
 
 	public boolean isNearPlayer(int x, int y, Level level, GameState gameState) {
+		if (Math.pow(x, 2) + Math.pow(y, 2) < 64) {
+			return true;
+		}
 		for (NetworkObject obj: gameState.getAllChildren().values()) {
 			if (obj instanceof Player) {
 				Player p = (Player) obj;
