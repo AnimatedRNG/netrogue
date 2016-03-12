@@ -1,10 +1,18 @@
 package animated.spferical.netrogue.world;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
+import animated.spferical.netrogue.networking.LocalCache;
+import animated.spferical.netrogue.networking.StringArray;
 
 public class Player extends PositionedObject implements Actor {
 	
@@ -33,16 +41,23 @@ public class Player extends PositionedObject implements Actor {
 		this.put("ap_accumulator", 0.0f);
 		this.put("xp", 0);
 		
+		this.put("melee_buff", 0);
+		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
+		
+		LocalCache.put("player_random", new Random(this.ID));
 	}
 
 	public int getDungeonLevel() {
 		return (int) get("level");
 	}
 
-	public int calculateDamage() {
-		return (int) this.get("characterLevel");
+	public int calculateMeleeDamage() {
+		int characterLevel = (int) this.get("characterLevel");
+		int meleeBuff = (int) this.get("melee_buff");
+		int attack = characterLevel + meleeBuff * Constants.MELEE_BUFF;
+		return attack;
 	}
 
 	public void takeDamage(int damage) {
@@ -88,7 +103,29 @@ public class Player extends PositionedObject implements Actor {
 			this.put("xp", 0);
 			this.put("hp", this.calculateMaxHP(newLevel));
 			this.put("ap", this.calculateMaxAP(newLevel));
-			this.addPlayerMessage("Welcome to Level " + newLevel);
+			this.addPlayerMessage("Welcome to Level " + newLevel + 
+					".\n How do you want to invest your skill points?");
+			
+			HashMap<String, Runnable> options = new HashMap<>();
+			options.put("Melee Attacks", new Runnable() {
+				@Override
+				public void run() {
+					Log.info("Game Logic", "Player " + this + 
+							" is investing in melee attacks");
+					int meleeBuff = (int) get("melee_buff");
+					put("melee_buff", meleeBuff + 1);
+				}
+			});
+			options.put("Offensive Spellcasting", new Runnable() {
+				@Override
+				public void run() {
+					Log.info("Game Logic", "Player " + this + 
+							" is investing in offensive spellcasting");
+					Log.info("Game Logic", "Except we don't yet"
+							+ "have spells... so that does nothing");
+				}
+			});
+			this.addPlayerGUI(null, options);
 			return true;
 		}
 		return false;
@@ -104,7 +141,18 @@ public class Player extends PositionedObject implements Actor {
 
 	public void addPlayerMessage(String message) {
 		this.put("playerMessage", message);
-		this.put("playerMessageID", new Random().nextLong());
+		this.put("playerMessageID", ((Random) LocalCache.get("player_random")).
+				nextLong());
+	}
+	
+	public void addPlayerGUI(String message, Map<String, Runnable> options) {
+		if (message != null)
+			this.addPlayerMessage(message);
+		this.put("playerGUI_options", new StringArray(options.keySet()));
+		LocalCache.put("playerGUI_callbacks", 
+				new ArrayList<Runnable>(options.values()));
+		this.put("playerGUI_ID", ((Random) LocalCache.get("player_random")).
+				nextLong());
 	}
 	
 	@Override
@@ -129,5 +177,25 @@ public class Player extends PositionedObject implements Actor {
 	@Override
 	public void onDeath(GameState gameState) {
 		// TODO: add a tombstone
+	}
+	
+	// Handles extra stuff that the player sends us
+	// One day we'll move all that crap in handlePlayerInput here
+	public void onPlayerInput(ClientInputState inputState) {
+		if (inputState.inputType == ClientInputState.InputType.SELECT_OPTION)
+			Log.info("Player selected option " + inputState.intInput);
+		@SuppressWarnings("unchecked")
+		List<Runnable> callbacks = 
+				(List<Runnable>) LocalCache.get("playerGUI_callbacks");
+		if (callbacks != null && callbacks.size() > inputState.intInput 
+				&& inputState.intInput >= 0)
+		{
+			try {
+				callbacks.get(inputState.intInput).run();
+				LocalCache.put("playerGUI_callbacks", null);
+			} catch (Exception e) {
+				Log.error("Game Logic", "Unable to handle Player GUI input", e);
+			}
+		}
 	}
 }

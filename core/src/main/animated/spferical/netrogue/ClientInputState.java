@@ -63,6 +63,8 @@ public class ClientInputState implements Serializable {
 		this.mouseClicked = false;
 		
 		this.stringInput = null;
+		this.intInput = 0;
+		this.inputType = null;
 	}
 
 	public boolean moveLeft = false;

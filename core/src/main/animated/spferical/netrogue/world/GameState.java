@@ -65,7 +65,7 @@ public class GameState extends NetworkObject {
 				if (m != null) {
 					Log.info("Player attacks mob at " + newX + ", " + newY);
 					// attack the mob!
-					m.takeDamage(player.calculateDamage());
+					m.takeDamage(player.calculateMeleeDamage());
 					if (((int) m.get("hp")) <= 0) {
 						removeFromTree(m);
 						player.onKillMob(m);
@@ -84,6 +84,7 @@ public class GameState extends NetworkObject {
 				}
 			}
 			
+			player.onPlayerInput(input);
 
 			if (input.stringInput != null) {
 				// player sent message
