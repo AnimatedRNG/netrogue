@@ -171,8 +171,8 @@ public class Player extends PositionedObject implements Actor {
 				public void run() {
 					Log.info("Game Logic", "Player " + this + 
 							" is investing in offensive spellcasting");
-					Log.info("Game Logic", "Except we don't yet"
-							+ "have spells... so that does nothing");
+					int spellBuff = (int) get("spell_buff");
+					put("spell_buff", spellBuff + 1);
 				}
 			});
 			this.addPlayerGUI(null, options);
@@ -257,7 +257,10 @@ public class Player extends PositionedObject implements Actor {
 				this.calculateSpellDamage(spell), this.ID);
 		projectile.put("level", this.get("level"));
 		int ap = ((int) get("ap")) - calculateSpellAPDrain(spell);
-		this.put("ap", ap);
+		if (ap > 0)
+			this.put("ap", ap);
+		else
+			this.put("ap", 0);
 		Log.info("Game Logic", "Firing spell");
 		gameState.getLevelByNumber((int) this.get("level")).putChild(projectile);
 	}
