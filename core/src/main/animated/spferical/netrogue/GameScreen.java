@@ -2,6 +2,7 @@ package animated.spferical.netrogue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Screen;
 import com.esotericsoftware.minlog.Log;
 
@@ -70,6 +71,16 @@ public class GameScreen implements Screen {
 			} else if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
 				inputState.inputType = ClientInputState.InputType.SELECT_ITEM;
 				inputState.intInput = 3;
+			}
+			
+			if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+				inputState.mouseClicked = true;
+				int mouseOffsetX = Gdx.input.getX() - Gdx.graphics.getWidth() / 2;
+				int mouseOffsetY = -1 * (Gdx.input.getY() - Gdx.graphics.getHeight() / 2);
+				int theta = (int) (Math.toDegrees(Math.atan2(mouseOffsetY, mouseOffsetX)));
+				if (theta < 0)
+					theta += 360;
+				inputState.theta = theta;
 			}
 		} else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 			inputState.stringInput = player.get("name") + ": "
