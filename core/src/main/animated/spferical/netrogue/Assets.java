@@ -30,6 +30,8 @@ public class Assets {
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
 		animations.put("worm",
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 0));
+		animations.put("big worm",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 1));
 		animations.put("ant",
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 4, 0));
 		animations.put("beetle",
@@ -38,6 +40,10 @@ public class Assets {
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 1, 3));
 		animations.put("slime",
 			loadAnimationFromBasePath("DawnLike/Characters/Slime", 1, 1));
+		animations.put("bat",
+			loadAnimationFromBasePath("DawnLike/Characters/Avian", 1, 0));
+		animations.put("big bat",
+			loadAnimationFromBasePath("DawnLike/Characters/Avian", 2, 0));
 		animations.put("tombstone",
 			loadAnimationFromBasePath("DawnLike/Objects/Decor", 17, 0));
 		animations.put(
@@ -75,7 +81,9 @@ public class Assets {
 		animations.put(
 			"firerayhoriz", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 1));
 		animations.put(
-			"fireraydiag", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 2));
+			"fireraydiag1", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 2));
+		animations.put(
+			"fireraydiag2", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 15, 3));
 		
 		objects.put(
 			"downstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 5));
@@ -85,6 +93,7 @@ public class Assets {
 			"redbox", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 8, 6));
 
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
+		items.put("dagger", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 0, 0));
 
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));

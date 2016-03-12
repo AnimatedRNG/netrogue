@@ -13,6 +13,7 @@ public class Spawner {
 	Random random;
 
 	class MobType {
+		public int level;
 		public String name;
 		public int maxHP;
 		public int damage;
@@ -20,8 +21,9 @@ public class Spawner {
 		public float moveSpeed;
 		public float attackSpeed;
 
-		public MobType(String name, int maxHP, int XP, int damage,
+		public MobType(int level, String name, int maxHP, int XP, int damage,
 				float moveSpeed, float attackSpeed) {
+			this.level = level;
 			this.name = name;
 			this.maxHP = maxHP;
 			this.damage = damage;
@@ -33,11 +35,14 @@ public class Spawner {
 
 	final MobType[] mobTypes = {
 		// new MobType("name", HP, XP, damage, moveSpeed, attackSpeed);
-		new MobType("worm", 10, 1, 1, 1, 1),
-		new MobType("ant", 7, 2, 1, .4f, .4f),
-		new MobType("beetle", 6, 1, 1, .75f, .5f),
-		new MobType("butterfly", 5, 1, 1, .3f, .3f),
-		new MobType("slime", 5, 1, 1, .5f, 0.5f),
+		new MobType(1, "worm", 10, 1, 1, 1, 1),
+		new MobType(1, "ant", 7, 2, 1, .4f, .4f),
+		new MobType(1, "beetle", 6, 1, 1, .75f, .5f),
+		new MobType(1, "butterfly", 5, 1, 1, .3f, .3f),
+		new MobType(1, "slime", 5, 1, 1, .5f, 0.5f),
+		new MobType(2, "bat", 10, 2, 2, .3f, 0.5f),
+		new MobType(2, "big worm", 20, 2, 3, 1, 0.9f),
+		new MobType(3, "big bat", 20, 2, 2, .3f, .5f),
 	};
 
 	public Spawner() {
@@ -139,6 +144,9 @@ public class Spawner {
 	}
 
 	public boolean isNearPlayer(int x, int y, Level level, GameState gameState) {
+		if (Math.pow(x, 2) + Math.pow(y, 2) < 64) {
+			return true;
+		}
 		for (NetworkObject obj: gameState.getAllChildren().values()) {
 			if (obj instanceof Player) {
 				Player p = (Player) obj;
@@ -167,14 +175,35 @@ public class Spawner {
 		}
 	}
 
+	public MobType getRandomMob(int level) {
+		int totalMobs = 0;
+		for (MobType t : mobTypes) {
+			if (t.level == level) {
+				totalMobs++;
+			}
+		}
+		int choice = random.nextInt(totalMobs);
+		int index = 0;
+		for (MobType t : mobTypes) {
+			if (t.level == level) {
+				if (choice == index) {
+					return t;
+				}
+				index += 1;
+			}
+		}
+		return null;
+	}
+
 	public void spawnOneMob(Level level, GameState gameState) {
+		int levelNumber = (int) level.get("number");
 		int width = level.getWidth() * Constants.chunkSize;
 		int height = level.getHeight() * Constants.chunkSize;
 		int x = random.nextInt(width);
 		int y = random.nextInt(height);
 		if (!level.checkOccupied(y, x) && !isNearPlayer(x, y, level, gameState)) {
 			// spawn a mob there
-			MobType type = mobTypes[random.nextInt(mobTypes.length)];
+			MobType type = getRandomMob(levelNumber);
 			Mob mob = new Mob(type.name, x, y, type.maxHP, type.XP,
 					type.damage, type.moveSpeed, type.attackSpeed);
 			mob.put("level", level.get("number"));

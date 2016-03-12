@@ -278,16 +278,15 @@ public class UserInterface {
 			for (int i = 0; i < Constants.slots.length; i++) {
 				String itemType = (String) player.get(Constants.slots[i]);
 				if (itemType != null) {
-					TextureRegion tex = Assets.animations.get(itemType).getKeyFrame(animationTime);
+					TextureRegion tex;
+					if (Constants.slots[i] == "weapon") {
+						tex = Assets.items.get(itemType);
+					} else {
+						tex = Assets.animations.get(itemType).getKeyFrame(animationTime);
+					}
 					batch.draw(tex, (6 + i) * tileSize, tileSize);
 				}
 			}
-			String weapon = (String) player.get("weapon");
-			String spell = (String) player.get("spell");
-			if (weapon != null) 
-				batch.draw(Assets.animations.get(weapon).getKeyFrame(animationTime), 6 * tileSize, tileSize);
-			if (spell != null) 
-				batch.draw(Assets.animations.get(spell).getKeyFrame(animationTime), 7 * tileSize, tileSize);
 			batch.end();
 		}
 	}

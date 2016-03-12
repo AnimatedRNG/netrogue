@@ -62,6 +62,12 @@ public class Player extends PositionedObject implements Actor {
 		int characterLevel = (int) this.get("characterLevel");
 		int meleeBuff = (int) this.get("melee_buff");
 		int attack = characterLevel + meleeBuff * Constants.MELEE_BUFF;
+		String weapon = (String) this.get("weapon");
+		if (weapon != null) {
+			int weaponDamage = Constants.weaponInfos.get(weapon).damage;
+			attack += weaponDamage;
+		}
+		Log.info("Game Logic", "Attack: " + attack);
 		return attack;
 	}
 	
