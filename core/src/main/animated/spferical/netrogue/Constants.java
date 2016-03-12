@@ -56,15 +56,16 @@ public class Constants {
 
 	public static final String[] slots = {"weapon", "spell", "bleh", "blah"};
 
-	public static final String[][] itemTypes = {{
+	public static final String[][] itemTypes = {
 		// item name, slot
-		"fire", "spell"
-	}};
+		{"fire", "spell"},
+		{"dagger", "weapon"},
+	};
 
 	public static class SpellInfo {
-		float range;
-		int damage;
-		int apCost;
+		public float range;
+		public int damage;
+		public int apCost;
 		public SpellInfo(float range, int damage, int apCost) {
 			this.range = range;
 			this.damage = damage;
@@ -76,10 +77,19 @@ public class Constants {
 		}
 	};
 
+	public static class WeaponInfo {
+		public int damage;
+		public WeaponInfo(int damage) {
+			this.damage = damage;
+		}
+	}
+
 	public static final Map<String, SpellInfo> spellInfos = new HashMap<>();
+	public static final Map<String, WeaponInfo> weaponInfos = new HashMap<>();
 
 	static {
 		spellInfos.put("fire",
 			new SpellInfo(5.0f, 2, 2));
+		weaponInfos.put("dagger", new WeaponInfo(1));
 	}
 }
