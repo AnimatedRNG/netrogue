@@ -65,6 +65,16 @@ public class Assets {
 			"apfull", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 2, 6));
 
 		animations.put(
+			"arrowUp", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 5));
+		animations.put(
+			"arrowLeft", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 4, 5));
+		animations.put(
+			"arrowRight", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 2, 5));
+		animations.put(
+			"arrowDown", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 3, 5));
+		
+		
+		animations.put(
 			"barLeft", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 6));
 		animations.put(
 			"barMiddle", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 7));

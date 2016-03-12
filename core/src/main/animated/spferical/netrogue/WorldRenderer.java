@@ -147,11 +147,32 @@ public class WorldRenderer {
 			}
 		}
 
+		double closestPlayerDist = Integer.MAX_VALUE;
+		Player closestPlayer = null;
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
 			if (obj instanceof Player && (int) obj.get("level") == (int) level.get("number")) {
 				renderObject(obj, delta);
+				if (obj.ID != player.ID)
+				{
+					Player otherPlayer = (Player) obj;
+					double dx = player.getX() - otherPlayer.getX();
+					double dy = player.getY() - otherPlayer.getY();
+					double dist = Math.sqrt(dx * dx + dy * dy);
+					if (dist < closestPlayerDist)
+					{
+						closestPlayerDist = dist;
+						closestPlayer = otherPlayer;
+					}
+				}
 			}
 		}
+		
+		if (closestPlayer != null) {
+			this.drawArrows(closestPlayer.getX() - player.getX(), 
+					closestPlayer.getY() - player.getY(), player.getX(),
+					player.getY());
+		}
+		
 		batch.end();
 	}
 
@@ -254,6 +275,33 @@ public class WorldRenderer {
 			batch.draw(Assets.animations.get("hp1").getKeyFrame(timeElapsed), x, y);
 		}
 		batch.setColor(c.r, c.g, c.b, 1f);
+	}
+	
+	public void drawArrows(int offsetX, int offsetY, int centerX, int centerY) {
+		if (Math.abs(offsetX + offsetY) < Constants.ARROW_DISTANCE)
+			return;
+		
+		int radius = (int) (Constants.tileSize * 3f);
+		int theta = (int) Math.toDegrees(Math.atan2(offsetY, offsetX));
+		if (theta < 0)
+			theta += 360;
+		
+		int x = (int) (centerX * Constants.tileSize + Math.cos(Math.toRadians(theta)) * radius);
+		int y = (int) (centerY * Constants.tileSize + Math.sin(Math.toRadians(theta)) * radius);
+		
+		if (theta > 67.5 && theta < 112.5)
+			batch.draw(Assets.animations.get("arrowUp").getKeyFrame(timeElapsed, true),
+					x, y);
+		else if (theta > 247.5 && theta < 292.5)
+			batch.draw(Assets.animations.get("arrowDown").getKeyFrame(timeElapsed, true),
+					x, y);
+		else if (theta < 67.5 || theta > 292.5)
+			batch.draw(Assets.animations.get("arrowRight").getKeyFrame(timeElapsed, true),
+					x, y);
+		else
+			batch.draw(Assets.animations.get("arrowLeft").getKeyFrame(timeElapsed, true),
+					x, y);
+		
 	}
 
 	public void handleResize(int width, int height) {

@@ -17,6 +17,9 @@ public class Constants {
 	public static final float AP_REGEN_TIME = 1f/3;
 	public static final float AP_REGEN_AMOUNT = 1;
 	
+	public static final int ARROW_PROXIMITY = 8;
+	public static final float ARROW_DISTANCE = 3f;
+	
 	// New Level = log2(XP / 20) + 1
 	public static final int XP_LEVEL_MODIFIER = 1;
 	public static final int XP_BASE_NUMBER = 2;
