@@ -54,14 +54,30 @@ public class Projectile extends PositionedObject implements Actor {
 						continue;
 					if ((int) actor.get("x") != this.getX() || (int) actor.get("y") != this.getY())
 						continue;
+					Player caster = (Player) gameState.searchChildren((Long) get("caster"));
 					if (actor instanceof Player && actor.ID != (Long) get("caster"))
 					{
-						Log.info("Should harm player");
 						((Player) actor).takeDamage((int) get("damage"), 
-								(String) gameState.searchChildren((Long) get("caster")).get("name"));
+								(String) caster.get("name"));
+						if (((Player) actor).check("dead"))
+						{
+							int xp = (int) ((Player) actor).get("xp");
+							caster.gainExperience(xp);
+							caster.addPlayerMessage("You murdered player " + 
+									((Player) actor).get("name") + " for "
+									+ xp + " XP.");
+						}
 					}
 					else if (actor instanceof Mob) {
-						((Mob) actor).takeDamage((int) get("damage"));
+						Mob mob = ((Mob) actor);
+						mob.takeDamage((int) get("damage"));
+						if (mob.check("dead"))
+						{
+							caster.gainExperience((int) mob.get("xp"));
+							caster.addPlayerMessage("You killed a " + 
+								mob.get("type") + " for "
+								+ mob.get("xp") + " XP.");
+						}
 					}
 				}
 			}
