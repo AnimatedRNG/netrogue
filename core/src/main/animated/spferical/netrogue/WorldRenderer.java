@@ -146,7 +146,7 @@ public class WorldRenderer {
 		}
 
 		for (NetworkObject obj : gameState.getAllChildren().values()) {
-			if (obj instanceof Player) {
+			if (obj instanceof Player && (int) obj.get("level") == (int) level.get("number")) {
 				renderObject(obj, delta);
 			}
 		}
