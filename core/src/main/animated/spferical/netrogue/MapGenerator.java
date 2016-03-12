@@ -90,7 +90,7 @@ public class MapGenerator {
 				tiles.length / 2 + 8, tiles[0].length / 2 + 8);
 
 		// dig more
-		for (int i = 0; i < 1000000; i++) {
+		for (int i = 0; i < Constants.FLOOR_DENSITY; i++) {
 			// find a wall
 			int row = 0;
 			int col = 0;
@@ -141,11 +141,11 @@ public class MapGenerator {
 
 	public static void possiblyDigHallway(Tile.Type[][] tiles, MapVector pos, MapVector vec, Random random) {
 		// try to build a hallway off of the wall
-		int hallwayLength = 1 + random.nextInt(50);
+		int hallwayLength = 1 + random.nextInt(9);
 		// total hallway width = 1 + 2 * thickness
 		int hallwayThickness = 1;
-		MapVector corner1 = pos.add(vec.rotated90());
-		MapVector corner2 = pos.add(vec.rotated270());
+		MapVector corner1 = pos.add(vec.rotated90().mul(hallwayThickness));
+		MapVector corner2 = pos.add(vec.rotated270().mul(hallwayThickness));
 		MapVector corner3 = pos.add(vec.mul(hallwayLength).add(vec.rotated90().mul(hallwayThickness)));
 		MapVector corner4 = pos.add(vec.mul(hallwayLength).add(vec.rotated270().mul(hallwayThickness)));
 		int row1 = Math.min(corner1.row, Math.min(corner2.row, Math.min(corner3.row, corner4.row)));
@@ -161,11 +161,11 @@ public class MapGenerator {
 
 	public static void possiblyDigRoom(Tile.Type[][] tiles, MapVector pos, MapVector vec, Random random) {
 		// try to build a hallway off of the wall
-		int roomLength = 10 + random.nextInt(10);
+		int roomLength = 3 + random.nextInt(4);
 		// total room width = 1 + 2 * thickness
-		int roomThickness = 5 + random.nextInt(5);
-		MapVector corner1 = pos.add(vec.rotated90());
-		MapVector corner2 = pos.add(vec.rotated270());
+		int roomThickness = 2 + random.nextInt(2);
+		MapVector corner1 = pos.add(vec.rotated90().mul(roomThickness));
+		MapVector corner2 = pos.add(vec.rotated270().mul(roomThickness));
 		MapVector corner3 = pos.add(vec.mul(roomLength).add(vec.rotated90().mul(roomThickness)));
 		MapVector corner4 = pos.add(vec.mul(roomLength).add(vec.rotated270().mul(roomThickness)));
 		int row1 = Math.min(corner1.row, Math.min(corner2.row, Math.min(corner3.row, corner4.row)));

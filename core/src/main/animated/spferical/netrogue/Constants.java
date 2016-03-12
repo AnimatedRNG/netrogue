@@ -40,4 +40,6 @@ public class Constants {
 		"Ror",
 		"Side"
 	};
+
+	public static final int FLOOR_DENSITY = 1000;
 }
