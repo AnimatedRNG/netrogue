@@ -3,7 +3,6 @@ package animated.spferical.netrogue.world;
 import java.util.Random;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.NetworkObject;
@@ -88,6 +87,9 @@ public class Player extends NetworkObject implements Actor {
 	
 	public void onKillMob(Mob mob) {
 		this.gainExperience((int) mob.get("xp"));
+		this.addPlayerMessage("You killed a " + 
+				mob.get("type") + " for "
+				+ mob.get("xp") + " XP");
 	}
 	
 	public void gainExperience(int xp) {
@@ -112,6 +114,11 @@ public class Player extends NetworkObject implements Actor {
 		return (int) Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER) + 1;
 	}
 
+	public void addPlayerMessage(String message) {
+		this.put("playerMessage", message);
+		this.put("playerMessageID", new Random().nextLong());
+	}
+	
 	@Override
 	public void onUpdate(GameState gameState, float dt) {
 		float currentAPAccumulator = (Float) this.get("ap_accumulator");

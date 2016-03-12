@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public class Assets {
+	public static final int FONT_SIZE = 50;
+	
 	static HashMap<String, Texture> spriteMaps = new HashMap<>();
 	static float animationTime = 0.5f;
 	static HashMap<String, Animation> animations = new HashMap<>();
@@ -57,6 +59,7 @@ public class Assets {
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin.add("default-font", getFont(FONT_SIZE), BitmapFont.class);
 	}
 
 	public static Animation loadAnimationFromBasePath(String basePath,

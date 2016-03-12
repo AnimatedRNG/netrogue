@@ -16,12 +16,16 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
 public class UserInterface {
+	
+	public static final int MESSAGE_DURATION = 1000;
+	
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
 	Animation barLeft, barMiddle, barRight;
 	long startTime;
@@ -36,6 +40,10 @@ public class UserInterface {
 
 	final int chatPanelWidth = 200;
 	final int chatPanelHeight = 200;
+	
+	Label playerMessage;
+	long playerMessageTime;
+	Long lastMessageID;
 
 	public UserInterface() {
 		hp1 = Assets.animations.get("hp1");
@@ -82,10 +90,34 @@ public class UserInterface {
 		table.add(chatField).left().width(chatPanelWidth);
 		table.bottom().right();
 		stage.addActor(table);
+		
+		playerMessage = new Label("", Assets.skin);
+		playerMessage.setFontScale(1.5f);
+		playerMessageTime = System.currentTimeMillis();
+		lastMessageID = 0L;
+		playerMessage.setAlignment(Align.center);
+		stage.addActor(playerMessage);
 	}
 
 	public void draw(GameState gameState, long playerID) {
 		Player player = (Player) gameState.searchChildren(playerID); 
+		
+		if (player.has("playerMessage") && this.playerMessageTime == -1 &&
+				!(player.get("playerMessageID").equals(lastMessageID)))
+		{
+			Log.info("Client GUI", "Rendering message for player");
+			String message = (String) player.get("playerMessage");
+			this.renderPlayerMessage(message);
+			this.playerMessageTime = System.currentTimeMillis();
+			this.lastMessageID = (Long) player.get("playerMessageID");
+		}
+		else if (this.playerMessageTime != -1 && 
+				System.currentTimeMillis() - this.playerMessageTime > MESSAGE_DURATION)
+		{
+			Log.info("Client GUI", "No longer rendering message for player");
+			this.playerMessageTime = -1;
+			this.renderPlayerMessage("");
+		}
 		
 		int tileSize = Constants.tileSize;
 		int hp = (int) player.get("hp");
@@ -200,6 +232,13 @@ public class UserInterface {
 		}
 	}
 
+	public void renderPlayerMessage(String message) {
+		playerMessage.setText(message);
+		playerMessage.setPosition(stage.getWidth() / 2 - playerMessage.getWidth() / 2, 
+				stage.getHeight() / 2 - playerMessage.getHeight() / 2);
+		playerMessage.layout();
+	}
+	
 	public boolean isChatFocused() {
 		return stage.getKeyboardFocus() == chatField;
 	}
