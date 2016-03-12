@@ -3,7 +3,6 @@ package animated.spferical.netrogue;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.networking.GameClient;
@@ -15,20 +14,19 @@ public class GameScreen implements Screen {
 	private UserInterface ui;
 	private GameState gameState;
 	private GameClient gameClient;
-	private SpriteBatch batch;
 	private WorldRenderer worldRenderer;
 	private Thread logicThread;
-	
 	private long lastUpdate;
+	private long playerID;
 
 	public GameScreen() {
 		ui = new UserInterface();
-		batch = new SpriteBatch();
 		gameClient = new GameClient(); 
 
 		gameState = gameClient.blockUntilLoaded();
 		Player player = gameClient.findPlayer();
 		Level level = gameState.getLevelByNumber(player.getDungeonLevel());
+		playerID = player.ID;
 
 		worldRenderer = new WorldRenderer(level, player);
 		
@@ -40,7 +38,9 @@ public class GameScreen implements Screen {
 
 	public void handleKeys(float delta) {
 		long newUpdate = System.currentTimeMillis();
-		Player player = gameClient.findPlayer();
+		Player player = (Player) gameState.searchChildren(playerID);
+		// can't control players that don't exist anymore
+		if (player == null) return;
 		ClientInputState inputState = new ClientInputState();
 		
 		if (!ui.isChatFocused()) {
@@ -77,9 +77,15 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		if (gameState.searchChildren(playerID) == null) {
+			Player p = gameClient.findPlayer();
+			if (p != null) {
+				playerID = p.ID;
+			}
+		}
 		gameState = gameClient.currentGameState;
 		worldRenderer.render(gameState, delta);
-		ui.draw(gameState, gameClient.findPlayer().ID);
+		ui.draw(gameState, playerID);
 		handleKeys(delta);
 	}
 

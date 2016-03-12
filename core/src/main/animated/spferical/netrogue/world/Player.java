@@ -46,7 +46,11 @@ public class Player extends PositionedObject implements Actor {
 	}
 
 	public void takeDamage(int damage) {
-		put("hp", ((int) get("hp")) - damage);
+		int hp = ((int) get("hp")) - damage;
+		if (hp <= 0) {
+			put("dead", true);
+		}
+		put("hp", hp);
 	}
 
 	public int getConnectionID() {

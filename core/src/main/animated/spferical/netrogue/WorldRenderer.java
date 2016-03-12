@@ -65,14 +65,20 @@ public class WorldRenderer {
 		int tileSize = Constants.tileSize;
 		int chunkSize = Constants.chunkSize;
 		timeElapsed += delta;
-		updateCamera(player, delta);
+		if (player != null)
+			updateCamera(player, delta);
 		// move camera to player
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		int playerChunkRow = player.getY() / Constants.chunkSize;
-		int playerChunkCol = player.getX() / Constants.chunkSize;
+
+		if (player == null) {
+			// TODO: display death message
+		}
+
+		int playerChunkRow = (int) (camera.position.y / Constants.tileSize / Constants.chunkSize);
+		int playerChunkCol = (int) (camera.position.x / Constants.tileSize / Constants.chunkSize);
 		// draw tiles
 		for (int row = playerChunkRow - 1; row <= playerChunkRow + 1; row++) {
 			for (int col = playerChunkCol - 1; col <= playerChunkCol + 1; col++) {

@@ -86,13 +86,18 @@ public class UserInterface {
 
 	public void draw(GameState gameState, long playerID) {
 		Player player = (Player) gameState.searchChildren(playerID); 
+		float hpFraction, apFraction;
+		if (player == null) {
+			hpFraction = apFraction = 0;
+		} else {
+			int hp = (int) player.get("hp");
+			int maxHP = player.calculateMaxHP((int) player.get("characterLevel"));
+			int ap = (Integer) player.get("ap");
+			hpFraction = (float) hp / maxHP;
+			apFraction = (float) ap / (float) player.calculateMaxAP((int) player.get("characterLevel"));
+		}
 		
 		int tileSize = Constants.tileSize;
-		int hp = (int) player.get("hp");
-		int maxHP = player.calculateMaxHP((int) player.get("characterLevel"));
-		float hpFraction = (float) hp / maxHP;
-		int ap = (Integer) player.get("ap");
-		float apFraction = (float) ap / (float) player.calculateMaxAP((int) player.get("characterLevel"));
 		long currTime = TimeUtils.millis();
 		float animationTime = (currTime - startTime) / 1000f;
 		batch.setProjectionMatrix(camera.combined);
