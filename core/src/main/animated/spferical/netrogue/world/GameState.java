@@ -145,8 +145,6 @@ public class GameState extends NetworkObject {
 					}
 				}
 			}
-			
-			player.onPlayerInput(input);
 
 			if (input.stringInput != null) {
 				// player sent message
@@ -161,6 +159,7 @@ public class GameState extends NetworkObject {
 				}
 			}
 		}
+		player.onPlayerInput(input);
 	}
 	
 	public Level getLevelByNumber(int number) {
