@@ -26,8 +26,17 @@ public class Assets {
 
 	public static void load() {
 		animations.put(
-			"player", 
+			"player",
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
+		animations.put(
+			"wizardplayer",
+			loadAnimationFromBasePath("DawnLike/Characters/Player", 3, 7));
+		animations.put(
+			"meleeplayer",
+			loadAnimationFromBasePath("DawnLike/Characters/Player", 3, 1));
+		animations.put(
+			"hybridplayer",
+			loadAnimationFromBasePath("DawnLike/Characters/Player", 8, 1));
 		animations.put("worm",
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 0));
 		animations.put("big worm",
