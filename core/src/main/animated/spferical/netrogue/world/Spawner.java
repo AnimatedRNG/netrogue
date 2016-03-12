@@ -33,6 +33,17 @@ public class Spawner {
 		}
 	};
 
+	class ItemType {
+		public int level;
+		public String item;
+		public String slot;
+		public ItemType(int level, String item, String slot) {
+			this.level = level;
+			this.item = item;
+			this.slot = slot;
+		}
+	}
+
 	final MobType[] mobTypes = {
 		// new MobType("name", HP, XP, damage, moveSpeed, attackSpeed);
 		new MobType(1, "worm", 10, 1, 1, 1, 1),
@@ -43,6 +54,11 @@ public class Spawner {
 		new MobType(2, "bat", 10, 2, 2, .3f, 0.5f),
 		new MobType(2, "big worm", 20, 2, 3, 1, 0.9f),
 		new MobType(3, "big bat", 20, 2, 2, .3f, .5f),
+	};
+
+	final ItemType[] itemTypes = {
+		new ItemType(1, "dagger", "weapon"),
+		new ItemType(1, "fire", "spell"),
 	};
 
 	public Spawner() {
@@ -166,13 +182,34 @@ public class Spawner {
 		int x = random.nextInt(width);
 		int y = random.nextInt(height);
 		if (!level.checkOccupied(y, x) && !isNearPlayer(x, y, level, gameState)) {
-			// spawn a mob there
-			int itemType = random.nextInt(Constants.itemTypes.length);
-			String name = Constants.itemTypes[itemType][0];
-			String slot = Constants.itemTypes[itemType][1];
-			Item item = new Item(name, slot, x, y);
-			level.putChild(item);
+			ItemType type = getRandomItem((int) level.get("number"));
+			if (type != null) {
+				String name = type.item;
+				String slot = type.slot;
+				Item item = new Item(name, slot, x, y);
+				level.putChild(item);
+			}
 		}
+	}
+
+	public ItemType getRandomItem(int level) {
+		int totalItems = 0;
+		for (ItemType t : itemTypes) {
+			if (t.level == level) {
+				totalItems++;
+			}
+		}
+		int choice = random.nextInt(totalItems);
+		int index = 0;
+		for (ItemType t : itemTypes) {
+			if (t.level == level) {
+				if (choice == index) {
+					return t;
+				}
+				index += 1;
+			}
+		}
+		return null;
 	}
 
 	public MobType getRandomMob(int level) {
