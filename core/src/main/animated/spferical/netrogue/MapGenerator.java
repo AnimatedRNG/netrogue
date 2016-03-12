@@ -76,9 +76,13 @@ public class MapGenerator {
 		// map dimensions, in chunks
 		Random random = new Random();
 		int chunkSize = Constants.chunkSize;
-
-		Tile.Type[][] tiles = new Tile.Type
-			[mapWidth * chunkSize][mapHeight * chunkSize];
+		Tile.Type[][] tiles;
+		if ((int) level.get("number") == 4) {
+			tiles = new Tile.Type[chunkSize][chunkSize];
+		} else {
+			tiles = new Tile.Type
+				[mapWidth * chunkSize][mapHeight * chunkSize];
+		}
 
 		// initialize with walls
 		for (int row = 0; row < tiles.length; row++) {
@@ -90,30 +94,32 @@ public class MapGenerator {
 				tiles.length / 2 + 2, tiles[0].length / 2 + 2);
 
 		// dig more
-		for (int i = 0; i < Constants.FLOOR_DENSITY; i++) {
-			// find a wall
-			int row = 0;
-			int col = 0;
-			MapVector pos = null;
-			MapVector vec = null;
-			while (vec == null) {
-				row = 1 + random.nextInt(tiles.length - 2);
-				col = 1 + random.nextInt(tiles[0].length - 2);
-				pos = new MapVector(row, col);
-				vec = isWallNextToFloor(tiles, row, col);
-			}
-			switch(random.nextInt(2)) {
-				case 0:
-					possiblyDigHallway(tiles, pos, vec, random);
-					break;
-				case 1:
-					possiblyDigRoom(tiles, pos, vec, random);
-					break;
+		if ((int) level.get("number") != 4) {
+			for (int i = 0; i < Constants.FLOOR_DENSITY; i++) {
+				// find a wall
+				int row = 0;
+				int col = 0;
+				MapVector pos = null;
+				MapVector vec = null;
+				while (vec == null) {
+					row = 1 + random.nextInt(tiles.length - 2);
+					col = 1 + random.nextInt(tiles[0].length - 2);
+					pos = new MapVector(row, col);
+					vec = isWallNextToFloor(tiles, row, col);
+				}
+				switch(random.nextInt(2)) {
+					case 0:
+						possiblyDigHallway(tiles, pos, vec, random);
+						break;
+					case 1:
+						possiblyDigRoom(tiles, pos, vec, random);
+						break;
+				}
 			}
 		}
 
 		// create the 2d chunk array
-		Chunk[][] chunks = new Chunk[mapWidth][mapHeight];
+		Chunk[][] chunks = new Chunk[tiles.length / 16][tiles[0].length / 16];
 
 		for (int chunkRow = 0; chunkRow < chunks.length; chunkRow++) {
 			for (int chunkCol = 0; chunkCol < chunks[0].length; chunkCol++) {
