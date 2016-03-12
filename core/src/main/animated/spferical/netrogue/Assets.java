@@ -69,6 +69,8 @@ public class Assets {
 			"selectedSlot", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 7, 12));
 		animations.put(
 			"fire", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 21, 0));
+		animations.put(
+			"redbox", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 8, 6));
 
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 
