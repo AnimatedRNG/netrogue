@@ -5,6 +5,7 @@ import java.util.Random;
 import com.esotericsoftware.kryonet.Connection;
 
 import animated.spferical.netrogue.Constants;
+import animated.spferical.netrogue.networking.NetworkObject;
 
 public class Player extends PositionedObject implements Actor {
 	
@@ -45,10 +46,11 @@ public class Player extends PositionedObject implements Actor {
 		return (int) this.get("characterLevel");
 	}
 
-	public void takeDamage(int damage) {
+	public void takeDamage(int damage, String attacker) {
 		int hp = ((int) get("hp")) - damage;
 		if (hp <= 0) {
 			put("dead", true);
+			put("killer", attacker);
 		}
 		put("hp", hp);
 	}
@@ -132,6 +134,14 @@ public class Player extends PositionedObject implements Actor {
 
 	@Override
 	public void onDeath(GameState gameState) {
-		// TODO: add a tombstone
+		String message = (String) get("name") + " was killed at level " + get("level");
+		String killer = (String) get("killer");
+		if (killer != null) {
+			message += " by a " + killer;
+		}
+		message += " on dungeon level " + getDungeonLevel();
+		PositionedObject tombStone = new Tombstone(getX(), getY(), message);
+		NetworkObject level = gameState.getLevelByNumber(getDungeonLevel());
+		level.putChild(tombStone);
 	}
 }

@@ -80,6 +80,16 @@ public class GameState extends NetworkObject {
 					player.put("timeSinceLastAction", 0.0f);
 					if (AP > 0)
 						player.put("ap", AP - 1);
+					// tombstone messages
+					for (NetworkObject obj : level.getAllChildren().values()) {
+						if (obj instanceof Tombstone) {
+							Tombstone ts = (Tombstone) obj;
+							if (ts.getX() == player.getX() && ts.getY() == player.getY()) {
+								String message = (String) obj.get("message");
+								player.addPlayerMessage(message);
+							}
+						}
+					}
 				}
 			}
 			
@@ -121,6 +131,7 @@ public class GameState extends NetworkObject {
 			if (child instanceof Actor) {
 				((Actor) child).onUpdate(this, dt);
 				if (child.check("dead")) {
+					((Actor) child).onDeath(this);
 					removeFromTree(child);
 				}
 			}

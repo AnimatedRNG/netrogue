@@ -103,13 +103,6 @@ public class WorldRenderer {
 		batch.end();
 
 		batch.begin();
-		for (NetworkObject obj : gameState.getAllChildren().values()) {
-			if (obj instanceof Player) {
-				Player p = (Player) obj;
-				batch.draw(Assets.animations.get("player").getKeyFrame(timeElapsed, true),
-						p.getX() * tileSize, p.getY() * tileSize);
-			}
-		}
 		Level level = (Level) gameState.searchChildren(levelID);
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof PositionedObject) {
@@ -125,6 +118,13 @@ public class WorldRenderer {
 					}
 				}
 
+			}
+		}
+		for (NetworkObject obj : gameState.getAllChildren().values()) {
+			if (obj instanceof Player) {
+				Player p = (Player) obj;
+				batch.draw(Assets.animations.get("player").getKeyFrame(timeElapsed, true),
+						p.getX() * tileSize, p.getY() * tileSize);
 			}
 		}
 		batch.end();

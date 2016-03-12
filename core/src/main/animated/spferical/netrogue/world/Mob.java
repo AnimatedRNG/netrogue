@@ -43,7 +43,7 @@ public class Mob extends PositionedObject implements Actor {
 				double distanceSquared = (Math.pow(p.getX() - getX(), 2) + Math.pow(p.getY() - getY(), 2));
 				if (distanceSquared <= 1 && canAttackYet()) {
 					// we can attack player!
-					p.takeDamage((int) get("damage"));
+					p.takeDamage((int) get("damage"), (String) get("type"));
 					resetTimeSinceLastAction();
 					return;
 				} else if (distanceSquared > 1 && distanceSquared < 25
