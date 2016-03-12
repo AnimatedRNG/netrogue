@@ -1,6 +1,8 @@
 package animated.spferical.netrogue;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -102,32 +104,48 @@ public class WorldRenderer {
 		}
 		batch.end();
 
+		List<NetworkObject> objToRenderOnTop = new ArrayList<>();
+
 		batch.begin();
 		Level level = (Level) gameState.searchChildren(levelID);
 		for (NetworkObject obj : level.getAllChildren().values()) {
 			if (obj instanceof PositionedObject) {
-				PositionedObject po = (PositionedObject) obj;
-				String type = (String) po.get("type");
-				batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
-						po.getX() * tileSize, po.getY() * tileSize);
-				if (obj instanceof Mob) {
-					int hp = (int)po.get("hp");
-					int maxHP = (int)po.get("maxHP");
-					if (hp < maxHP) {
-						drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
-					}
+				if (!obj.check("renderLower")) {
+					objToRenderOnTop.add(obj);
+					continue;
 				}
-
-			}
-		}
-		for (NetworkObject obj : gameState.getAllChildren().values()) {
-			if (obj instanceof Player) {
-				Player p = (Player) obj;
-				batch.draw(Assets.animations.get("player").getKeyFrame(timeElapsed, true),
-						p.getX() * tileSize, p.getY() * tileSize);
+				renderObject(obj);
 			}
 		}
 		batch.end();
+
+		batch.begin();
+
+		for (NetworkObject obj : objToRenderOnTop) {
+			renderObject(obj);
+		}
+
+		for (NetworkObject obj : gameState.getAllChildren().values()) {
+			if (obj instanceof Player) {
+				renderObject(obj);
+			}
+		}
+		batch.end();
+	}
+
+	public void renderObject(NetworkObject obj) {
+		if (!(obj instanceof PositionedObject)) return;
+		PositionedObject po = (PositionedObject) obj;
+		String type = (String) po.get("type");
+		batch.draw(Assets.animations.get(type).getKeyFrame(timeElapsed, true),
+				po.getX() * Constants.tileSize, po.getY() * Constants.tileSize);
+		if (obj instanceof Mob) {
+			int hp = (int)po.get("hp");
+			int maxHP = (int)po.get("maxHP");
+			if (hp < maxHP) {
+				drawHealthBar(po.getX(), po.getY(), ((float) hp) / ((float)maxHP));
+			}
+		}
 	}
 
 	public void drawHealthBar(int x, int y, float healthFraction) {

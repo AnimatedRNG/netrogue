@@ -9,5 +9,6 @@ public class Tombstone extends PositionedObject {
 	public Tombstone(int x, int y, String message) {
 		super("tombstone", x, y);
 		put("message", message);
+		put("renderLower", true);
 	}
 }
