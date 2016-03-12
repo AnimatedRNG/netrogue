@@ -30,6 +30,8 @@ public class Assets {
 			loadAnimationFromBasePath("DawnLike/Characters/Player", 0, 0));
 		animations.put("worm",
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 0));
+		animations.put("big worm",
+			loadAnimationFromBasePath("DawnLike/Characters/Pest", 3, 1));
 		animations.put("ant",
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 4, 0));
 		animations.put("beetle",
@@ -38,6 +40,10 @@ public class Assets {
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 1, 3));
 		animations.put("slime",
 			loadAnimationFromBasePath("DawnLike/Characters/Slime", 1, 1));
+		animations.put("bat",
+			loadAnimationFromBasePath("DawnLike/Characters/Avian", 1, 0));
+		animations.put("big bat",
+			loadAnimationFromBasePath("DawnLike/Characters/Avian", 2, 0));
 		animations.put("tombstone",
 			loadAnimationFromBasePath("DawnLike/Objects/Decor", 17, 0));
 		animations.put(
