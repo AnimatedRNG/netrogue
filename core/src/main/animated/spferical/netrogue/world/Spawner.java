@@ -59,6 +59,11 @@ public class Spawner {
 	final ItemType[] itemTypes = {
 		new ItemType(1, "dagger", "weapon"),
 		new ItemType(1, "fire", "spell"),
+		new ItemType(1, "club", "weapon"),
+		new ItemType(2, "mace", "weapon"),
+		new ItemType(2, "sword", "weapon"),
+		new ItemType(3, "axe", "weapon"),
+		new ItemType(3, "double-axe", "weapon"),
 	};
 
 	public Spawner() {

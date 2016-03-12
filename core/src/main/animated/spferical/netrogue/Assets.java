@@ -94,6 +94,11 @@ public class Assets {
 
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 		items.put("dagger", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 0, 0));
+		items.put("club", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 2, 0));
+		items.put("mace", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 4, 0));
+		items.put("sword", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 0, 0));
+		items.put("axe", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 0, 1));
+		items.put("double-axe", Assets.loadTextureRegion("DawnLike/Items/MedWep.png", 1, 1));
 
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));

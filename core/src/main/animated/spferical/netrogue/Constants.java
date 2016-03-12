@@ -76,6 +76,10 @@ public class Constants {
 		public WeaponInfo(int damage) {
 			this.damage = damage;
 		}
+
+		public String toString() {
+			return "Damage: " + damage;
+		}
 	}
 
 	public static final Map<String, SpellInfo> spellInfos = new HashMap<>();
@@ -85,5 +89,10 @@ public class Constants {
 		spellInfos.put("fire",
 			new SpellInfo(5.0f, 2, 2));
 		weaponInfos.put("dagger", new WeaponInfo(1));
+		weaponInfos.put("club", new WeaponInfo(2));
+		weaponInfos.put("mace", new WeaponInfo(4));
+		weaponInfos.put("sword", new WeaponInfo(6));
+		weaponInfos.put("axe", new WeaponInfo(8));
+		weaponInfos.put("double-axe", new WeaponInfo(10));
 	}
 }

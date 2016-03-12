@@ -120,6 +120,9 @@ public class GameState extends NetworkObject {
 							String itemInfo = "";
 							if (itemSlot.contains("spell"))
 								itemInfo = Constants.spellInfos.get(item.get("type").toString()).toString();
+							else if (itemSlot.contains("weapon")) {
+								itemInfo = Constants.weaponInfos.get(item.get("type").toString()).toString();
+							}
 							player.addPlayerMessage("You equip the " + item.get("type") + "! " + itemInfo);
 						}
 					}
