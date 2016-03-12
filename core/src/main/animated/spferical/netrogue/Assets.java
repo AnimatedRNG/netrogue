@@ -92,6 +92,7 @@ public class Assets {
 		animations.put(
 			"redbox", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 8, 6));
 
+		items.put("healing potion", Assets.loadTextureRegion("DawnLike/Items/Potion.png", 0, 0));
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 		items.put("dagger", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 0, 0));
 		items.put("club", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 2, 0));
