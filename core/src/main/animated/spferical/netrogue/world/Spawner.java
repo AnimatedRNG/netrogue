@@ -112,8 +112,8 @@ public class Spawner {
 	}
 	
 	public void spawnDownstairsOnLevel(Level level, Level nextLevel) {
-		int width = level.getWidth() * Constants.chunkSize;
-		int height = level.getHeight() * Constants.chunkSize;
+		int width = nextLevel.getWidth() * Constants.chunkSize;
+		int height = nextLevel.getHeight() * Constants.chunkSize;
 		int levelNumber = (int) level.get("number");
 		Log.info("Trying to spawn downstairs on level " + levelNumber);
 		
