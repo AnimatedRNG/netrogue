@@ -278,16 +278,19 @@ public class WorldRenderer {
 	}
 	
 	public void drawArrows(int offsetX, int offsetY, int centerX, int centerY) {
-		if (Math.abs(offsetX + offsetY) < Constants.ARROW_DISTANCE)
+		if (Math.sqrt(offsetX * offsetX + offsetY * offsetY) < Constants.ARROW_PROXIMITY)
 			return;
 		
-		int radius = (int) (Constants.tileSize * 3f);
+		int radius = (int) (Constants.tileSize * Constants.ARROW_DISTANCE);
 		int theta = (int) Math.toDegrees(Math.atan2(offsetY, offsetX));
 		if (theta < 0)
 			theta += 360;
 		
 		int x = (int) (centerX * Constants.tileSize + Math.cos(Math.toRadians(theta)) * radius);
 		int y = (int) (centerY * Constants.tileSize + Math.sin(Math.toRadians(theta)) * radius);
+		
+		Color c = batch.getColor();
+		batch.setColor(c.r, c.g, c.b, 0.5f);
 		
 		if (theta > 67.5 && theta < 112.5)
 			batch.draw(Assets.animations.get("arrowUp").getKeyFrame(timeElapsed, true),
@@ -301,6 +304,8 @@ public class WorldRenderer {
 		else
 			batch.draw(Assets.animations.get("arrowLeft").getKeyFrame(timeElapsed, true),
 					x, y);
+		
+		batch.setColor(c.r, c.g, c.b, 1.0f);
 		
 	}
 
