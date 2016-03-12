@@ -15,7 +15,7 @@ public class Constants {
 	public static final float AP_REGEN_AMOUNT = 1;
 	
 	// New Level = log2(XP / 20) + 1
-	public static final int XP_LEVEL_MODIFIER = 2;
+	public static final int XP_LEVEL_MODIFIER = 10;
 	public static final int XP_BASE_NUMBER = 2;
 	
 	public static final String[] names = new String[] {

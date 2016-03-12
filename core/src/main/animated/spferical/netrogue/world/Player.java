@@ -69,13 +69,14 @@ public class Player extends PositionedObject implements Actor {
 	}
 	
 	public void onKillMob(Mob mob) {
-		this.gainExperience((int) mob.get("xp"));
-		this.addPlayerMessage("You killed a " + 
-				mob.get("type") + " for "
-				+ mob.get("xp") + " XP");
+		boolean leveledUp = this.gainExperience((int) mob.get("xp"));
+		if (!leveledUp)
+			this.addPlayerMessage("You killed a " + 
+					mob.get("type") + " for "
+					+ mob.get("xp") + " XP.");
 	}
 	
-	public void gainExperience(int xp) {
+	public boolean gainExperience(int xp) {
 		int currentXP = (int) this.get("xp") + xp;
 		int currentLevel = (int) this.get("characterLevel");
 		int newLevel = appropriateLevelUp(currentXP);
@@ -87,14 +88,18 @@ public class Player extends PositionedObject implements Actor {
 			this.put("xp", 0);
 			this.put("hp", this.calculateMaxHP(newLevel));
 			this.put("ap", this.calculateMaxAP(newLevel));
+			this.addPlayerMessage("Welcome to Level " + newLevel);
+			return true;
 		}
+		return false;
 	}
 	
 	public int appropriateLevelUp(int currentXP) {
 		float xp = currentXP;
 		if (xp <= 0)
 			xp = 1;
-		return (int) Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER) + 1;
+		return (int) (Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER)
+				/ Math.log(2)) + 1;
 	}
 
 	public void addPlayerMessage(String message) {
