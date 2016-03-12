@@ -33,6 +33,7 @@ public class Player extends NetworkObject implements Actor {
 		
 		this.put("ap", calculateMaxAP((Integer) this.get("characterLevel")));
 		this.put("ap_accumulator", 0.0f);
+		this.put("xp", 0);
 		
 		this.put("level", 1);
 		this.put("timeSinceLastAction", (Float) 0.0f);
@@ -84,6 +85,32 @@ public class Player extends NetworkObject implements Actor {
 		return Constants.BASE_AP + 
 				characterLevelNumber * Constants.EXTRA_AP_PER_LEVEL;
 	}
+	
+	public void onKillMob(Mob mob) {
+		this.gainExperience((int) mob.get("xp"));
+	}
+	
+	public void gainExperience(int xp) {
+		int currentXP = (int) this.get("xp") + xp;
+		int currentLevel = (int) this.get("characterLevel");
+		int newLevel = appropriateLevelUp(currentXP);
+		
+		this.put("xp", currentXP);
+		if (newLevel > currentLevel)
+		{
+			this.put("characterLevel", newLevel);
+			this.put("xp", 0);
+			this.put("hp", this.calculateMaxHP(newLevel));
+			this.put("ap", this.calculateMaxAP(newLevel));
+		}
+	}
+	
+	public int appropriateLevelUp(int currentXP) {
+		float xp = currentXP;
+		if (xp <= 0)
+			xp = 1;
+		return (int) Math.log((float) currentXP / (float) Constants.XP_LEVEL_MODIFIER) + 1;
+	}
 
 	@Override
 	public void onUpdate(GameState gameState, float dt) {
@@ -91,10 +118,12 @@ public class Player extends NetworkObject implements Actor {
 		
 		if (currentAPAccumulator > Constants.AP_REGEN_TIME)
 		{
-			float max_ap = (float) this.calculateMaxAP((int) this.get("characterLevel"));
+			int max_ap = this.calculateMaxAP((int) this.get("characterLevel"));
 			int current_ap = (int) this.get("ap");
 			if (current_ap < max_ap)
 				current_ap += Constants.AP_REGEN_AMOUNT;
+			if (current_ap > max_ap)
+				current_ap = max_ap;
 			this.put("ap", current_ap);
 			currentAPAccumulator = 0;
 		}

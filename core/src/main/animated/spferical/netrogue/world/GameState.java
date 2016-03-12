@@ -68,6 +68,7 @@ public class GameState extends NetworkObject {
 					m.takeDamage(player.calculateDamage());
 					if (((int) m.get("hp")) <= 0) {
 						removeFromTree(m);
+						player.onKillMob(m);
 						Log.info("Player kills mob at " + newX + ", " + newY);
 					}
 					player.put("timeSinceLastAction", 0.0f);
