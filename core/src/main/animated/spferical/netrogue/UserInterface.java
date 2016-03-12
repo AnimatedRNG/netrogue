@@ -128,8 +128,18 @@ public class UserInterface {
 
 	public void draw(GameState gameState, long playerID) {
 		Player player = (Player) gameState.searchChildren(playerID); 
+		float hpFraction, apFraction;
+		if (player == null) {
+			hpFraction = apFraction = 0;
+		} else {
+			int hp = (int) player.get("hp");
+			int maxHP = player.calculateMaxHP((int) player.get("characterLevel"));
+			int ap = (Integer) player.get("ap");
+			hpFraction = (float) hp / maxHP;
+			apFraction = (float) ap / (float) player.calculateMaxAP((int) player.get("characterLevel"));
+		}
 		
-		if (player.has("playerMessage") && this.playerMessageTime == -1 &&
+		if (player != null && player.has("playerMessage") && this.playerMessageTime == -1 &&
 				!(player.get("playerMessageID").equals(lastMessageID)))
 		{
 			Log.info("Client GUI", "Rendering message for player. Last message ID: " + lastMessageID);
@@ -146,7 +156,7 @@ public class UserInterface {
 			this.renderPlayerMessage("");
 		}
 		
-		if (player.has("playerGUI_options") && 
+		if (player != null && player.has("playerGUI_options") && 
 				!(player.get("playerGUI_ID").equals(serverGUI_ID)))
 		{
 			Log.info("Client GUI", "Giving the player options from the server");
@@ -161,11 +171,6 @@ public class UserInterface {
 		}
 		
 		int tileSize = Constants.tileSize;
-		int hp = (int) player.get("hp");
-		int maxHP = player.calculateMaxHP((int) player.get("characterLevel"));
-		float hpFraction = (float) hp / maxHP;
-		int ap = (Integer) player.get("ap");
-		float apFraction = (float) ap / (float) player.calculateMaxAP((int) player.get("characterLevel"));
 		long currTime = TimeUtils.millis();
 		float animationTime = (currTime - startTime) / 1000f;
 		batch.setProjectionMatrix(camera.combined);

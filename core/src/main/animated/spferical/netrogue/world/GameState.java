@@ -66,8 +66,7 @@ public class GameState extends NetworkObject {
 					Log.info("Player attacks mob at " + newX + ", " + newY);
 					// attack the mob!
 					m.takeDamage(player.calculateMeleeDamage());
-					if (((int) m.get("hp")) <= 0) {
-						removeFromTree(m);
+					if (((boolean) m.check("dead"))) {
 						player.onKillMob(m);
 						Log.info("Player kills mob at " + newX + ", " + newY);
 					}
@@ -81,6 +80,16 @@ public class GameState extends NetworkObject {
 					player.put("timeSinceLastAction", 0.0f);
 					if (AP > 0)
 						player.put("ap", AP - 1);
+					// tombstone messages
+					for (NetworkObject obj : level.getAllChildren().values()) {
+						if (obj instanceof Tombstone) {
+							Tombstone ts = (Tombstone) obj;
+							if (ts.getX() == player.getX() && ts.getY() == player.getY()) {
+								String message = (String) obj.get("message");
+								player.addPlayerMessage(message);
+							}
+						}
+					}
 				}
 			}
 			
@@ -120,8 +129,13 @@ public class GameState extends NetworkObject {
 	 */
 	public void updateAllChildren(NetworkObject object, float dt) {
 		for (NetworkObject child : object.getAllChildren().values())
-			if (child instanceof Actor)
+			if (child instanceof Actor) {
 				((Actor) child).onUpdate(this, dt);
+				if (child.check("dead")) {
+					((Actor) child).onDeath(this);
+					removeFromTree(child);
+				}
+			}
 		for (NetworkObject child : object.getAllChildren().values())
 		{
 			if (!(child instanceof Chunk))

@@ -36,6 +36,8 @@ public class Assets {
 			loadAnimationFromBasePath("DawnLike/Characters/Pest", 1, 3));
 		animations.put("slime",
 			loadAnimationFromBasePath("DawnLike/Characters/Slime", 1, 1));
+		animations.put("tombstone",
+			loadAnimationFromBasePath("DawnLike/Objects/Decor", 17, 0));
 		animations.put(
 			"hp1", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 1, 9));
 		animations.put(

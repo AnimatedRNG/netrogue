@@ -17,8 +17,10 @@ import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Level;
 import animated.spferical.netrogue.world.Mob;
 import animated.spferical.netrogue.world.Player;
+import animated.spferical.netrogue.world.PositionedObject;
 import animated.spferical.netrogue.world.Tile;
 import animated.spferical.netrogue.world.TileTypeArray;
+import animated.spferical.netrogue.world.Tombstone;
 
 public abstract class Registrar {
 
@@ -58,5 +60,7 @@ public abstract class Registrar {
 		kryo.register(ChatNetworkObject.class);
 		kryo.register(ChatLine.class);
 		kryo.register(Mob.class);
+		kryo.register(PositionedObject.class);
+		kryo.register(Tombstone.class);
 	}
 }

@@ -12,6 +12,7 @@ import com.esotericsoftware.minlog.Log;
 import animated.spferical.netrogue.ClientInputState;
 import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.networking.LocalCache;
+import animated.spferical.netrogue.networking.NetworkObject;
 import animated.spferical.netrogue.networking.StringArray;
 
 public class Player extends PositionedObject implements Actor {
@@ -57,11 +58,17 @@ public class Player extends PositionedObject implements Actor {
 		int characterLevel = (int) this.get("characterLevel");
 		int meleeBuff = (int) this.get("melee_buff");
 		int attack = characterLevel + meleeBuff * Constants.MELEE_BUFF;
+		Log.info("Game Logic", "Attack: " + attack);
 		return attack;
 	}
 
-	public void takeDamage(int damage) {
-		put("hp", ((int) get("hp")) - damage);
+	public void takeDamage(int damage, String attacker) {
+		int hp = ((int) get("hp")) - damage;
+		if (hp <= 0) {
+			put("dead", true);
+			put("killer", attacker);
+		}
+		put("hp", hp);
 	}
 
 	public int getConnectionID() {
@@ -151,6 +158,9 @@ public class Player extends PositionedObject implements Actor {
 		this.put("playerGUI_options", new StringArray(options.keySet()));
 		LocalCache.put("playerGUI_callbacks", 
 				new ArrayList<Runnable>(options.values()));
+		Log.info("Here is what's in options: " + options.values());
+		Log.info("Here is what's in the callbacks earlier: " + 
+					LocalCache.get("playerGUI_callbacks"));
 		this.put("playerGUI_ID", ((Random) LocalCache.get("player_random")).
 				nextLong());
 	}
@@ -176,18 +186,32 @@ public class Player extends PositionedObject implements Actor {
 
 	@Override
 	public void onDeath(GameState gameState) {
-		// TODO: add a tombstone
+		String message = (String) get("name") + " was killed at level " + get("level");
+		String killer = (String) get("killer");
+		if (killer != null) {
+			message += " by a " + killer;
+		}
+		message += " on dungeon level " + getDungeonLevel();
+		PositionedObject tombStone = new Tombstone(getX(), getY(), message);
+		NetworkObject level = gameState.getLevelByNumber(getDungeonLevel());
+		level.putChild(tombStone);
 	}
 	
 	// Handles extra stuff that the player sends us
 	// One day we'll move all that crap in handlePlayerInput here
 	public void onPlayerInput(ClientInputState inputState) {
 		if (inputState.inputType == ClientInputState.InputType.SELECT_OPTION)
+		{
 			Log.info("Player selected option " + inputState.intInput);
+			Log.info("Here is what's in the callbacks: " + 
+					LocalCache.get("playerGUI_callbacks"));
+		}
 		@SuppressWarnings("unchecked")
 		List<Runnable> callbacks = 
 				(List<Runnable>) LocalCache.get("playerGUI_callbacks");
-		if (callbacks != null && callbacks.size() > inputState.intInput 
+		if (callbacks != null && 
+				inputState.inputType == ClientInputState.InputType.SELECT_OPTION
+				&& callbacks.size() > inputState.intInput 
 				&& inputState.intInput >= 0)
 		{
 			try {

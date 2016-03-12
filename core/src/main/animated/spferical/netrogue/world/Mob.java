@@ -43,7 +43,7 @@ public class Mob extends PositionedObject implements Actor {
 				double distanceSquared = (Math.pow(p.getX() - getX(), 2) + Math.pow(p.getY() - getY(), 2));
 				if (distanceSquared <= 1 && canAttackYet()) {
 					// we can attack player!
-					p.takeDamage((int) get("damage"));
+					p.takeDamage((int) get("damage"), (String) get("type"));
 					resetTimeSinceLastAction();
 					return;
 				} else if (distanceSquared > 1 && distanceSquared < 25
@@ -116,12 +116,15 @@ public class Mob extends PositionedObject implements Actor {
 	}
 
 	public void takeDamage(int damage) {
-		put("hp", ((int) get("hp")) - damage);
+		int hp = ((int) get("hp")) - damage;
+		if (hp <= 0) {
+			put("dead", true);
+		}
+		put("hp", hp);
 	}
 
 	@Override
 	public void onDeath(GameState gameState) {
 		// TODO place corpse
-
 	}
 }
