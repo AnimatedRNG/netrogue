@@ -99,6 +99,17 @@ public class Assets {
 		animations.put(
 			"iceraydiag2", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 16, 3));
 		
+		animations.put(
+			"lightning", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 21, 6));
+		animations.put(
+			"lightningrayvert", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 17, 0));
+		animations.put(
+			"lightningrayhoriz", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 17, 1));
+		animations.put(
+			"lightningraydiag1", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 17, 2));
+		animations.put(
+			"lightningraydiag2", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 17, 3));
+		
 		objects.put(
 			"downstairs", Assets.loadTextureRegion("DawnLike/Objects/Tile.png", 1, 5));
 		objects.put(
@@ -109,6 +120,7 @@ public class Assets {
 		items.put("healing potion", Assets.loadTextureRegion("DawnLike/Items/Potion.png", 0, 0));
 		items.put("fire", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 0));
 		items.put("ice", Assets.loadTextureRegion("DawnLike/Items/Book.png", 4, 4));
+		items.put("lightning", Assets.loadTextureRegion("DawnLike/Items/Book.png", 7, 1));
 		items.put("dagger", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 0, 0));
 		items.put("club", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 2, 0));
 		items.put("mace", Assets.loadTextureRegion("DawnLike/Items/ShortWep.png", 4, 0));

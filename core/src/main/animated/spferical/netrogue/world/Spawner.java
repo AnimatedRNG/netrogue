@@ -64,6 +64,7 @@ public class Spawner {
 		new ItemType(1, "healing potion", "potion"),
 		new ItemType(1, "fire", "spell"),
 		new ItemType(1, "ice", "spell1"),
+		new ItemType(1, "lightning", "spell2"),
 		new ItemType(1, "club", "weapon"),
 		new ItemType(2, "mace", "weapon"),
 		new ItemType(2, "sword", "weapon"),

@@ -98,9 +98,11 @@ public class Constants {
 
 	static {
 		spellInfos.put("fire",
-			new SpellInfo(5.0f, 2, 4, "fire"));
+			new SpellInfo(5.0f, 3, 3, "fire"));
 		spellInfos.put("ice",
-			new SpellInfo(10.0f, 1, 3, "ice"));
+			new SpellInfo(10.0f, 2, 4, "ice"));
+		spellInfos.put("lightning",
+			new SpellInfo(15.0f, 1, 3, "lightning"));
 		weaponInfos.put("dagger", new WeaponInfo(1));
 		weaponInfos.put("club", new WeaponInfo(2));
 		weaponInfos.put("mace", new WeaponInfo(4));

@@ -1,5 +1,7 @@
 package animated.spferical.netrogue.world;
 
+import java.util.List;
+
 import com.esotericsoftware.minlog.Log;
 
 import animated.spferical.netrogue.ChatLine;
@@ -138,7 +140,6 @@ public class GameState extends NetworkObject {
 				{
 					if (Constants.spellInfos.containsKey((String) player.get(slotType)))
 					{
-						Log.info("Game Logic", "Player should fire spell");
 						player.castSpell(this, input.theta, 
 								Constants.spellInfos.get((String) player.get(slotType)));
 					}
@@ -172,6 +173,15 @@ public class GameState extends NetworkObject {
 			}
 		}
 		return null;
+	}
+	
+	public void announce(String message) {
+		List<NetworkObject> cn = 
+				this.getAllChildrenOfType(ChatNetworkObject.class, false);
+		if (cn.isEmpty())
+			return;
+		else
+			cn.get(0).putChild(new ChatLine(message, System.currentTimeMillis()));
 	}
 	
 	/**

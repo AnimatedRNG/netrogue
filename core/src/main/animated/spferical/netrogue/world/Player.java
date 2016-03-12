@@ -67,7 +67,6 @@ public class Player extends PositionedObject implements Actor {
 			int weaponDamage = Constants.weaponInfos.get(weapon).damage;
 			attack += weaponDamage;
 		}
-		Log.info("Game Logic", "Attack: " + attack);
 		return attack;
 	}
 	
@@ -273,6 +272,7 @@ public class Player extends PositionedObject implements Actor {
 			message += " by a " + killer;
 		}
 		message += " on dungeon level " + getDungeonLevel();
+		gameState.announce(message);
 		PositionedObject tombStone = new Tombstone(getX(), getY(), message);
 		NetworkObject level = gameState.getLevelByNumber(getDungeonLevel());
 		level.putChild(tombStone);
