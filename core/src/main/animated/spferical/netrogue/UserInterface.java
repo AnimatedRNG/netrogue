@@ -27,7 +27,7 @@ public class UserInterface {
 	public static final int MESSAGE_DURATION = 1000;
 	
 	Animation hp1, hp2, hp3, hpfull, ap1, ap2, ap3, apfull;
-	Animation barLeft, barMiddle, barRight;
+	Animation barLeft, barMiddle, barRight, slot;
 	long startTime;
 	SpriteBatch batch;
 	Camera camera;
@@ -59,6 +59,8 @@ public class UserInterface {
 		barLeft = Assets.animations.get("barLeft");
 		barMiddle = Assets.animations.get("barMiddle");
 		barRight = Assets.animations.get("barRight");
+
+		slot = Assets.animations.get("slot");
 
 		startTime = TimeUtils.millis();
 		batch = new SpriteBatch();
@@ -212,8 +214,24 @@ public class UserInterface {
 			shouldScrollToChatBottom = true;
 		}
 
+		drawItems(animationTime);
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
+	}
+
+	public void drawItems(float animationTime) {
+		//TODO: draw something other than dummy items
+		int tileSize = Constants.tileSize;
+		batch.begin();
+		batch.draw(slot.getKeyFrame(animationTime), 6 * tileSize, tileSize);
+		batch.draw(slot.getKeyFrame(animationTime), 7 * tileSize, tileSize);
+		batch.draw(slot.getKeyFrame(animationTime), 8 * tileSize, tileSize);
+		batch.draw(slot.getKeyFrame(animationTime), 9 * tileSize, tileSize);
+		batch.end();
+		batch.begin();
+		batch.draw(Assets.animations.get("fireball").getKeyFrame(animationTime), 6 * tileSize, tileSize);
+		batch.end();
 	}
 
 	public void handleResize(int width, int height) {

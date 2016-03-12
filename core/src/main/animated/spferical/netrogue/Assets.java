@@ -62,6 +62,10 @@ public class Assets {
 			"barMiddle", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 7));
 		animations.put(
 			"barRight", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 0, 8));
+		animations.put(
+			"slot", Assets.loadAnimationFromBasePath("DawnLike/GUI/GUI", 7, 8));
+		animations.put(
+			"fireball", Assets.loadAnimationFromBasePath("DawnLike/Objects/Effect", 21, 0));
 
 		fontGenerator = new FreeTypeFontGenerator(
 			Gdx.files.internal("DawnLike/GUI/SDS_8x8.ttf"));
