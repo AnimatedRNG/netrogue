@@ -32,7 +32,7 @@ public class Constants {
 	public static final float SPELL_SPEED_BUFF = 0.02f;
 	public static final float FASTEST_SPELL = 0.05f;
 	
-	public static final int LEVEL_NUM = 3;
+	public static final int LEVEL_NUM = 4;
 	
 	public static final String[] names = new String[] {
 		"Aeto",

@@ -37,11 +37,15 @@ public class MapGenerator {
 		public MapVector mul(int value) {
 			return new MapVector(row * value, col * value);
 		}
+
+		public String toString() {
+			return "row: " + row + " col: " + col;
+		}
 	}
 
 	public static void digRect(Tile.Type[][] tiles, int row1, int col1, int row2, int col2) {
-		for (int row = row1; row <= row2; row++) {
-			for (int col = col1; col < col2; col++) {
+		for (int row = row1; row <= row2 + 1; row++) {
+			for (int col = col1; col < col2 + 1; col++) {
 				tiles[row][col] = Tile.Type.FLOOR;
 			}
 		}
@@ -76,9 +80,13 @@ public class MapGenerator {
 		// map dimensions, in chunks
 		Random random = new Random();
 		int chunkSize = Constants.chunkSize;
-
-		Tile.Type[][] tiles = new Tile.Type
-			[mapWidth * chunkSize][mapHeight * chunkSize];
+		Tile.Type[][] tiles;
+		if ((int) level.get("number") == 4) {
+			tiles = new Tile.Type[chunkSize][chunkSize];
+		} else {
+			tiles = new Tile.Type
+				[mapWidth * chunkSize][mapHeight * chunkSize];
+		}
 
 		// initialize with walls
 		for (int row = 0; row < tiles.length; row++) {
@@ -90,30 +98,32 @@ public class MapGenerator {
 				tiles.length / 2 + 2, tiles[0].length / 2 + 2);
 
 		// dig more
-		for (int i = 0; i < Constants.FLOOR_DENSITY; i++) {
-			// find a wall
-			int row = 0;
-			int col = 0;
-			MapVector pos = null;
-			MapVector vec = null;
-			while (vec == null) {
-				row = 1 + random.nextInt(tiles.length - 2);
-				col = 1 + random.nextInt(tiles[0].length - 2);
-				pos = new MapVector(row, col);
-				vec = isWallNextToFloor(tiles, row, col);
-			}
-			switch(random.nextInt(2)) {
-				case 0:
-					possiblyDigHallway(tiles, pos, vec, random);
-					break;
-				case 1:
-					possiblyDigRoom(tiles, pos, vec, random);
-					break;
+		if ((int) level.get("number") != 4) {
+			for (int i = 0; i < Constants.FLOOR_DENSITY; i++) {
+				// find a wall
+				int row = 0;
+				int col = 0;
+				MapVector pos = null;
+				MapVector vec = null;
+				while (vec == null) {
+					row = 1 + random.nextInt(tiles.length - 2);
+					col = 1 + random.nextInt(tiles[0].length - 2);
+					pos = new MapVector(row, col);
+					vec = isWallNextToFloor(tiles, row, col);
+				}
+				switch(random.nextInt(2)) {
+					case 0:
+						possiblyDigHallway(tiles, pos, vec, random);
+						break;
+					case 1:
+						possiblyDigRoom(tiles, pos, vec, random);
+						break;
+				}
 			}
 		}
 
 		// create the 2d chunk array
-		Chunk[][] chunks = new Chunk[mapWidth][mapHeight];
+		Chunk[][] chunks = new Chunk[tiles.length / 16][tiles[0].length / 16];
 
 		for (int chunkRow = 0; chunkRow < chunks.length; chunkRow++) {
 			for (int chunkCol = 0; chunkCol < chunks[0].length; chunkCol++) {
@@ -152,8 +162,8 @@ public class MapGenerator {
 		int row2 = Math.max(corner1.row, Math.max(corner2.row, Math.max(corner3.row, corner4.row)));
 		int col1 = Math.min(corner1.col, Math.min(corner2.col, Math.min(corner3.col, corner4.col)));
 		int col2 = Math.max(corner1.col, Math.max(corner2.col, Math.max(corner3.col, corner4.col)));
-		if (row1 > 0 && row2 < tiles.length &&
-				col1 > 0 && col2 < tiles.length &&
+		if (row1 > 0 && row2 < tiles.length - 1 &&
+				col1 > 0 && col2 < tiles.length - 1 &&
 				isWalls(tiles, row1, col1, row2, col2)) {
 			digRect(tiles, row1, col1, row2, col2);
 		}
@@ -172,8 +182,8 @@ public class MapGenerator {
 		int row2 = Math.max(corner1.row, Math.max(corner2.row, Math.max(corner3.row, corner4.row)));
 		int col1 = Math.min(corner1.col, Math.min(corner2.col, Math.min(corner3.col, corner4.col)));
 		int col2 = Math.max(corner1.col, Math.max(corner2.col, Math.max(corner3.col, corner4.col)));
-		if (row1 > 0 && row2 < tiles.length &&
-				col1 > 0 && col2 < tiles.length &&
+		if (row1 > 0 && row2 < tiles.length - 1 &&
+				col1 > 0 && col2 < tiles.length - 1 &&
 				isWalls(tiles, row1, col1, row2, col2)) {
 			digRect(tiles, row1, col1, row2, col2);
 		}

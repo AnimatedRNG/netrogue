@@ -54,6 +54,7 @@ public class Spawner {
 		new MobType(2, "bat", 10, 2, 2, .3f, 0.5f),
 		new MobType(2, "big worm", 20, 2, 3, 1, 0.9f),
 		new MobType(3, "big bat", 20, 2, 2, .3f, .5f),
+		new MobType(4, "boss", 100, 100, 10, .5f, .5f),
 	};
 
 	final ItemType[] itemTypes = {
@@ -68,6 +69,7 @@ public class Spawner {
 		new ItemType(3, "axe", "weapon"),
 		new ItemType(3, "double-axe", "weapon"),
 		new ItemType(3, "healing potion", "potion"),
+		new ItemType(4, "healing potion", "potion"),
 	};
 
 	public Spawner() {
