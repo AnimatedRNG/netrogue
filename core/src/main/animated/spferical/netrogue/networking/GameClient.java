@@ -10,6 +10,8 @@ import com.esotericsoftware.kryonet.FrameworkMessage.Ping;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 
+import animated.spferical.netrogue.ClientInputState;
+import animated.spferical.netrogue.Constants;
 import animated.spferical.netrogue.world.GameState;
 import animated.spferical.netrogue.world.Player;
 
@@ -41,7 +43,7 @@ public class GameClient extends Listener {
 	public void connect() {
 		try {
 			// 18.189.109.162
-			this.client.connect(TIMEOUT, "quote.mgpfe.me", GameServer.PORT_NUMBER);
+			this.client.connect(TIMEOUT, "localhost", GameServer.PORT_NUMBER);
 		} catch (IOException e) {
 			Gdx.app.error("Networking", "Failed to connect to server", e);
 		}
@@ -93,6 +95,11 @@ public class GameClient extends Listener {
 	@Override
 	public void connected(Connection connection) {
 		client.updateReturnTripTime();
+		ClientInputState reportVersion = new ClientInputState();
+		reportVersion.inputType = ClientInputState.InputType.REPORT_VERSION;
+		reportVersion.intInput = Constants.VERSION;
+		this.client.sendTCP(reportVersion);
+		Log.info("Client Networking", "Reporting version to server");
 	}
 	
 	@Override

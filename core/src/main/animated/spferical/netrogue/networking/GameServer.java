@@ -39,6 +39,7 @@ public class GameServer extends Listener implements Runnable {
 		Registrar.register(server.getKryo());
 		
 		this.playerIDs = new HashMap<>();
+		this.unverifiedPlayers = new HashMap<>();
 		this.timeSinceLastMove = new HashMap<>();
 	}
 
@@ -98,6 +99,7 @@ public class GameServer extends Listener implements Runnable {
 		player.randomlyAssignName();
 		
 		this.playerIDs.put(connection, player.ID);
+		this.unverifiedPlayers.put(connection, player.ID);
 		this.timeSinceLastMove.put(connection, System.currentTimeMillis());
 		this.gameState.putChild(player);
 		
@@ -135,6 +137,26 @@ public class GameServer extends Listener implements Runnable {
 		else if (object instanceof ClientInputState)
 		{
 			Player player = (Player) this.gameState.getChild(this.playerIDs.get(connection));
+			
+			if (this.unverifiedPlayers.containsKey(connection))
+			{
+				Log.info("Server Networking", "Received input from player of unknown version");
+				ClientInputState obj = (ClientInputState) object;
+				if (obj.inputType == null || 
+						obj.inputType != ClientInputState.InputType.REPORT_VERSION ||
+						obj.intInput != Constants.VERSION)
+				{
+					// Player is running an invalid version. Start harrassing them.
+					player.addPlayerMessage("This server is on version " + Constants.VERSION_STRING
+							+ "; please update your client.");
+				}
+				else
+				{
+					this.unverifiedPlayers.remove(connection);
+					Log.info("Server Networking", "Player successfully verified their game version");
+				}
+			}
+			
 			long delta = System.currentTimeMillis() - timeSinceLastMove.get(connection);
 			this.gameState.handlePlayerInput(player, (ClientInputState) object, (float) delta / 1000f);
 			this.timeSinceLastMove.put(connection, System.currentTimeMillis());
@@ -198,6 +220,7 @@ public class GameServer extends Listener implements Runnable {
 	private GameState oldGameState;
 	private boolean isRunning;
 	
+	private HashMap<Connection, Long> unverifiedPlayers;
 	private HashMap<Connection, Long> playerIDs;
 	
 	// Connection -> Time since last move

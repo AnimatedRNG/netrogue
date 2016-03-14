@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
+	
+	// Major.Minor.Revision
+	public static final String VERSION_STRING = "1.0.1";
+	public static final int VERSION = VERSION_STRING.hashCode();
+	
 	public static final float actionDelay = 0.25f; // in seconds
 	public static final int tileSize = 64;
 	public static final int chunkSize = 16;
