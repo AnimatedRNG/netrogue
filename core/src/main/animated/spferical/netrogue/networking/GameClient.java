@@ -43,7 +43,7 @@ public class GameClient extends Listener {
 	public void connect() {
 		try {
 			// 18.189.109.162
-			this.client.connect(TIMEOUT, "localhost", GameServer.PORT_NUMBER);
+			this.client.connect(TIMEOUT, "netrogue.mgpfe.me", GameServer.PORT_NUMBER);
 		} catch (IOException e) {
 			Gdx.app.error("Networking", "Failed to connect to server", e);
 		}
